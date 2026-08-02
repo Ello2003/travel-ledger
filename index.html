@@ -28,3 +28,93 @@
     min-height: 100%;
     box-sizing: border-box;
   }
+  #travel-ledger-root * { box-sizing: border-box; }
+  #travel-ledger-root .wrap { max-width: 1080px; margin: 0 auto; padding: 28px 22px 60px; }
+  #travel-ledger-root .app-footer {
+    display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap;
+    margin-top: 36px; padding-top: 18px; border-top: 1px solid var(--paper-edge);
+  }
+  #travel-ledger-root .footer-link {
+    background: none; border: none; padding: 4px 2px; cursor: pointer;
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: .5px; color: var(--ink-soft);
+    text-transform: uppercase;
+  }
+  #travel-ledger-root .footer-link:hover { color: var(--ink); text-decoration: underline; }
+  #travel-ledger-root .footer-import { display: inline-flex; align-items: center; }
+  #travel-ledger-root .footer-sep { color: var(--paper-edge); font-size: 11px; }
+
+  #travel-ledger-root .masthead {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    border-bottom: 3px solid var(--ink); padding-bottom: 14px; margin-bottom: 18px;
+    flex-wrap: wrap; gap: 10px;
+  }
+  #travel-ledger-root .wordmark { font-family: var(--font-display); font-weight: 900; font-size: 30px; letter-spacing: 0.5px; }
+  #travel-ledger-root .wordmark small {
+    display: block; font-family: var(--font-mono); font-weight: 400; font-size: 11px;
+    letter-spacing: 3px; color: var(--ink-soft); text-transform: uppercase; margin-top: 2px;
+  }
+  #travel-ledger-root .save-flag {
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--green); opacity: 0; transition: opacity .4s ease;
+  }
+  #travel-ledger-root .save-flag.show { opacity: 1; }
+  #travel-ledger-root .sync-flag {
+    font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .5px; color: var(--ink-soft); margin-top: 3px;
+  }
+  #travel-ledger-root .sync-flag.error { color: var(--red); }
+  #travel-ledger-root .sync-flag.syncing { color: var(--brass); }
+  #travel-ledger-root .storage-warning {
+    display: none; align-items: center; gap: 10px; background: #f3e0b8; border: 1px solid var(--brass);
+    color: var(--ink); border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12.5px; line-height: 1.5;
+  }
+  #travel-ledger-root .storage-warning.show { display: flex; }
+  #travel-ledger-root .storage-warning strong { display: block; font-family: var(--font-mono); font-size: 10px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 2px; }
+  #travel-ledger-root .storage-warning button { flex-shrink: 0; margin-left: auto; }
+  #travel-ledger-root .version-badge {
+    font-family: var(--font-mono); font-size: 10px; letter-spacing: 1px; color: var(--ink-soft); opacity: .7; margin-bottom: 2px;
+  }
+
+  #travel-ledger-root .kpi-board {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 1px;
+    background: var(--ink); border: 1px solid var(--ink); margin-bottom: 22px;
+    border-radius: 6px; overflow: hidden;
+  }
+  #travel-ledger-root .kpi-cell { background: var(--ink); color: var(--paper-raised); padding: 14px 16px; }
+  #travel-ledger-root .kpi-cell .label { font-family: var(--font-mono); font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; opacity: .65; }
+  #travel-ledger-root .kpi-cell .value { font-family: var(--font-mono); font-size: 20px; font-weight: 600; margin-top: 4px; }
+  #travel-ledger-root .kpi-cell.over .value { color: #e0897c; }
+  #travel-ledger-root .kpi-cell.under .value { color: #8fd6c3; }
+
+  #travel-ledger-root .toolbar { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; align-items: center; }
+  #travel-ledger-root button {
+    font-family: var(--font-body); font-size: 13px; font-weight: 600; cursor: pointer;
+    border-radius: 5px; padding: 9px 14px; border: 1px solid var(--ink); background: transparent; color: var(--ink);
+  }
+  #travel-ledger-root .btn-primary { background: var(--ink); color: var(--paper-raised); }
+  #travel-ledger-root .btn-primary:hover { background: var(--ink-soft); }
+  #travel-ledger-root .btn-ghost:hover { background: var(--paper-raised); }
+  #travel-ledger-root .btn-danger { color: var(--red); border-color: var(--red); }
+  #travel-ledger-root .btn-danger:hover { background: var(--red); color: #fff; }
+  #travel-ledger-root .btn-sm { padding: 5px 10px; font-size: 12px; }
+  #travel-ledger-root .import-label {
+    font-family: var(--font-body); font-size: 13px; font-weight: 600; cursor: pointer;
+    border-radius: 5px; padding: 9px 14px; border: 1px solid var(--ink); background: transparent;
+    display: inline-flex; align-items: center;
+  }
+  #travel-ledger-root .import-label:hover { background: var(--paper-raised); }
+
+  #travel-ledger-root .filter-bar { display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }
+  #travel-ledger-root .filter-bar input[type="text"], #travel-ledger-root .filter-bar select {
+    font-family: var(--font-body); font-size: 13px; padding: 8px 10px; border: 1px solid var(--paper-edge);
+    border-radius: 5px; background: var(--paper-raised); color: var(--ink);
+  }
+  #travel-ledger-root .filter-bar input[type="text"] { flex: 1; min-width: 160px; }
+
+  #travel-ledger-root .charts-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  #travel-ledger-root .charts-row.three { grid-template-columns: 1fr 1fr 1fr; }
+  @media (max-width: 900px) { #travel-ledger-root .charts-row, #travel-ledger-root .charts-row.three { grid-template-columns: 1fr; } }
+  #travel-ledger-root .chart-card { background: var(--paper-raised); border: 1px solid var(--paper-edge); border-radius: 8px; padding: 16px; }
+  #travel-ledger-root .chart-card h3 {
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--ink-soft); margin: 0 0 14px 0; font-weight: 600;
+  }
