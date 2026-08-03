@@ -118,3 +118,2558 @@
     font-family: var(--font-mono); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase;
     color: var(--ink-soft); margin: 0 0 14px 0; font-weight: 600;
   }
+  #travel-ledger-root .cat-bar-row, #travel-ledger-root .year-row { display: flex; align-items: center; gap: 8px; margin-bottom: 9px; font-size: 12px; }
+  #travel-ledger-root .cat-bar-label, #travel-ledger-root .year-label { width: 90px; font-family: var(--font-mono); flex-shrink: 0; }
+  #travel-ledger-root .cat-bar-track, #travel-ledger-root .year-track { flex: 1; background: var(--paper); border-radius: 3px; height: 12px; overflow: hidden; position: relative; }
+  #travel-ledger-root .cat-bar-fill, #travel-ledger-root .year-fill { height: 100%; border-radius: 3px; }
+  #travel-ledger-root .cat-bar-val, #travel-ledger-root .year-val { width: 130px; text-align: right; font-family: var(--font-mono); flex-shrink: 0; font-size: 11px; }
+
+  #travel-ledger-root .trend-svg { width: 100%; height: 200px; }
+  #travel-ledger-root .trend-legend { display: flex; gap: 16px; margin-top: 8px; font-family: var(--font-mono); font-size: 11px; }
+  #travel-ledger-root .trend-legend span { display: inline-flex; align-items: center; gap: 5px; }
+  #travel-ledger-root .swatch { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+
+  #travel-ledger-root .trips-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 18px; }
+  #travel-ledger-root .pass {
+    background: var(--paper-raised); border: 1px solid var(--paper-edge); border-radius: 10px;
+    position: relative; cursor: pointer; overflow: hidden; transition: transform .15s ease, box-shadow .15s ease;
+  }
+  #travel-ledger-root .pass:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(28,37,48,0.15); }
+  #travel-ledger-root .pass-top { padding: 16px 16px 10px; }
+  #travel-ledger-root .pass-eyebrow {
+    font-family: var(--font-mono); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--ink-soft);
+    display: flex; justify-content: space-between; align-items: center; gap: 6px; flex-wrap: wrap;
+  }
+  #travel-ledger-root .chip-group { display: flex; gap: 5px; flex-wrap: wrap; justify-content: flex-end; }
+  #travel-ledger-root .pass-name { font-family: var(--font-display); font-weight: 700; font-size: 21px; margin: 6px 0 10px; }
+  #travel-ledger-root .pass-flag { font-size: 0.9em; }
+  #travel-ledger-root .pass-flag-guessed { border-bottom: 2px dotted var(--brass); cursor: help; }
+  #travel-ledger-root .status-chip, .countdown-chip {
+    font-family: var(--font-mono); font-size: 10px; letter-spacing: 1px; text-transform: uppercase;
+    padding: 2px 8px; border-radius: 20px; font-weight: 600; border: 1px solid currentColor;
+  }
+  #travel-ledger-root .status-completed { color: var(--green); }
+  #travel-ledger-root .status-upcoming { color: var(--blue); }
+  #travel-ledger-root .status-cancelled { color: var(--slate); text-decoration: line-through; }
+  #travel-ledger-root .status-over { color: var(--red); }
+  #travel-ledger-root .countdown-chip { color: var(--brass); }
+
+  #travel-ledger-root .pass-figures { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 12px; margin-bottom: 6px; }
+  #travel-ledger-root .pass-dates { font-family: var(--font-mono); font-size: 11.5px; color: var(--ink-soft); margin-bottom: 8px; letter-spacing: .2px; }
+  #travel-ledger-root .pass-figures .diff-pos { color: var(--green); }
+  #travel-ledger-root .pass-figures .diff-neg { color: var(--red); }
+  #travel-ledger-root .pass-pp { font-family: var(--font-mono); font-size: 11px; color: var(--ink-soft); margin-bottom: 6px; }
+  #travel-ledger-root .pass-track { background: var(--paper); height: 8px; border-radius: 4px; overflow: hidden; margin-bottom: 4px; }
+  #travel-ledger-root .pass-fill { height: 100%; }
+
+  #travel-ledger-root .perforation { border-top: 2px dashed var(--paper-edge); position: relative; margin-top: 8px; }
+  #travel-ledger-root .perforation::before, #travel-ledger-root .perforation::after {
+    content: ''; position: absolute; top: -8px; width: 16px; height: 16px; background: var(--paper); border-radius: 50%;
+  }
+  #travel-ledger-root .perforation::before { left: -8px; }
+  #travel-ledger-root .perforation::after { right: -8px; }
+  #travel-ledger-root .pass-bottom { padding: 10px 16px 14px; display: flex; justify-content: space-between; align-items: center; }
+  #travel-ledger-root .barcode {
+    height: 22px; flex: 1; margin-right: 10px;
+    background: repeating-linear-gradient(90deg, var(--ink) 0 2px, transparent 2px 5px, var(--ink) 5px 6px, transparent 6px 9px, var(--ink) 9px 12px, transparent 12px 14px);
+    opacity: .55;
+  }
+  #travel-ledger-root .pass-year { font-family: var(--font-mono); font-size: 13px; font-weight: 600; flex-shrink: 0; }
+
+  #travel-ledger-root .back-btn { margin-bottom: 16px; }
+  #travel-ledger-root .detail-header {
+    display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 14px;
+    background: var(--ink); color: var(--paper-raised); border-radius: 10px; padding: 20px 22px; margin-bottom: 20px;
+  }
+  #travel-ledger-root .detail-title { font-family: var(--font-display); font-weight: 800; font-size: 28px; }
+  #travel-ledger-root .detail-sub { font-family: var(--font-mono); font-size: 11px; letter-spacing: 1.5px; opacity: .7; margin-top: 4px; text-transform: uppercase; }
+  #travel-ledger-root .detail-figs { display: flex; gap: 22px; flex-wrap: wrap; }
+  #travel-ledger-root .detail-fig .label { font-family: var(--font-mono); font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; opacity: .6; }
+  #travel-ledger-root .detail-fig .value { font-family: var(--font-mono); font-size: 19px; font-weight: 600; margin-top: 2px; }
+
+  #travel-ledger-root .detail-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 18px; margin-bottom: 20px; }
+  @media (max-width: 780px) { #travel-ledger-root .detail-grid { grid-template-columns: 1fr; } }
+
+  #travel-ledger-root .donut-wrap { display: flex; align-items: center; gap: 18px; }
+  #travel-ledger-root .donut { width: 140px; height: 140px; border-radius: 50%; flex-shrink: 0; position: relative; }
+  #travel-ledger-root .donut-center {
+    position: absolute; top: 22px; right: 22px; bottom: 22px; left: 22px; inset: 22px; border-radius: 50%; background: var(--paper-raised);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: var(--font-mono);
+  }
+  #travel-ledger-root .donut-center .amt { font-size: 14px; font-weight: 700; }
+  #travel-ledger-root .donut-center .lbl { font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: var(--ink-soft); }
+  #travel-ledger-root .donut-legend { font-size: 12px; font-family: var(--font-mono); }
+  #travel-ledger-root .donut-legend div { display: flex; gap: 7px; align-items: center; margin-bottom: 6px; }
+
+  #travel-ledger-root table.exp-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  #travel-ledger-root table.exp-table th {
+    font-family: var(--font-mono); font-size: 10px; letter-spacing: 1px; text-transform: uppercase;
+    text-align: left; padding: 6px 8px; border-bottom: 2px solid var(--ink); color: var(--ink-soft);
+  }
+  #travel-ledger-root table.exp-table td { padding: 6px 8px; border-bottom: 1px solid var(--line); }
+  #travel-ledger-root table.exp-table td.num { font-family: var(--font-mono); text-align: right; }
+  #travel-ledger-root table.exp-table input, #travel-ledger-root table.exp-table select {
+    width: 100%; border: 1px solid transparent; background: transparent; font-family: var(--font-body); font-size: 13px; padding: 3px 4px; border-radius: 3px;
+  }
+  #travel-ledger-root table.exp-table input:hover, #travel-ledger-root table.exp-table select:hover,
+  #travel-ledger-root table.exp-table input:focus, #travel-ledger-root table.exp-table select:focus {
+    border-color: var(--paper-edge); background: var(--paper-raised); outline: none;
+  }
+  #travel-ledger-root .exp-del { background: none; border: none; color: var(--red); cursor: pointer; font-size: 15px; padding: 2px 6px; }
+  #travel-ledger-root .exp-foot td { font-family: var(--font-mono); font-weight: 700; border-top: 2px solid var(--ink); border-bottom: none; }
+  #travel-ledger-root table.plan-table { table-layout: fixed; }
+  #travel-ledger-root table.plan-table col.col-name { width: 38%; }
+  #travel-ledger-root table.plan-table col.col-status { width: 13%; }
+  #travel-ledger-root table.plan-table col.col-when { width: 17%; }
+  #travel-ledger-root table.plan-table col.col-cost { width: 12%; }
+  #travel-ledger-root table.plan-table col.col-actions { width: 20%; }
+  #travel-ledger-root table.plan-table td, #travel-ledger-root table.plan-table th { overflow: hidden; text-overflow: ellipsis; }
+  #travel-ledger-root td.when-cell { font-family: var(--font-mono); font-size: 12px; text-align: left; white-space: nowrap; }
+  #travel-ledger-root table.research-table { table-layout: fixed; }
+  #travel-ledger-root table.research-table col.col-name { width: 34%; }
+  #travel-ledger-root table.research-table col.col-price { width: 8%; }
+  #travel-ledger-root table.research-table col.col-priority { width: 11%; }
+  #travel-ledger-root table.research-table col.col-estcost { width: 12%; }
+  #travel-ledger-root table.research-table col.col-status { width: 12%; }
+  #travel-ledger-root table.research-table col.col-actions { width: 23%; }
+  #travel-ledger-root table.research-table td, #travel-ledger-root table.research-table th { overflow: hidden; text-overflow: ellipsis; }
+  #travel-ledger-root table.packing-table { table-layout: fixed; }
+  #travel-ledger-root table.packing-table col.col-check { width: 8%; }
+  #travel-ledger-root table.packing-table col.col-item { width: 62%; }
+  #travel-ledger-root table.packing-table col.col-qty { width: 15%; }
+  #travel-ledger-root table.packing-table col.col-actions { width: 15%; }
+  #travel-ledger-root table.packing-table input[type="checkbox"] { width: 16px; height: 16px; cursor: pointer; }
+  #travel-ledger-root table.packing-table tr.packed-row .pack-name { text-decoration: line-through; opacity: .5; }
+  #travel-ledger-root table.packing-table tr.packed-row td { opacity: .75; }
+
+  #travel-ledger-root .notes-box { width: 100%; min-height: 70px; font-family: var(--font-body); font-size: 13px; padding: 10px; border: 1px solid var(--paper-edge); border-radius: 6px; background: var(--paper-raised); resize: vertical; }
+
+  #travel-ledger-root .modal-overlay { position: fixed; top: 0; right: 0; bottom: 0; left: 0; inset: 0; background: rgba(28,37,48,0.55); display: flex; align-items: center; justify-content: center; z-index: 100; padding: 20px; }
+  #travel-ledger-root .modal-box { background: var(--paper-raised); border-radius: 10px; padding: 22px; width: 100%; max-width: 420px; font-family: var(--font-body); max-height: 84vh; overflow-y: auto; }
+  #travel-ledger-root .modal-box.wide { max-width: 560px; }
+  #travel-ledger-root .modal-box h3 { font-family: var(--font-display); margin: 0 0 16px; font-size: 19px; }
+  #travel-ledger-root .field { margin-bottom: 12px; }
+  #travel-ledger-root .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  #travel-ledger-root .field label { display: block; font-family: var(--font-mono); font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 4px; }
+  #travel-ledger-root .field input, #travel-ledger-root .field select, #travel-ledger-root .field textarea {
+    width: 100%; padding: 8px 9px; border: 1px solid var(--paper-edge); border-radius: 5px; font-family: var(--font-body); font-size: 13px; background: #fff;
+  }
+  #travel-ledger-root textarea.autogrow { resize: vertical; overflow: hidden; min-height: 34px; line-height: 1.4; }
+  #travel-ledger-root table.exp-table textarea.autogrow,
+  #travel-ledger-root table.plan-table textarea.autogrow,
+  #travel-ledger-root table.packing-table textarea.autogrow,
+  #travel-ledger-root .cat-row textarea.autogrow {
+    width: 100%; border: 1px solid transparent; background: transparent; font: inherit; padding: 4px 2px;
+    resize: vertical; overflow: hidden; min-height: 20px; line-height: 1.4;
+  }
+  #travel-ledger-root table.exp-table textarea.autogrow:focus,
+  #travel-ledger-root table.plan-table textarea.autogrow:focus,
+  #travel-ledger-root table.packing-table textarea.autogrow:focus,
+  #travel-ledger-root .cat-row textarea.autogrow:focus {
+    border-color: var(--paper-edge); background: #fff; outline: none;
+  }
+  #travel-ledger-root .modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; }
+  #travel-ledger-root .link-row { display: flex; gap: 6px; align-items: flex-start; margin-bottom: 6px; }
+  #travel-ledger-root .link-row .link-label { flex: 0 0 30%; }
+  #travel-ledger-root .link-row .link-url { flex: 1; }
+  #travel-ledger-root .link-row .link-remove { flex-shrink: 0; padding: 8px 10px; }
+  #travel-ledger-root .empty-state { text-align: center; padding: 50px 20px; color: var(--ink-soft); font-family: var(--font-mono); font-size: 13px; }
+
+  #travel-ledger-root .cat-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  #travel-ledger-root .cat-row input[type="color"] { width: 30px; height: 30px; padding: 0; border: 1px solid var(--paper-edge); border-radius: 5px; }
+  #travel-ledger-root .cat-row textarea.autogrow { flex: 1; }
+
+  #travel-ledger-root .log-item, .trash-item {
+    padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 12px; display: flex; justify-content: space-between; gap: 10px; align-items: center;
+  }
+  #travel-ledger-root .log-item .ts, .trash-item .ts { font-family: var(--font-mono); color: var(--ink-soft); font-size: 10px; white-space: nowrap; }
+  #travel-ledger-root .toast {
+    position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%); background: var(--ink); color: var(--paper-raised);
+    padding: 9px 16px; border-radius: 20px; font-family: var(--font-mono); font-size: 12px; z-index: 200; opacity: 0; transition: opacity .25s ease; pointer-events: none;
+  }
+  #travel-ledger-root .toast.show { opacity: 1; }
+
+  /* ---------- Plan tab ---------- */
+  #travel-ledger-root .tab-bar { display: flex; gap: 6px; margin-bottom: 16px; border-bottom: 2px solid var(--paper-edge); }
+  #travel-ledger-root .tab-btn {
+    border: none; border-bottom: 3px solid transparent; border-radius: 0; background: transparent;
+    padding: 8px 4px; margin-right: 18px; color: var(--ink-soft); font-family: var(--font-mono);
+    font-size: 12px; letter-spacing: 1px; text-transform: uppercase;
+  }
+  #travel-ledger-root .tab-btn.active { color: var(--ink); border-bottom-color: var(--ink); font-weight: 700; }
+  #travel-ledger-root .timeline-toggle { display: flex; gap: 4px; margin-left: auto; }
+
+  #travel-ledger-root .sheet-section { margin-bottom: 18px; background: var(--paper-raised); border: 1px solid var(--paper-edge); border-radius: 8px; padding: 14px 16px; }
+  #travel-ledger-root .sheet-header { display: flex; justify-content: space-between; align-items: center; font-family: var(--font-display); font-weight: 700; font-size: 15px; margin-bottom: 10px; }
+  #travel-ledger-root .sheet-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 7px; }
+
+  /* ---------- Hour by hour ---------- */
+  #travel-ledger-root .day-block { margin-bottom: 20px; }
+  #travel-ledger-root .day-label { display: flex; align-items: center; gap: 14px; margin-bottom: 10px; }
+  #travel-ledger-root .day-label .day-date-num {
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--paper-raised); background: var(--ink); padding: 4px 10px 3px; border-radius: 3px; flex-shrink: 0;
+  }
+  #travel-ledger-root .day-label .rule { flex: 1; height: 1px; background: linear-gradient(90deg, var(--paper-edge), transparent); }
+  #travel-ledger-root .day-card { background: var(--paper-raised); border: 1px solid var(--paper-edge); border-radius: 8px; overflow: hidden; }
+  #travel-ledger-root .tl-row { display: grid; grid-template-columns: 80px 1fr 34px; gap: 0; align-items: stretch; border-bottom: 1px solid var(--line); }
+  #travel-ledger-root .tl-row:last-child { border-bottom: none; }
+  #travel-ledger-root .tl-row.is-cancelled { opacity: .45; }
+  #travel-ledger-root .tl-time-cell {
+    display: flex; align-items: flex-start; justify-content: flex-end; padding: 14px 14px 14px 12px;
+    background: var(--paper); border-right: 1px solid var(--paper-edge);
+  }
+  #travel-ledger-root .tl-time-cell input.tl-time {
+    font-family: var(--font-mono); font-size: 12px; font-weight: 500; border: none; background: transparent;
+    text-align: right; width: 100%; padding: 0; color: var(--ink-soft);
+  }
+  #travel-ledger-root .tl-time-cell input.tl-time:focus { outline: none; color: var(--ink); }
+  #travel-ledger-root .tl-main { padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+  #travel-ledger-root .tl-sheet-tag { font-family: var(--font-mono); font-size: 10px; letter-spacing: 1px; text-transform: uppercase; }
+  #travel-ledger-root .tl-main input.tl-name {
+    font-size: 14px; font-family: var(--font-display); font-weight: 600; border: none; background: transparent;
+    width: 100%; padding: 0; color: var(--ink);
+  }
+  #travel-ledger-root .tl-main input.tl-name:focus { outline: none; }
+  #travel-ledger-root .tl-main input.tl-name::placeholder { font-weight: 400; color: var(--ink-soft); opacity: .6; }
+  #travel-ledger-root .tl-main textarea.tl-notes {
+    width: 100%; font-size: 12.5px; color: var(--ink-soft); font-style: italic; border: none; background: transparent;
+    resize: vertical; padding: 0; font-family: var(--font-body); min-height: 0;
+  }
+  #travel-ledger-root .tl-main textarea.tl-notes:focus { outline: none; color: var(--ink); font-style: normal; }
+  #travel-ledger-root .tl-del-cell { display: flex; align-items: center; justify-content: center; padding: 0 8px; }
+  #travel-ledger-root .tl-add-row { border-top: 1px dashed var(--paper-edge); padding: 8px 14px; }
+
+  #travel-ledger-root .gantt-scroll { overflow-x: auto; padding-bottom: 4px; }
+  #travel-ledger-root .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  #travel-ledger-root .table-scroll table.plan-table,
+  #travel-ledger-root .table-scroll table.research-table,
+  #travel-ledger-root .table-scroll table.packing-table { min-width: 460px; }
+  #travel-ledger-root .table-scroll table.exp-table:not(.plan-table):not(.research-table):not(.packing-table) { min-width: 520px; }
+  #travel-ledger-root .gantt-grid { display: grid; grid-auto-rows: 30px; position: relative; min-width: 100%; width: max-content; }
+  #travel-ledger-root .gantt-cell { border-bottom: 1px solid var(--paper-edge); border-right: 1px solid var(--paper-edge); font-family: var(--font-mono); font-size: 10px; padding: 4px 6px; color: var(--ink-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #travel-ledger-root .gantt-cell.gantt-label { position: -webkit-sticky; position: sticky; left: 0; background: var(--paper-raised); border-right: 2px solid var(--ink); font-size: 11px; color: var(--ink); z-index: 2; }
+  #travel-ledger-root .gantt-cell.gantt-head { text-align: center; font-weight: 700; background: var(--paper); }
+  #travel-ledger-root .gantt-bar {
+    border-radius: 5px; color: #fff; font-family: var(--font-mono); font-size: 10px; padding: 4px 8px; margin: 3px 2px;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap; align-self: center; box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+  }
+
+  /* ---------- Up Next ---------- */
+  #travel-ledger-root .upnext-card { margin-bottom: 22px; }
+  #travel-ledger-root .upnext-row {
+    display: flex; align-items: center; gap: 12px; padding: 9px 4px; border-bottom: 1px solid var(--line); cursor: pointer;
+  }
+  #travel-ledger-root .upnext-row:last-child { border-bottom: none; }
+  #travel-ledger-root .upnext-row:hover { background: var(--paper); border-radius: 5px; }
+  #travel-ledger-root .upnext-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  #travel-ledger-root .upnext-main { flex: 1; min-width: 0; }
+  #travel-ledger-root .upnext-name { font-family: var(--font-body); font-weight: 600; font-size: 13px; }
+  #travel-ledger-root .upnext-sub { font-family: var(--font-mono); font-size: 11px; color: var(--ink-soft); margin-top: 1px; }
+  #travel-ledger-root .map-container { width: 100%; height: 420px; border-radius: 8px; overflow: hidden; }
+
+  /* ---------- Print / PDF export ---------- */
+  #printArea { display: none; }
+  #printArea .p-hdr { border-bottom: 3px solid #000; padding-bottom: 10px; margin-bottom: 16px; }
+  #printArea .p-hdr h1 { font-family: Georgia, serif; font-size: 24px; margin: 0; }
+  #printArea .p-hdr .p-sub { font-family: monospace; font-size: 12px; color: #444; margin-top: 4px; }
+  #printArea .p-section { margin-bottom: 18px; break-inside: avoid; }
+  #printArea .p-section h2 {
+    font-family: monospace; font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase;
+    border-bottom: 1px solid #999; padding-bottom: 4px; margin: 0 0 8px 0; color: #333;
+  }
+  #printArea .p-item { padding: 8px 0; border-bottom: 1px solid #ddd; break-inside: avoid; }
+  #printArea .p-item:last-child { border-bottom: none; }
+  #printArea .p-item-top { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+  #printArea .p-item-name { font-family: Georgia, serif; font-weight: 700; font-size: 14px; }
+  #printArea .p-item-meta { font-family: monospace; font-size: 11px; color: #333; white-space: nowrap; }
+  #printArea .p-item-line { font-family: Arial, sans-serif; font-size: 12px; color: #222; margin-top: 3px; }
+  #printArea .p-item-line b { color: #000; }
+  #printArea .p-empty { font-family: Arial, sans-serif; font-size: 12px; color: #777; font-style: italic; }
+  @media print {
+    body * { visibility: hidden; }
+    #printArea, #printArea * { visibility: visible; }
+    #printArea { display: block !important; position: absolute; left: 0; top: 0; width: 100%; background: #fff; color: #000; }
+  }
+</style>
+
+<div id="travel-ledger-root">
+  <div class="wrap">
+    <div class="masthead">
+      <div class="wordmark">&#x2708; Travel Ledger<small>Budget &amp; Expense Log</small></div>
+      <div style="text-align:right;">
+        <div class="version-badge" id="versionBadge"></div>
+        <div class="save-flag" id="saveFlag">&#x25cf; saved</div>
+        <div class="sync-flag" id="syncFlag" hidden></div>
+      </div>
+    </div>
+
+    <div class="storage-warning" id="storageWarning">
+      <div>
+        <strong>Storage isn't persisting reliably</strong>
+        Changes may not survive a reload in this browser/mode. Export a backup now, and consider hosting this file over a local server or web address (e.g. GitHub Pages) instead of opening it directly.
+      </div>
+      <button class="btn-ghost btn-sm" id="storageWarningExport">Export Backup</button>
+    </div>
+
+    <div class="kpi-board" id="kpiBoard"></div>
+
+    <div class="tab-bar">
+      <button class="tab-btn" data-dashtab="trips" id="dashTabTrips">Trips</button>
+      <button class="tab-btn" data-dashtab="charts" id="dashTabCharts">Charts</button>
+    </div>
+
+    <main id="dashboardView">
+      <div id="dashTrips">
+        <div id="upNextWrap"></div>
+
+        <div class="toolbar">
+          <button class="btn-primary" id="newTripBtn">+ New Trip</button>
+          <button class="btn-ghost" id="manageCatsBtn">Categories</button>
+        </div>
+
+        <div class="filter-bar">
+          <input type="text" id="searchInput" placeholder="Search trips&#x2026;">
+          <select id="statusFilter">
+            <option value="all">All statuses</option>
+            <option value="upcoming">Upcoming</option>
+            <option value="completed">Completed</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+          <select id="sortSelect">
+            <option value="year-desc">Newest first</option>
+            <option value="year-asc">Oldest first</option>
+            <option value="name">Name A&#x2013;Z</option>
+            <option value="budget-desc">Budget: high&#x2013;low</option>
+            <option value="spend-desc">Spend: high&#x2013;low</option>
+          </select>
+        </div>
+
+        <div class="trips-grid" id="tripsGrid"></div>
+
+        <div class="chart-card" id="myMapCard" style="margin-top:16px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <h3 style="margin:0;">My Maps</h3>
+            <button class="btn-ghost btn-sm" id="toggleMyMap">Show</button>
+          </div>
+          <div id="myMapEmbed" hidden style="margin-top:12px;">
+            <iframe src="https://www.google.com/maps/d/embed?mid=1agtFV4DvC-eE9MuhqqB5i3a2XWuJ0e4&hl=en&ehbc=2E312F" width="100%" height="480" style="border:0;border-radius:6px;display:block;" loading="lazy"></iframe>
+          </div>
+        </div>
+      </div>
+
+      <div id="dashCharts" hidden>
+        <div class="charts-row">
+          <div class="chart-card">
+            <h3>Spend by Category &#x2014; All Trips</h3>
+            <div id="catBars"></div>
+          </div>
+          <div class="chart-card">
+            <h3>Year over Year</h3>
+            <div id="yearRows"></div>
+          </div>
+        </div>
+        <div class="charts-row" style="grid-template-columns: 1fr;">
+          <div class="chart-card">
+            <h3>Budget vs. Actual by Trip</h3>
+            <svg id="trendSvg" class="trend-svg"></svg>
+            <div class="trend-legend">
+              <span><span class="swatch" style="background:var(--brass)"></span>Budget</span>
+              <span><span class="swatch" style="background:var(--ink)"></span>Spent</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <main id="tripView" hidden></main>
+
+    <footer class="app-footer">
+      <button class="footer-link" id="exportBtn">Export Backup</button>
+      <span class="footer-sep">&#xb7;</span>
+      <label class="footer-link footer-import">Import Backup<input type="file" id="importInput" hidden accept="application/json"></label>
+      <span class="footer-sep">&#xb7;</span>
+      <button class="footer-link" id="trashBtn">Trash</button>
+      <span class="footer-sep">&#xb7;</span>
+      <button class="footer-link" id="activityLogBtn">Activity Log</button>
+      <span class="footer-sep">&#xb7;</span>
+      <button class="footer-link" id="githubSyncBtn">GitHub Sync</button>
+    </footer>
+
+    <div id="modalRoot"></div>
+    <div class="toast" id="toast"></div>
+    <div id="printArea"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const STORAGE_KEY = 'trips-data';
+  const APP_VERSION = '1.7.3';
+  const CHANGELOG = {
+    '1.7.3': 'Plan and Research items can now move both ways (\u21a9 button on a Plan item sends it back to Research; \u2192 Plan on a Research item promotes it), and any item can now have multiple links (add/remove, with optional labels) instead of just one. Added a "My Maps" section on the dashboard embedding a personal Google My Maps. Added a Plan tab "Export PDF" button that builds a clean, printable itinerary (name, status, when, address, links, notes, grouped by category) via the browser\u2019s Print \u2192 Save as PDF.',
+    '1.7.2': 'Added GitHub Sync (footer link) \u2014 your trips, expenses, categories, and trash automatically sync to a file in a GitHub repo of your choice via a personal access token, so the same data shows up on any device you open this page from. Syncs are debounced (batched a few seconds after you stop editing, not per keystroke) and auto-retry once on conflict. The token itself is stored only in this browser\u2019s local storage and is never included in the synced file or committed to the repo \u2014 only trips/expenses/categories/trash sync, not settings.',
+    '1.7.1': 'Country is now auto-guessed from the trip name (e.g. "Brugge" \u2192 Belgium, "Liverpool \u2014 Springsteen" \u2192 United Kingdom) using a lookup of ~250 well-known destinations, applied to existing trips on load and live-suggested while typing a new trip name. Guessed flags show a dotted underline so you know they haven\u2019t been confirmed \u2014 opening Edit Trip and saving clears that marker.',
+    '1.7.0': 'Added an optional Country field to trips (type-ahead over ~190 countries) \u2014 the matching flag now appears next to the trip name on the boarding pass card and the trip detail header. Unrecognised or blank entries just show no flag rather than breaking anything.',
+    '1.6.9': 'Text fields prone to truncation (Trip Name, expense Description, Plan item Name/Location/Link/Notes, Research Address/Link, Packing item names, Category names) are now resizable, auto-growing text boxes instead of single-line inputs that hid overflow \u2014 drag the corner to make them bigger, or they\u2019ll wrap and grow on their own as you type. The Research "Name / Search" field stays a single-line input since it\u2019s wired to Google Places autocomplete, which requires that.',
+    '1.6.8': 'Efficiency & UI/UX audit: Trash now auto-purges entries older than 90 days so it can\u2019t grow unbounded in storage over years of use; all data tables (Budget, Plan, Research, Packing) now scroll horizontally instead of squashing illegibly on narrow/mobile screens; widened the Research table\u2019s actions column so the Promote/Edit/Delete buttons have room',
+    '1.6.7': 'Adding a new Plan item now defaults the Date field to the trip\u2019s start date (or Day field to Day 1 for day-numbered trips) instead of blank, since most items are near the start of the trip',
+    '1.6.6': 'Boarding pass cards (and the trip detail header) now show trip length \u2014 date range plus number of days, derived from start/end dates or, if those aren\u2019t set, from the highest day number used in the Plan tab',
+    '1.6.5': 'Added a per-trip Packing tab (categorised checklist with quantities and a "Quick Add Essentials" starter list); split the "Activities / Sights" sheet into separate Activities and Sights sections in Plan and Research; added a new "Things To Do" section alongside them. Existing items previously filed under Activities / Sights are automatically moved to Activities.',
+    '1.6.4': 'Fixed Plan and Research tab tables: the When column was right-aligned by mistake (was reusing the numeric-column style), and each category (Hotels, Restaurants, etc.) rendered as a separately auto-sized table so columns drifted between sections \u2014 now uses fixed, consistent column widths and left-aligned When',
+    '1.6.3': 'Added storage-reliability check and save verification \u2014 warns visibly (with a one-click Export Backup) if localStorage isn\u2019t actually persisting, which happens in some browsers when opening the file directly via file:// instead of hosting it',
+    '1.6.2': 'Added confirmation before deleting a category; hardened ID generation against collisions; imported backups now reconcile expense categories against the active category list instead of silently pointing at categories that no longer exist',
+    '1.6.1': 'Fixed data not saving outside the Claude environment \u2014 switched from window.storage to localStorage so the app works as a standalone file (browser, GitHub Pages, etc.)',
+    '1.0.0': 'Budget dashboard, expenses, categories, backup/restore',
+    '1.1.0': 'Trip dates & countdown, per-person split, search/filter/sort, year-over-year, custom categories, trash & activity log',
+    '1.2.0': 'Plan tab: Hotels/Restaurants/Bars/Coffee Shops/Activities/Transport sheets + Gantt timeline',
+    '1.3.0': 'Up Next dashboard strip',
+    '1.4.0': 'Research tab with Google Maps place search and multi-pin map',
+    '1.4.1': 'Fixed modal/toast styling not applying; switched to system fonts for reliable cross-browser rendering',
+    '1.4.2': 'Fixed leftover hardcoded IBM Plex Mono reference in the SVG chart that system-font switch missed',
+    '1.4.3': 'Fixed missing glyphs (\u00a3, \u2708, and other symbols) in Safari by replacing raw Unicode characters with escape sequences/HTML entities and adding an explicit UTF-8 charset declaration',
+    '1.5.0': 'Split the dashboard into Trips (boarding passes, Up Next, filters) and Charts (category/year/trend analytics) tabs',
+    '1.5.1': 'Moved Export Backup, Import Backup, Trash, and Activity Log out of the main toolbar into a quiet global footer',
+    '1.6.0': 'Added Hour-by-Hour itinerary view to the Plan tab (day-grouped, inline-editable rows) alongside the Gantt chart'
+  };
+  const CUR = '\u00a3';
+
+  const root = document.getElementById('travel-ledger-root');
+  const dashboardView = document.getElementById('dashboardView');
+  const tripView = document.getElementById('tripView');
+  const modalRoot = document.getElementById('modalRoot');
+  const saveFlag = document.getElementById('saveFlag');
+  const syncFlag = document.getElementById('syncFlag');
+  const toastEl = document.getElementById('toast');
+
+  let state = { categories: [], trips: [], trash: { trips: [], expenses: [] }, activityLog: [], settings: defaultSettings() };
+  let activeTripId = null;
+  let activeTripTab = 'budget';
+  let activeDashTab = 'trips';
+  let researchView = 'list';
+  let planView = 'gantt';
+  let uiFilter = { search: '', status: 'all', sort: 'year-desc' };
+
+  const SHEETS = [
+    { key: 'Hotels', color: '#35695c' },
+    { key: 'Restaurants', color: '#8a7a3a' },
+    { key: 'Bars', color: '#6a4a6e' },
+    { key: 'Coffee Shops', color: '#b8874f' },
+    { key: 'Activities', color: '#35597a' },
+    { key: 'Sights', color: '#4a8a86' },
+    { key: 'Things To Do', color: '#9c5a3f' },
+    { key: 'Transport / Transfers', color: '#5b6672' }
+  ];
+  const SHEET_TO_CAT = {
+    'Hotels': 'Hotels', 'Restaurants': 'Spends', 'Bars': 'Spends', 'Coffee Shops': 'Spends',
+    'Activities': 'Excursions', 'Sights': 'Excursions', 'Things To Do': 'Excursions', 'Transport / Transfers': 'Transportation'
+  };
+  const PACKING_CATEGORIES = [
+    { key: 'Clothing', color: '#35597a' },
+    { key: 'Toiletries', color: '#6a4a6e' },
+    { key: 'Documents', color: '#a63a2e' },
+    { key: 'Electronics', color: '#5b6672' },
+    { key: 'Health', color: '#35695c' },
+    { key: 'Misc', color: '#8a7a3a' }
+  ];
+  const PACKING_ESSENTIALS = [
+    { name: 'Passport', category: 'Documents', qty: 1 },
+    { name: 'Boarding passes / e-tickets', category: 'Documents', qty: 1 },
+    { name: 'Travel insurance docs', category: 'Documents', qty: 1 },
+    { name: 'Phone charger', category: 'Electronics', qty: 1 },
+    { name: 'Travel adapter', category: 'Electronics', qty: 1 },
+    { name: 'Headphones', category: 'Electronics', qty: 1 },
+    { name: 'Toothbrush', category: 'Toiletries', qty: 1 },
+    { name: 'Toothpaste', category: 'Toiletries', qty: 1 },
+    { name: 'Deodorant', category: 'Toiletries', qty: 1 },
+    { name: 'Sunscreen', category: 'Toiletries', qty: 1 },
+    { name: 'Medication', category: 'Health', qty: 1 },
+    { name: 'Painkillers', category: 'Health', qty: 1 },
+    { name: 'Underwear', category: 'Clothing', qty: 7 },
+    { name: 'Socks', category: 'Clothing', qty: 7 },
+    { name: 'Sunglasses', category: 'Clothing', qty: 1 },
+    { name: 'Swimwear', category: 'Clothing', qty: 1 }
+  ];
+  const COUNTRIES = [
+    {code:'AF',name:'Afghanistan'},{code:'AL',name:'Albania'},{code:'DZ',name:'Algeria'},{code:'AD',name:'Andorra'},{code:'AO',name:'Angola'},
+    {code:'AG',name:'Antigua and Barbuda'},{code:'AR',name:'Argentina'},{code:'AM',name:'Armenia'},{code:'AU',name:'Australia'},{code:'AT',name:'Austria'},
+    {code:'AZ',name:'Azerbaijan'},{code:'BS',name:'Bahamas'},{code:'BH',name:'Bahrain'},{code:'BD',name:'Bangladesh'},{code:'BB',name:'Barbados'},
+    {code:'BY',name:'Belarus'},{code:'BE',name:'Belgium'},{code:'BZ',name:'Belize'},{code:'BJ',name:'Benin'},{code:'BT',name:'Bhutan'},
+    {code:'BO',name:'Bolivia'},{code:'BA',name:'Bosnia and Herzegovina'},{code:'BW',name:'Botswana'},{code:'BR',name:'Brazil'},{code:'BN',name:'Brunei'},
+    {code:'BG',name:'Bulgaria'},{code:'BF',name:'Burkina Faso'},{code:'BI',name:'Burundi'},{code:'KH',name:'Cambodia'},{code:'CM',name:'Cameroon'},
+    {code:'CA',name:'Canada'},{code:'CV',name:'Cape Verde'},{code:'CF',name:'Central African Republic'},{code:'TD',name:'Chad'},{code:'CL',name:'Chile'},
+    {code:'CN',name:'China'},{code:'CO',name:'Colombia'},{code:'KM',name:'Comoros'},{code:'CG',name:'Congo'},{code:'CD',name:'Congo (DRC)'},
+    {code:'CR',name:'Costa Rica'},{code:'HR',name:'Croatia'},{code:'CU',name:'Cuba'},{code:'CY',name:'Cyprus'},{code:'CZ',name:'Czechia'},
+    {code:'DK',name:'Denmark'},{code:'DJ',name:'Djibouti'},{code:'DM',name:'Dominica'},{code:'DO',name:'Dominican Republic'},{code:'EC',name:'Ecuador'},
+    {code:'EG',name:'Egypt'},{code:'SV',name:'El Salvador'},{code:'GQ',name:'Equatorial Guinea'},{code:'ER',name:'Eritrea'},{code:'EE',name:'Estonia'},
+    {code:'SZ',name:'Eswatini'},{code:'ET',name:'Ethiopia'},{code:'FJ',name:'Fiji'},{code:'FI',name:'Finland'},{code:'FR',name:'France'},
+    {code:'GA',name:'Gabon'},{code:'GM',name:'Gambia'},{code:'GE',name:'Georgia'},{code:'DE',name:'Germany'},{code:'GH',name:'Ghana'},
+    {code:'GR',name:'Greece'},{code:'GD',name:'Grenada'},{code:'GT',name:'Guatemala'},{code:'GN',name:'Guinea'},{code:'GW',name:'Guinea-Bissau'},
+    {code:'GY',name:'Guyana'},{code:'HT',name:'Haiti'},{code:'HN',name:'Honduras'},{code:'HK',name:'Hong Kong'},{code:'HU',name:'Hungary'},
+    {code:'IS',name:'Iceland'},{code:'IN',name:'India'},{code:'ID',name:'Indonesia'},{code:'IR',name:'Iran'},{code:'IQ',name:'Iraq'},
+    {code:'IE',name:'Ireland'},{code:'IL',name:'Israel'},{code:'IT',name:'Italy'},{code:'JM',name:'Jamaica'},{code:'JP',name:'Japan'},
+    {code:'JO',name:'Jordan'},{code:'KZ',name:'Kazakhstan'},{code:'KE',name:'Kenya'},{code:'KI',name:'Kiribati'},{code:'KW',name:'Kuwait'},
+    {code:'KG',name:'Kyrgyzstan'},{code:'LA',name:'Laos'},{code:'LV',name:'Latvia'},{code:'LB',name:'Lebanon'},{code:'LS',name:'Lesotho'},
+    {code:'LR',name:'Liberia'},{code:'LY',name:'Libya'},{code:'LI',name:'Liechtenstein'},{code:'LT',name:'Lithuania'},{code:'LU',name:'Luxembourg'},
+    {code:'MO',name:'Macao'},{code:'MG',name:'Madagascar'},{code:'MW',name:'Malawi'},{code:'MY',name:'Malaysia'},{code:'MV',name:'Maldives'},
+    {code:'ML',name:'Mali'},{code:'MT',name:'Malta'},{code:'MH',name:'Marshall Islands'},{code:'MR',name:'Mauritania'},{code:'MU',name:'Mauritius'},
+    {code:'MX',name:'Mexico'},{code:'FM',name:'Micronesia'},{code:'MD',name:'Moldova'},{code:'MC',name:'Monaco'},{code:'MN',name:'Mongolia'},
+    {code:'ME',name:'Montenegro'},{code:'MA',name:'Morocco'},{code:'MZ',name:'Mozambique'},{code:'MM',name:'Myanmar'},{code:'NA',name:'Namibia'},
+    {code:'NR',name:'Nauru'},{code:'NP',name:'Nepal'},{code:'NL',name:'Netherlands'},{code:'NZ',name:'New Zealand'},{code:'NI',name:'Nicaragua'},
+    {code:'NE',name:'Niger'},{code:'NG',name:'Nigeria'},{code:'KP',name:'North Korea'},{code:'MK',name:'North Macedonia'},{code:'NO',name:'Norway'},
+    {code:'OM',name:'Oman'},{code:'PK',name:'Pakistan'},{code:'PW',name:'Palau'},{code:'PS',name:'Palestine'},{code:'PA',name:'Panama'},
+    {code:'PG',name:'Papua New Guinea'},{code:'PY',name:'Paraguay'},{code:'PE',name:'Peru'},{code:'PH',name:'Philippines'},{code:'PL',name:'Poland'},
+    {code:'PT',name:'Portugal'},{code:'PR',name:'Puerto Rico'},{code:'QA',name:'Qatar'},{code:'RO',name:'Romania'},{code:'RU',name:'Russia'},
+    {code:'RW',name:'Rwanda'},{code:'KN',name:'Saint Kitts and Nevis'},{code:'LC',name:'Saint Lucia'},{code:'VC',name:'Saint Vincent and the Grenadines'},
+    {code:'WS',name:'Samoa'},{code:'SM',name:'San Marino'},{code:'ST',name:'Sao Tome and Principe'},{code:'SA',name:'Saudi Arabia'},{code:'SN',name:'Senegal'},
+    {code:'RS',name:'Serbia'},{code:'SC',name:'Seychelles'},{code:'SL',name:'Sierra Leone'},{code:'SG',name:'Singapore'},{code:'SK',name:'Slovakia'},
+    {code:'SI',name:'Slovenia'},{code:'SB',name:'Solomon Islands'},{code:'SO',name:'Somalia'},{code:'ZA',name:'South Africa'},{code:'KR',name:'South Korea'},
+    {code:'SS',name:'South Sudan'},{code:'ES',name:'Spain'},{code:'LK',name:'Sri Lanka'},{code:'SD',name:'Sudan'},{code:'SR',name:'Suriname'},
+    {code:'SE',name:'Sweden'},{code:'CH',name:'Switzerland'},{code:'SY',name:'Syria'},{code:'TW',name:'Taiwan'},{code:'TJ',name:'Tajikistan'},
+    {code:'TZ',name:'Tanzania'},{code:'TH',name:'Thailand'},{code:'TL',name:'Timor-Leste'},{code:'TG',name:'Togo'},{code:'TO',name:'Tonga'},
+    {code:'TT',name:'Trinidad and Tobago'},{code:'TN',name:'Tunisia'},{code:'TR',name:'Turkey'},{code:'TM',name:'Turkmenistan'},{code:'TV',name:'Tuvalu'},
+    {code:'UG',name:'Uganda'},{code:'UA',name:'Ukraine'},{code:'AE',name:'United Arab Emirates'},{code:'GB',name:'United Kingdom'},{code:'US',name:'United States'},
+    {code:'UY',name:'Uruguay'},{code:'UZ',name:'Uzbekistan'},{code:'VU',name:'Vanuatu'},{code:'VA',name:'Vatican City'},{code:'VE',name:'Venezuela'},
+    {code:'VN',name:'Vietnam'},{code:'YE',name:'Yemen'},{code:'ZM',name:'Zambia'},{code:'ZW',name:'Zimbabwe'}
+  ];
+  function countryFlag(code){
+    if (!code || code.length !== 2) return '';
+    return code.toUpperCase().replace(/./g, c => String.fromCodePoint(127397 + c.charCodeAt(0)));
+  }
+  function countryCodeForName(name){
+    if (!name) return null;
+    const hit = COUNTRIES.find(c => c.name.toLowerCase() === name.trim().toLowerCase());
+    return hit ? hit.code : null;
+  }
+  function countryFlagForTrip(t){
+    const code = countryCodeForName(t.country);
+    return code ? countryFlag(code) : '';
+  }
+  const CITY_TO_COUNTRY = {
+    'bruges':'Belgium','brugge':'Belgium','brussels':'Belgium','ghent':'Belgium','antwerp':'Belgium',
+    'paris':'France','nice':'France','lyon':'France','marseille':'France','bordeaux':'France','provence':'France','normandy':'France','strasbourg':'France','cannes':'France','avignon':'France','chamonix':'France',
+    'london':'United Kingdom','liverpool':'United Kingdom','manchester':'United Kingdom','edinburgh':'United Kingdom','glasgow':'United Kingdom','bristol':'United Kingdom','york':'United Kingdom','bath':'United Kingdom','oxford':'United Kingdom','cambridge':'United Kingdom','cornwall':'United Kingdom','brighton':'United Kingdom','belfast':'United Kingdom','cardiff':'United Kingdom','lake district':'United Kingdom',
+    'rome':'Italy','venice':'Italy','florence':'Italy','milan':'Italy','naples':'Italy','sicily':'Italy','tuscany':'Italy','amalfi':'Italy','verona':'Italy','turin':'Italy','pisa':'Italy','bologna':'Italy','sardinia':'Italy','lake como':'Italy','cinque terre':'Italy',
+    'santorini':'Greece','athens':'Greece','mykonos':'Greece','crete':'Greece','rhodes':'Greece','corfu':'Greece','zakynthos':'Greece','thessaloniki':'Greece','naxos':'Greece',
+    'madrid':'Spain','barcelona':'Spain','seville':'Spain','valencia':'Spain','granada':'Spain','ibiza':'Spain','mallorca':'Spain','majorca':'Spain','malaga':'Spain','bilbao':'Spain','tenerife':'Spain','canary islands':'Spain','san sebastian':'Spain',
+    'lisbon':'Portugal','porto':'Portugal','algarve':'Portugal','madeira':'Portugal','sintra':'Portugal',
+    'amsterdam':'Netherlands','rotterdam':'Netherlands','the hague':'Netherlands','utrecht':'Netherlands',
+    'berlin':'Germany','munich':'Germany','hamburg':'Germany','cologne':'Germany','frankfurt':'Germany','bavaria':'Germany','black forest':'Germany','dresden':'Germany',
+    'vienna':'Austria','salzburg':'Austria','innsbruck':'Austria','tyrol':'Austria',
+    'zurich':'Switzerland','geneva':'Switzerland','interlaken':'Switzerland','zermatt':'Switzerland','lucerne':'Switzerland','bern':'Switzerland',
+    'dublin':'Ireland','galway':'Ireland','cork':'Ireland',
+    'reykjavik':'Iceland',
+    'copenhagen':'Denmark','stockholm':'Sweden','gothenburg':'Sweden','oslo':'Norway','bergen':'Norway','lofoten':'Norway','helsinki':'Finland','lapland':'Finland',
+    'prague':'Czechia','budapest':'Hungary','warsaw':'Poland','krakow':'Poland','zagreb':'Croatia','dubrovnik':'Croatia','split':'Croatia','hvar':'Croatia','ljubljana':'Slovenia','bled':'Slovenia',
+    'istanbul':'Turkey','cappadocia':'Turkey','antalya':'Turkey','bodrum':'Turkey',
+    'moscow':'Russia','st petersburg':'Russia',
+    'malta':'Malta','valletta':'Malta','cyprus':'Cyprus','monaco':'Monaco',
+    'new york':'United States','los angeles':'United States','san francisco':'United States','las vegas':'United States','chicago':'United States','miami':'United States','orlando':'United States','boston':'United States','seattle':'United States','hawaii':'United States','washington dc':'United States','new orleans':'United States','austin':'United States','denver':'United States','nashville':'United States','yellowstone':'United States',
+    'toronto':'Canada','vancouver':'Canada','montreal':'Canada','banff':'Canada','quebec city':'Canada','niagara falls':'Canada',
+    'cancun':'Mexico','mexico city':'Mexico','tulum':'Mexico','playa del carmen':'Mexico',
+    'havana':'Cuba','kingston':'Jamaica','nassau':'Bahamas','punta cana':'Dominican Republic',
+    'rio de janeiro':'Brazil','sao paulo':'Brazil','buenos aires':'Argentina','santiago':'Chile','lima':'Peru','machu picchu':'Peru','cusco':'Peru','bogota':'Colombia','cartagena':'Colombia','quito':'Ecuador','galapagos':'Ecuador',
+    'cairo':'Egypt','marrakech':'Morocco','casablanca':'Morocco','fes':'Morocco','cape town':'South Africa','johannesburg':'South Africa','nairobi':'Kenya','zanzibar':'Tanzania','serengeti':'Tanzania',
+    'dubai':'United Arab Emirates','abu dhabi':'United Arab Emirates','doha':'Qatar','tel aviv':'Israel','jerusalem':'Israel','amman':'Jordan','petra':'Jordan',
+    'tokyo':'Japan','kyoto':'Japan','osaka':'Japan','okinawa':'Japan','hokkaido':'Japan',
+    'beijing':'China','shanghai':'China','hong kong':'Hong Kong','shenzhen':'China',
+    'seoul':'South Korea','busan':'South Korea','taipei':'Taiwan',
+    'bangkok':'Thailand','phuket':'Thailand','chiang mai':'Thailand','koh samui':'Thailand',
+    'singapore':'Singapore','kuala lumpur':'Malaysia','bali':'Indonesia','jakarta':'Indonesia','ubud':'Indonesia',
+    'hanoi':'Vietnam','ho chi minh city':'Vietnam','siem reap':'Cambodia','luang prabang':'Laos',
+    'manila':'Philippines','boracay':'Philippines',
+    'mumbai':'India','delhi':'India','goa':'India','jaipur':'India','kerala':'India','agra':'India',
+    'kathmandu':'Nepal','male':'Maldives','maldives':'Maldives',
+    'sydney':'Australia','melbourne':'Australia','brisbane':'Australia','perth':'Australia','gold coast':'Australia','auckland':'New Zealand','queenstown':'New Zealand','wellington':'New Zealand',
+    'fiji':'Fiji'
+  };
+  function guessCountryFromName(name){
+    if (!name) return null;
+    const clean = name.toLowerCase();
+    const direct = COUNTRIES.find(c => new RegExp('\\b'+c.name.toLowerCase().replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'\\b').test(clean));
+    if (direct) return direct.name;
+    const keys = Object.keys(CITY_TO_COUNTRY).sort((a,b)=> b.length - a.length);
+    for (const key of keys){
+      if (new RegExp('\\b'+key.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'\\b').test(clean)) return CITY_TO_COUNTRY[key];
+    }
+    return null;
+  }
+  function sheetColor(key){ const s = SHEETS.find(s=>s.key===key); return s ? s.color : '#5b6672'; }
+  function resolveExpenseCategory(name){ return state.categories.some(c=>c.name===name) ? name : 'Other'; }
+  function tripTimelineMode(t){ return t.timelineMode || (t.startDate ? 'dates' : 'days'); }
+
+  let uidCounter = 0;
+  function uid(prefix){ uidCounter += 1; return prefix + '_' + Date.now().toString(36) + '_' + uidCounter.toString(36) + '_' + Math.random().toString(36).slice(2,7); }
+
+  function defaultCategories(){
+    return [
+      { name: 'Flights', color: '#b8874f' },
+      { name: 'Hotels', color: '#35695c' },
+      { name: 'Transportation', color: '#35597a' },
+      { name: 'Spends', color: '#a63a2e' },
+      { name: 'Excursions', color: '#6a4a6e' },
+      { name: 'Misc', color: '#8a7a3a' },
+      { name: 'Other', color: '#5b6672' }
+    ];
+  }
+  function defaultSettings(){
+    return {
+      mapsApiKey: '',
+      githubEnabled: false, githubToken: '', githubOwner: '', githubRepo: '',
+      githubPath: 'data.json', githubBranch: 'main', githubSha: null, githubLastSyncAt: null
+    };
+  }
+  function getCategoryColor(name){
+    const c = state.categories.find(c=>c.name===name);
+    return c ? c.color : '#5b6672';
+  }
+
+  function seedData(){
+    return { trips: [
+      mkTrip('Santorini', 2024, 'completed', 4000, [
+        exp('NCL - JHR', 'Flights', 2, 305.50), exp('Altamar Suites', 'Hotels', 7, 212.00),
+        exp('Airport Transfers', 'Transportation', 2, 24.00), exp('City Tax', 'Misc', 1, 10.00),
+        exp('Euros', 'Spends', 1, 300.00), exp('Card Spending', 'Spends', 1, 1500.00),
+        exp('Catamaran', 'Excursions', 2, 143.00)
+      ], {travelers: 2}),
+      mkTrip('London', 2024, 'completed', 1000, [
+        exp('NCL - LDN', 'Transportation', 2, 115.00), exp('Westbourne Hotel', 'Hotels', 2, 235.26),
+        exp('Tube', 'Transportation', 2, 25.00), exp('Spends', 'Spends', 1, 400.00),
+        exp('Stevie Nicks Tickets', 'Excursions', 2, 119.95)
+      ], {travelers: 2}),
+      mkTrip('Paris', 2025, 'completed', 2500, [
+        exp('NCL - CDG', 'Flights', 2, 254.71), exp('Hotel Les Deux Girafes', 'Hotels', 4, 182.25),
+        exp('Les Deux to CDG', 'Transportation', 1, 53.80), exp('Spends', 'Spends', 4, 193.18),
+        exp('City Tax', 'Misc', 4, 15.00), exp('Louvre', 'Excursions', 2, 19.29), exp('Uber Home', 'Transportation', 1, 21.18)
+      ], {travelers: 2}),
+      mkTrip('Liverpool \u2014 Springsteen', 2025, 'completed', 1000, [
+        exp('NCL - LIV', 'Transportation', 2, 59.29), exp('Quest Apartments', 'Hotels', 2, 204.10),
+        exp('Bruce Springsteen Tickets', 'Excursions', 2, 105.75)
+      ], {travelers: 2}),
+      mkTrip("Italy \u2014 didn't happen", 2025, 'cancelled', 4000, [
+        exp('MAN - FCO', 'Flights', 2, 330.00), exp('Florence Hotel', 'Hotels', 4, 200.00), exp('Rome Hotel', 'Hotels', 3, 200.00),
+        exp('Spends', 'Spends', 7, 300.00), exp('Tuscany', 'Excursions', 1, 200.00), exp('Wineries', 'Excursions', 1, 200.00),
+        exp('Parking', 'Misc', 1, 90.00), exp('Airport to Rome', 'Transportation', 2, 50.00),
+        exp('Train to Florence', 'Transportation', 1, 100.00), exp('Train to Rome', 'Transportation', 1, 100.00)
+      ], {travelers: 2}),
+      mkTrip('Brugge', 2026, 'upcoming', 2000, [
+        exp('MAN - Brugge Flights', 'Flights', 2, 250.00), exp('Spends', 'Spends', 2, 300.00)
+      ], {travelers: 2})
+    ]};
+  }
+  function mkTrip(name, year, status, budget, expenses, opts){
+    opts = opts || {};
+    return {
+      id: uid('trip'), name, year, status, budget,
+      startDate: opts.startDate || null, endDate: opts.endDate || null,
+      travelers: opts.travelers || 2, notes: opts.notes || '',
+      expenses, planItems: opts.planItems || [], timelineMode: opts.timelineMode || null,
+      research: opts.research || [], packingList: opts.packingList || [], country: opts.country || '', countryGuessed: opts.countryGuessed || false,
+      createdAt: Date.now(), updatedAt: Date.now()
+    };
+  }
+  function exp(description, category, quantity, unitCost){
+    return { id: uid('exp'), description, category, quantity, unitCost };
+  }
+  function mkLink(label, url){ return { id: uid('link'), label: label||'', url: url||'' }; }
+  function researchItem(sheet, name, opts){
+    opts = opts || {};
+    return {
+      id: uid('res'), sheet, name, address: opts.address || '',
+      lat: opts.lat != null ? opts.lat : null, lng: opts.lng != null ? opts.lng : null,
+      priceLevel: opts.priceLevel || null, priority: opts.priority || null,
+      estCost: opts.estCost != null ? opts.estCost : null, notes: opts.notes || '',
+      links: opts.links || [], status: opts.status || 'researching',
+      linkedPlanItemId: null, createdAt: Date.now()
+    };
+  }
+  function planItem(sheet, name, opts){
+    opts = opts || {};
+    return {
+      id: uid('plan'), sheet, name, status: opts.status || 'idea',
+      date: opts.date || null, endDate: opts.endDate || null, time: opts.time || null,
+      dayNumber: opts.dayNumber || null, dayNumberEnd: opts.dayNumberEnd || null,
+      location: opts.location || '', links: opts.links || [], cost: opts.cost != null ? opts.cost : null,
+      linkedExpenseId: opts.linkedExpenseId || null, notes: opts.notes || ''
+    };
+  }
+  function packingItem(category, name, qty){
+    return { id: uid('pack'), category, name, qty: qty || 1, packed: false };
+  }
+
+  function tripTotal(trip){ return trip.expenses.reduce((s,e)=> s + (Number(e.quantity)||0) * (Number(e.unitCost)||0), 0); }
+  function tripCategoryTotals(trip){
+    const totals = {}; state.categories.forEach(c => totals[c.name] = 0);
+    trip.expenses.forEach(e => { totals[e.category] = (totals[e.category]||0) + (Number(e.quantity)||0)*(Number(e.unitCost)||0); });
+    return totals;
+  }
+  function fmt(n){ return CUR + (Number(n)||0).toLocaleString('en-GB', {minimumFractionDigits:2, maximumFractionDigits:2}); }
+  function daysUntil(dateStr){ const d = new Date(dateStr + 'T00:00:00'); const now = new Date(); now.setHours(0,0,0,0); return Math.round((d-now)/86400000); }
+  function shortDate(dateStr){ return new Date(dateStr + 'T00:00:00').toLocaleDateString('en-GB', {day:'numeric', month:'short'}); }
+  function autoGrow(el){ if (!el) return; el.style.height = 'auto'; el.style.height = el.scrollHeight + 'px'; }
+  function singleLine(str){ return (str||'').replace(/[\r\n]+/g, ' ').trim(); }
+  function wireAutogrow(root, selector, opts){
+    opts = opts || {};
+    (root || document).querySelectorAll(selector).forEach(el=>{
+      autoGrow(el);
+      el.addEventListener('input', ()=> autoGrow(el));
+      if (opts.singleValue){
+        el.addEventListener('keydown', ev=>{ if (ev.key === 'Enter'){ ev.preventDefault(); } });
+      }
+    });
+  }
+  function tripDuration(t){
+    if (t.startDate && t.endDate){
+      const days = Math.round((new Date(t.endDate+'T00:00:00') - new Date(t.startDate+'T00:00:00')) / 86400000) + 1;
+      return days > 0 ? days : null;
+    }
+    if (tripTimelineMode(t)==='days' && Array.isArray(t.planItems) && t.planItems.length){
+      let maxDay = 0;
+      t.planItems.forEach(i=>{
+        if (i.dayNumber) maxDay = Math.max(maxDay, i.dayNumber);
+        if (i.dayNumberEnd) maxDay = Math.max(maxDay, i.dayNumberEnd);
+      });
+      return maxDay > 0 ? maxDay : null;
+    }
+    return null;
+  }
+  function escapeHtml(s){ const d=document.createElement('div'); d.textContent=s||''; return d.innerHTML; }
+  function renderLinksInline(links){
+    if (!links || !links.length) return '';
+    return ' ' + links.map((l,idx)=>{
+      if (!l.url) return '';
+      const text = l.label ? l.label : (links.length>1 ? 'link'+(idx+1) : 'link');
+      return `<a href="${escapeHtml(l.url)}" target="_blank" rel="noopener" style="font-size:11px;">${escapeHtml(text)}</a>`;
+    }).filter(Boolean).join(' \u00b7 ');
+  }
+  function setupLinksEditor(prefix, initialLinks){
+    let draft = (initialLinks||[]).map(l=>({ id: l.id||uid('link'), label: l.label||'', url: l.url||'' }));
+    function render(){
+      const list = document.getElementById(prefix+'-links-list');
+      if (!list) return;
+      list.innerHTML = draft.length ? draft.map(l=>`
+        <div class="link-row" data-id="${l.id}">
+          <input type="text" class="link-label" placeholder="Label (optional)" value="${escapeHtml(l.label)}">
+          <textarea rows="1" class="link-url autogrow" placeholder="https://\u2026">${escapeHtml(l.url)}</textarea>
+          <button type="button" class="exp-del link-remove" title="Remove link">\u2715</button>
+        </div>`).join('') : '<div style="font-size:12px;color:var(--ink-soft);margin-bottom:6px;">No links yet.</div>';
+      list.querySelectorAll('.link-row').forEach(row=>{
+        const id = row.dataset.id;
+        const item = draft.find(x=>x.id===id);
+        if (!item) return;
+        row.querySelector('.link-label').addEventListener('input', ev=>{ item.label = ev.target.value; });
+        const urlEl = row.querySelector('.link-url');
+        urlEl.addEventListener('input', ev=>{ item.url = ev.target.value; });
+        row.querySelector('.link-remove').addEventListener('click', ()=>{ draft = draft.filter(x=>x.id!==id); render(); });
+      });
+      wireAutogrow(list, 'textarea.link-url', {singleValue:true});
+    }
+    render();
+    const addBtn = document.getElementById(prefix+'-add-link');
+    if (addBtn) addBtn.addEventListener('click', ()=>{
+      draft.push({ id: uid('link'), label: '', url: '' });
+      render();
+      const rows = document.querySelectorAll(`#${prefix}-links-list .link-row`);
+      const last = rows[rows.length-1];
+      if (last) last.querySelector('.link-label').focus();
+    });
+    return {
+      getLinks: function(){
+        return draft.map(l=>({ id: l.id, label: singleLine(l.label), url: singleLine(l.url) })).filter(l=>l.url);
+      },
+      addLink: function(label, url){
+        if (!url || draft.some(l=>l.url===url)) return;
+        draft.push({ id: uid('link'), label: label||'', url });
+        render();
+      }
+    };
+  }
+
+  function logEvent(action, detail){
+    state.activityLog.unshift({ id: uid('log'), ts: Date.now(), action, detail });
+    if (state.activityLog.length > 200) state.activityLog.length = 200;
+  }
+  function showToast(msg){
+    toastEl.textContent = msg; toastEl.classList.add('show');
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(()=> toastEl.classList.remove('show'), 2200);
+  }
+
+  const storageWarningEl = document.getElementById('storageWarning');
+  function showStorageWarning(show){
+    if (storageWarningEl) storageWarningEl.classList.toggle('show', !!show);
+  }
+  function storageWritesReliably(){
+    try {
+      const probeKey = '__ledger_probe__';
+      const probeVal = String(Date.now());
+      localStorage.setItem(probeKey, probeVal);
+      const ok = localStorage.getItem(probeKey) === probeVal;
+      localStorage.removeItem(probeKey);
+      return ok;
+    } catch(e) { return false; }
+  }
+
+  function utf8ToBase64(str){ return btoa(unescape(encodeURIComponent(str))); }
+  function base64ToUtf8(b64){ return decodeURIComponent(escape(atob((b64||'').replace(/\n/g,'')))); }
+  function githubConfigured(){
+    const s = state.settings;
+    return !!(s && s.githubEnabled && s.githubToken && s.githubOwner && s.githubRepo && s.githubPath);
+  }
+  function githubApiUrl(){
+    const s = state.settings;
+    const pathParts = s.githubPath.split('/').filter(Boolean).map(encodeURIComponent).join('/');
+    return `https://api.github.com/repos/${encodeURIComponent(s.githubOwner)}/${encodeURIComponent(s.githubRepo)}/contents/${pathParts}`;
+  }
+  function syncableData(){
+    return { categories: state.categories, trips: state.trips, trash: state.trash, activityLog: state.activityLog };
+  }
+  function setSyncStatus(kind, text){
+    if (!syncFlag) return;
+    syncFlag.hidden = false;
+    syncFlag.textContent = text;
+    syncFlag.className = 'sync-flag' + (kind ? ' ' + kind : '');
+  }
+  function formatSyncTime(ts){
+    if (!ts) return 'never';
+    return new Date(ts).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+  }
+  async function githubFetchRemote(){
+    const s = state.settings;
+    const res = await fetch(`${githubApiUrl()}?ref=${encodeURIComponent(s.githubBranch||'main')}`, {
+      headers: { 'Authorization': `token ${s.githubToken}`, 'Accept': 'application/vnd.github+json' }
+    });
+    if (res.status === 404) return { exists:false, json:null, sha:null };
+    if (res.status === 401 || res.status === 403) throw new Error('github-auth-failed');
+    if (!res.ok) throw new Error('github-fetch-failed:'+res.status);
+    const data = await res.json();
+    let json = null;
+    try { json = JSON.parse(base64ToUtf8(data.content)); } catch(e) { throw new Error('github-bad-content'); }
+    return { exists:true, json, sha: data.sha };
+  }
+  async function githubPushRemote(retrying){
+    const s = state.settings;
+    const payload = JSON.stringify(syncableData());
+    const body = {
+      message: `Travel Ledger sync \u2014 ${new Date().toISOString()}`,
+      content: utf8ToBase64(payload),
+      branch: s.githubBranch || 'main'
+    };
+    if (s.githubSha) body.sha = s.githubSha;
+    const res = await fetch(githubApiUrl(), {
+      method: 'PUT',
+      headers: { 'Authorization': `token ${s.githubToken}`, 'Accept': 'application/vnd.github+json', 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    if (res.status === 409 && !retrying){
+      // Stale sha (edited elsewhere) — refresh sha once and retry.
+      const remote = await githubFetchRemote();
+      s.githubSha = remote.sha;
+      return githubPushRemote(true);
+    }
+    if (res.status === 401 || res.status === 403) throw new Error('github-auth-failed');
+    if (!res.ok){
+      const errBody = await res.json().catch(()=>({}));
+      throw new Error('github-push-failed:'+res.status+(errBody.message?':'+errBody.message:''));
+    }
+    const data = await res.json();
+    s.githubSha = data.content.sha;
+    s.githubLastSyncAt = Date.now();
+  }
+  let githubSyncTimer = null;
+  function scheduleGithubSync(){
+    if (!githubConfigured()) return;
+    setSyncStatus('syncing', '\u2601 sync pending\u2026');
+    clearTimeout(githubSyncTimer);
+    githubSyncTimer = setTimeout(async ()=>{
+      setSyncStatus('syncing', '\u2601 syncing\u2026');
+      try {
+        await githubPushRemote(false);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); // persist updated sha/lastSyncAt locally too
+        setSyncStatus('', `\u2601 synced ${formatSyncTime(state.settings.githubLastSyncAt)}`);
+      } catch(err){
+        const msg = err.message === 'github-auth-failed'
+          ? '\u2601 sync failed: check token'
+          : '\u2601 sync failed';
+        setSyncStatus('error', msg);
+      }
+    }, 4000);
+  }
+  async function githubPullOnLoad(){
+    if (!githubConfigured()) return;
+    setSyncStatus('syncing', '\u2601 pulling\u2026');
+    try {
+      const remote = await githubFetchRemote();
+      if (remote.exists && remote.json){
+        state.categories = remote.json.categories || state.categories;
+        state.trips = remote.json.trips || state.trips;
+        state.trash = remote.json.trash || state.trash;
+        state.activityLog = remote.json.activityLog || state.activityLog;
+        state.settings.githubSha = remote.sha;
+        state.settings.githubLastSyncAt = Date.now();
+        migrate();
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        setSyncStatus('', `\u2601 synced ${formatSyncTime(state.settings.githubLastSyncAt)}`);
+      } else {
+        setSyncStatus('', '\u2601 no remote data yet \u2014 will create on first save');
+      }
+    } catch(err){
+      const msg = err.message === 'github-auth-failed'
+        ? '\u2601 pull failed: check token'
+        : '\u2601 pull failed \u2014 using local data';
+      setSyncStatus('error', msg);
+    }
+  }
+  async function loadState(){
+    showStorageWarning(!storageWritesReliably());
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) { state = JSON.parse(raw); migrate(); await githubPullOnLoad(); return; }
+    } catch(e) { /* no existing data, or storage unavailable */ }
+    state = seedData();
+    state.categories = defaultCategories();
+    state.trash = { trips: [], expenses: [] };
+    state.activityLog = [];
+    state.settings = defaultSettings();
+    migrate();
+    logEvent('setup', 'Ledger initialised with sample trips');
+    await saveState();
+  }
+  function migrate(){
+    if (!state.categories || !state.categories.length) state.categories = defaultCategories();
+    if (!state.trash) state.trash = { trips: [], expenses: [] };
+    if (!state.trash.trips) state.trash.trips = [];
+    if (!state.trash.expenses) state.trash.expenses = [];
+    if (!state.activityLog) state.activityLog = [];
+    if (!state.settings) state.settings = defaultSettings();
+    const sDefaults = defaultSettings();
+    Object.keys(sDefaults).forEach(k=>{ if (state.settings[k] === undefined) state.settings[k] = sDefaults[k]; });
+    let guessedCount = 0;
+    (state.trips||[]).forEach(t=>{
+      if (t.travelers == null) t.travelers = 2;
+      if (t.startDate === undefined) t.startDate = null;
+      if (t.endDate === undefined) t.endDate = null;
+      if (t.notes === undefined) t.notes = '';
+      if (!Array.isArray(t.planItems)) t.planItems = [];
+      if (t.timelineMode === undefined) t.timelineMode = null;
+      if (!Array.isArray(t.research)) t.research = [];
+      if (!Array.isArray(t.packingList)) t.packingList = [];
+      if (t.country === undefined) t.country = '';
+      if (t.countryGuessed === undefined) t.countryGuessed = false;
+      if (!t.country){
+        const guess = guessCountryFromName(t.name);
+        if (guess){ t.country = guess; t.countryGuessed = true; guessedCount++; }
+      }
+      t.planItems.forEach(i=>{
+        if (i.sheet === 'Activities / Sights') i.sheet = 'Activities';
+        if (!Array.isArray(i.links)){
+          i.links = (i.link ? [mkLink('', i.link)] : []);
+          delete i.link;
+        }
+      });
+      t.research.forEach(i=>{
+        if (i.sheet === 'Activities / Sights') i.sheet = 'Activities';
+        if (!Array.isArray(i.links)){
+          i.links = (i.link ? [mkLink('', i.link)] : []);
+          delete i.link;
+        }
+      });
+    });
+    if (guessedCount){
+      logEvent('country-auto-guessed', `Guessed country for ${guessedCount} trip(s) from their names \u2014 check Edit Trip to correct any that are wrong`);
+    }
+    const trashCutoff = Date.now() - (90 * 24 * 60 * 60 * 1000);
+    const purgedTrips = state.trash.trips.filter(x=>x.deletedAt && x.deletedAt < trashCutoff).length;
+    const purgedExpenses = state.trash.expenses.filter(x=>x.deletedAt && x.deletedAt < trashCutoff).length;
+    state.trash.trips = state.trash.trips.filter(x=>!x.deletedAt || x.deletedAt >= trashCutoff);
+    state.trash.expenses = state.trash.expenses.filter(x=>!x.deletedAt || x.deletedAt >= trashCutoff);
+    if (purgedTrips || purgedExpenses){
+      logEvent('trash-auto-purged', `Auto-cleared ${purgedTrips} trip(s) and ${purgedExpenses} expense(s) from Trash after 90 days`);
+    }
+  }
+  async function saveState(){
+    try {
+      const payload = JSON.stringify(state);
+      localStorage.setItem(STORAGE_KEY, payload);
+      const verify = localStorage.getItem(STORAGE_KEY);
+      if (verify !== payload){
+        showStorageWarning(true);
+        showToast('Warning: save may not have persisted');
+        return;
+      }
+      showStorageWarning(false);
+      flashSaved();
+      scheduleGithubSync();
+    }
+    catch(e) { console.error('Storage error', e); showStorageWarning(true); showToast('Could not save \u2014 storage full or unavailable'); }
+  }
+  let saveTimer = null;
+  function flashSaved(){
+    saveFlag.classList.add('show');
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(()=> saveFlag.classList.remove('show'), 1200);
+  }
+
+  /* ---------------- KPIs ---------------- */
+  function resolveItemAbsoluteDate(t, item){
+    const mode = tripTimelineMode(t);
+    if (mode === 'dates'){
+      if (!item.date) return null;
+      return new Date(item.date + 'T' + (item.time || '00:00') + ':00');
+    }
+    if (item.dayNumber && t.startDate){
+      const base = new Date(t.startDate + 'T00:00:00');
+      base.setDate(base.getDate() + (item.dayNumber - 1));
+      if (item.time){ const [h,m] = item.time.split(':'); base.setHours(Number(h),Number(m),0,0); }
+      return base;
+    }
+    return null;
+  }
+
+  function getUpcomingPlanItems(limit){
+    const now = new Date();
+    const out = [];
+    state.trips.forEach(t=>{
+      if (t.status === 'cancelled') return;
+      t.planItems.forEach(item=>{
+        if (item.status === 'cancelled') return;
+        const d = resolveItemAbsoluteDate(t, item);
+        if (!d || d < now) return;
+        out.push({ trip: t, item, date: d });
+      });
+    });
+    out.sort((a,b)=> a.date - b.date);
+    return out.slice(0, limit || 5);
+  }
+
+  function renderUpNext(){
+    const wrap = document.getElementById('upNextWrap');
+    const upcoming = getUpcomingPlanItems(5);
+    if (!upcoming.length){ wrap.innerHTML = ''; return; }
+    wrap.innerHTML = `
+      <div class="chart-card upnext-card">
+        <h3>Up Next</h3>
+        ${upcoming.map(u=>{
+          const days = Math.round((u.date - new Date())/86400000);
+          const when = days <= 0 ? 'Today' : days === 1 ? 'Tomorrow' : `In ${days} days`;
+          const dateLabel = u.date.toLocaleDateString('en-GB', {day:'numeric', month:'short'}) + (u.item.time ? ' \u00b7 '+u.item.time : '');
+          return `
+          <div class="upnext-row" data-trip="${u.trip.id}">
+            <span class="upnext-dot" style="background:${sheetColor(u.item.sheet)}"></span>
+            <div class="upnext-main">
+              <div class="upnext-name">${escapeHtml(u.item.name)}</div>
+              <div class="upnext-sub">${escapeHtml(u.item.sheet)} \u00b7 ${escapeHtml(u.trip.name)} \u00b7 ${dateLabel}</div>
+            </div>
+            <div class="countdown-chip">${when}</div>
+          </div>`;
+        }).join('')}
+      </div>`;
+    wrap.querySelectorAll('.upnext-row').forEach(row=>{
+      row.addEventListener('click', ()=>{ activeTripId = row.dataset.trip; activeTripTab = 'plan'; dashboardView.hidden = true; tripView.hidden = false; renderTripView(); });
+    });
+  }
+
+  function renderKPIs(){
+    const live = state.trips.filter(t => t.status !== 'cancelled');
+    const totalBudget = live.reduce((s,t)=> s + Number(t.budget||0), 0);
+    const totalSpent = live.reduce((s,t)=> s + tripTotal(t), 0);
+    const variance = totalBudget - totalSpent;
+    const upcoming = state.trips.filter(t=>t.status==='upcoming').length;
+    document.getElementById('kpiBoard').innerHTML = `
+      <div class="kpi-cell"><div class="label">Total Budgeted</div><div class="value">${fmt(totalBudget)}</div></div>
+      <div class="kpi-cell"><div class="label">Total Spent</div><div class="value">${fmt(totalSpent)}</div></div>
+      <div class="kpi-cell ${variance < 0 ? 'over' : 'under'}"><div class="label">Variance</div><div class="value">${variance < 0 ? '-' : ''}${fmt(Math.abs(variance))}</div></div>
+      <div class="kpi-cell"><div class="label">Trips Logged</div><div class="value">${state.trips.length}</div></div>
+      <div class="kpi-cell"><div class="label">Upcoming</div><div class="value">${upcoming}</div></div>
+    `;
+  }
+
+  function renderCatBars(){
+    const totals = {}; state.categories.forEach(c=> totals[c.name]=0);
+    state.trips.filter(t=>t.status!=='cancelled').forEach(t=>{
+      const ct = tripCategoryTotals(t);
+      state.categories.forEach(c=> totals[c.name]+=ct[c.name]||0);
+    });
+    const max = Math.max(1, ...Object.values(totals));
+    const names = state.categories.map(c=>c.name).filter(n=>totals[n]>0).sort((a,b)=>totals[b]-totals[a]);
+    document.getElementById('catBars').innerHTML = names.map(c=>`
+      <div class="cat-bar-row">
+        <div class="cat-bar-label">${escapeHtml(c)}</div>
+        <div class="cat-bar-track"><div class="cat-bar-fill" style="width:${(totals[c]/max*100).toFixed(1)}%;background:${getCategoryColor(c)}"></div></div>
+        <div class="cat-bar-val">${fmt(totals[c])}</div>
+      </div>`).join('') || '<div class="empty-state">No expenses logged yet.</div>';
+  }
+
+  function renderYearRows(){
+    const years = {};
+    state.trips.forEach(t=>{
+      if (t.status==='cancelled') return;
+      if (!years[t.year]) years[t.year] = { budget:0, spent:0, count:0 };
+      years[t.year].budget += Number(t.budget||0);
+      years[t.year].spent += tripTotal(t);
+      years[t.year].count += 1;
+    });
+    const keys = Object.keys(years).sort();
+    const max = Math.max(1, ...keys.map(y=>Math.max(years[y].budget, years[y].spent)));
+    document.getElementById('yearRows').innerHTML = keys.length ? keys.map(y=>{
+      const row = years[y];
+      const pct = Math.min(100, (row.spent/max)*100);
+      const over = row.spent > row.budget;
+      return `<div class="year-row">
+        <div class="year-label">${y}</div>
+        <div class="year-track"><div class="year-fill" style="width:${pct}%;background:${over?'var(--red)':'var(--green)'}"></div></div>
+        <div class="year-val">${fmt(row.spent)} / ${fmt(row.budget)}</div>
+      </div>`;
+    }).join('') : '<div class="empty-state">No trips yet.</div>';
+  }
+
+  function renderTrend(){
+    const trips = [...state.trips].sort((a,b)=> a.year - b.year || a.name.localeCompare(b.name));
+    const svg = document.getElementById('trendSvg');
+    if (!trips.length){ svg.innerHTML = ''; return; }
+    const w = 900, h = 200, padL = 46, padB = 34, padT = 10, padR = 10;
+    const chartW = w - padL - padR, chartH = h - padT - padB;
+    const maxVal = Math.max(1, ...trips.map(t=> Math.max(Number(t.budget||0), tripTotal(t))));
+    const bw = chartW / trips.length;
+    let bars = '', labels = '', gridlines = '';
+    for (let i=0;i<=4;i++){
+      const y = padT + chartH - (chartH*i/4);
+      gridlines += `<line x1="${padL}" y1="${y}" x2="${w-padR}" y2="${y}" stroke="#c7bb98" stroke-width="1" stroke-dasharray="2,3"/>`;
+      gridlines += `<text x="${padL-6}" y="${y+3}" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="9" fill="#37455a" text-anchor="end">${CUR}${Math.round(maxVal*i/4)}</text>`;
+    }
+    trips.forEach((t,i)=>{
+      const spent = tripTotal(t), budget = Number(t.budget||0);
+      const groupX = padL + i*bw;
+      const bH1 = (budget/maxVal)*chartH, bH2 = (spent/maxVal)*chartH;
+      const bwEach = Math.min(24, bw*0.32);
+      const x1 = groupX + bw/2 - bwEach - 2, x2 = groupX + bw/2 + 2;
+      bars += `<rect x="${x1}" y="${padT+chartH-bH1}" width="${bwEach}" height="${bH1}" fill="#b8874f"/>`;
+      bars += `<rect x="${x2}" y="${padT+chartH-bH2}" width="${bwEach}" height="${bH2}" fill="#1c2530" ${spent>budget?'opacity="0.85"':''}/>`;
+      labels += `<text x="${groupX+bw/2}" y="${h-10}" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="9" fill="#37455a" text-anchor="middle">${escapeHtml(t.name.length>9? t.name.slice(0,8)+'\u2026':t.name)}</text>`;
+    });
+    svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+    svg.innerHTML = gridlines + bars + labels;
+  }
+
+  function statusLabel(t){
+    const spent = tripTotal(t);
+    if (t.status === 'cancelled') return {cls:'status-cancelled', text:'Cancelled'};
+    if (spent > Number(t.budget||0)) return {cls:'status-over', text:'Over Budget'};
+    if (t.status === 'upcoming') return {cls:'status-upcoming', text:'Upcoming'};
+    return {cls:'status-completed', text:'On Track'};
+  }
+
+  function applyFilterSort(trips){
+    let out = trips.filter(t=>{
+      if (uiFilter.status !== 'all' && t.status !== uiFilter.status) return false;
+      if (uiFilter.search && !t.name.toLowerCase().includes(uiFilter.search.toLowerCase())) return false;
+      return true;
+    });
+    switch(uiFilter.sort){
+      case 'year-asc': out.sort((a,b)=> a.year-b.year); break;
+      case 'name': out.sort((a,b)=> a.name.localeCompare(b.name)); break;
+      case 'budget-desc': out.sort((a,b)=> Number(b.budget)-Number(a.budget)); break;
+      case 'spend-desc': out.sort((a,b)=> tripTotal(b)-tripTotal(a)); break;
+      default: out.sort((a,b)=> b.year-a.year || (b.updatedAt||0)-(a.updatedAt||0));
+    }
+    return out;
+  }
+
+  function renderTripsGrid(){
+    const grid = document.getElementById('tripsGrid');
+    if (!state.trips.length){ grid.innerHTML = '<div class="empty-state">No trips yet \u2014 add your first one above.</div>'; return; }
+    const sorted = applyFilterSort(state.trips);
+    if (!sorted.length){ grid.innerHTML = '<div class="empty-state">No trips match that search/filter.</div>'; return; }
+    grid.innerHTML = sorted.map(t=>{
+      const spent = tripTotal(t), budget = Number(t.budget||0), diff = budget - spent;
+      const pct = budget>0 ? Math.min(100,(spent/budget)*100) : 0;
+      const st = statusLabel(t);
+      const fillColor = spent>budget ? 'var(--red)' : 'var(--green)';
+      const perPerson = t.travelers>1 ? spent/t.travelers : null;
+      let countdown = '';
+      if (t.status==='upcoming' && t.startDate){
+        const d = daysUntil(t.startDate);
+        countdown = `<span class="countdown-chip">${d>=0 ? 'In '+d+'d' : Math.abs(d)+'d ago'}</span>`;
+      }
+      const days = tripDuration(t);
+      let datesLine = '';
+      if (t.startDate){
+        datesLine = shortDate(t.startDate) + (t.endDate && t.endDate!==t.startDate ? ' \u2192 ' + shortDate(t.endDate) : '');
+        if (days) datesLine += ` \u00b7 ${days} day${days!==1?'s':''}`;
+      } else if (days){
+        datesLine = `${days} day${days!==1?'s':''}`;
+      }
+      const flag = countryFlagForTrip(t);
+      const flagTitle = t.countryGuessed ? 'Guessed from trip name \u2014 click Edit Trip to confirm' : t.country;
+      return `
+      <div class="pass" data-id="${t.id}">
+        <div class="pass-top">
+          <div class="pass-eyebrow"><span>Boarding Pass</span><span class="chip-group"><span class="status-chip ${st.cls}">${st.text}</span>${countdown}</span></div>
+          <div class="pass-name">${flag?`<span class="pass-flag${t.countryGuessed?' pass-flag-guessed':''}" title="${escapeHtml(flagTitle)}">${flag}</span> `:''}${escapeHtml(t.name)}</div>
+          ${datesLine ? `<div class="pass-dates">${datesLine}</div>` : ''}
+          <div class="pass-figures"><span>Budget ${fmt(budget)}</span><span class="${diff<0?'diff-neg':'diff-pos'}">${diff<0?'-':''}${fmt(Math.abs(diff))}</span></div>
+          ${perPerson!=null ? `<div class="pass-pp">${fmt(perPerson)} / person (${t.travelers})</div>` : ''}
+          <div class="pass-track"><div class="pass-fill" style="width:${pct}%;background:${fillColor}"></div></div>
+        </div>
+        <div class="perforation"></div>
+        <div class="pass-bottom"><div class="barcode"></div><div class="pass-year">${t.year}</div></div>
+      </div>`;
+    }).join('');
+    grid.querySelectorAll('.pass').forEach(card=> card.addEventListener('click', ()=> openTrip(card.dataset.id)));
+  }
+
+  /* ---------------- Trip detail ---------------- */
+  function openTrip(id){ activeTripId = id; activeTripTab = 'budget'; researchView = 'list'; planView = 'gantt'; dashboardView.hidden = true; tripView.hidden = false; renderTripView(); }
+  function closeTrip(){ activeTripId = null; tripView.hidden = true; dashboardView.hidden = false; renderAll(); }
+  function currentTrip(){ return state.trips.find(t=>t.id===activeTripId); }
+
+  function renderTripView(){
+    const t = currentTrip();
+    if (!t) { closeTrip(); return; }
+    const spent = tripTotal(t), budget = Number(t.budget||0), diff = budget - spent;
+    const catTotals = tripCategoryTotals(t);
+    const activeCats = state.categories.map(c=>c.name).filter(c=>catTotals[c]>0);
+    let cumPct = 0; const stops = [];
+    activeCats.forEach(c=>{
+      const pct = spent>0 ? (catTotals[c]/spent*100) : 0;
+      stops.push(`${getCategoryColor(c)} ${cumPct.toFixed(2)}% ${(cumPct+pct).toFixed(2)}%`);
+      cumPct += pct;
+    });
+    const donutBg = stops.length ? `conic-gradient(${stops.join(',')})` : 'var(--paper-edge)';
+    const perPerson = t.travelers>1 ? spent/t.travelers : null;
+    let dateSub = `${t.year} \u00b7 ${t.status}`;
+    if (t.startDate) dateSub += ` \u00b7 ${t.startDate}${t.endDate ? ' \u2192 '+t.endDate : ''}`;
+    const detailDays = tripDuration(t);
+    if (detailDays) dateSub += ` \u00b7 ${detailDays} day${detailDays!==1?'s':''}`;
+    if (t.status==='upcoming' && t.startDate){
+      const d = daysUntil(t.startDate);
+      dateSub += ` \u00b7 ${d>=0 ? 'in '+d+' days' : Math.abs(d)+' days ago'}`;
+    }
+
+    tripView.innerHTML = `
+      <button class="btn-ghost back-btn" id="backBtn">\u2190 All Trips</button>
+      <div class="detail-header">
+        <div>
+          <div class="detail-title">${countryFlagForTrip(t)?`<span class="pass-flag${t.countryGuessed?' pass-flag-guessed':''}" title="${t.countryGuessed?'Guessed from trip name \u2014 click Edit Trip to confirm':escapeHtml(t.country)}">${countryFlagForTrip(t)}</span> `:''}${escapeHtml(t.name)}</div>
+          <div class="detail-sub">${dateSub}</div>
+        </div>
+        <div class="detail-figs">
+          <div class="detail-fig"><div class="label">Budget</div><div class="value">${fmt(budget)}</div></div>
+          <div class="detail-fig"><div class="label">Spent</div><div class="value">${fmt(spent)}</div></div>
+          <div class="detail-fig"><div class="label">Variance</div><div class="value" style="color:${diff<0?'#e0897c':'#8fd6c3'}">${diff<0?'-':''}${fmt(Math.abs(diff))}</div></div>
+          ${perPerson!=null ? `<div class="detail-fig"><div class="label">Per Person (${t.travelers})</div><div class="value">${fmt(perPerson)}</div></div>` : ''}
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <button class="btn-ghost" id="editTripBtn">Edit Trip Details</button>
+        <button class="btn-ghost" id="duplicateTripBtn">Duplicate as New Trip</button>
+        <button class="btn-danger" id="deleteTripBtn">Delete Trip</button>
+      </div>
+
+      <div class="tab-bar">
+        <button class="tab-btn ${activeTripTab==='budget'?'active':''}" data-tab="budget">Budget</button>
+        <button class="tab-btn ${activeTripTab==='plan'?'active':''}" data-tab="plan">Plan${t.planItems.length?' ('+t.planItems.length+')':''}</button>
+        <button class="tab-btn ${activeTripTab==='research'?'active':''}" data-tab="research">Research${t.research.length?' ('+t.research.length+')':''}</button>
+        <button class="tab-btn ${activeTripTab==='packing'?'active':''}" data-tab="packing">Packing${t.packingList.length?` (${t.packingList.filter(p=>p.packed).length}/${t.packingList.length})`:''}</button>
+      </div>
+
+      <div id="tabBudget" ${activeTripTab!=='budget'?'hidden':''}>
+        <div class="detail-grid">
+          <div class="chart-card">
+            <h3>Category Breakdown</h3>
+            ${activeCats.length ? `
+            <div class="donut-wrap">
+              <div class="donut" style="background:${donutBg}"><div class="donut-center"><div class="amt">${fmt(spent)}</div><div class="lbl">spent</div></div></div>
+              <div class="donut-legend">${activeCats.map(c=>`<div><span class="swatch" style="background:${getCategoryColor(c)}"></span>${escapeHtml(c)} \u2014 ${fmt(catTotals[c])}</div>`).join('')}</div>
+            </div>` : '<div class="empty-state">No expenses logged yet.</div>'}
+          </div>
+
+          <div class="chart-card">
+            <h3>Expenses</h3>
+            <div class="table-scroll">
+            <table class="exp-table">
+              <thead><tr><th>Description</th><th>Category</th><th>Qty</th><th>Unit Cost</th><th>Amount</th><th></th></tr></thead>
+              <tbody id="expBody"></tbody>
+              <tfoot><tr class="exp-foot"><td colspan="4">Total Expenses</td><td class="num">${fmt(spent)}</td><td></td></tr></tfoot>
+            </table>
+            </div>
+            <div class="toolbar" style="margin-top:12px;margin-bottom:0;"><button class="btn-primary" id="addExpBtn">+ Add Expense</button></div>
+          </div>
+        </div>
+
+        <div class="chart-card">
+          <h3>Notes</h3>
+          <textarea class="notes-box" id="notesBox" placeholder="Itinerary notes, daily spending caps, reminders\u2026">${escapeHtml(t.notes||'')}</textarea>
+        </div>
+      </div>
+
+      <div id="tabPlan" ${activeTripTab!=='plan'?'hidden':''}></div>
+      <div id="tabResearch" ${activeTripTab!=='research'?'hidden':''}></div>
+      <div id="tabPacking" ${activeTripTab!=='packing'?'hidden':''}></div>
+    `;
+
+    document.getElementById('backBtn').addEventListener('click', closeTrip);
+    document.getElementById('editTripBtn').addEventListener('click', ()=> openTripModal(t));
+    document.getElementById('duplicateTripBtn').addEventListener('click', ()=> duplicateTrip(t));
+    document.getElementById('deleteTripBtn').addEventListener('click', ()=> deleteTrip(t));
+    document.getElementById('addExpBtn').addEventListener('click', ()=> openExpenseModal(t));
+    document.getElementById('notesBox').addEventListener('change', (e)=>{ t.notes = e.target.value; t.updatedAt = Date.now(); saveState(); });
+    tripView.querySelectorAll('.tab-btn').forEach(btn=> btn.addEventListener('click', ()=>{ activeTripTab = btn.dataset.tab; renderTripView(); }));
+    renderExpenseRows(t);
+    if (activeTripTab === 'plan') renderPlanTab(t);
+    if (activeTripTab === 'research') renderResearchTab(t);
+    if (activeTripTab === 'packing') renderPackingTab(t);
+  }
+
+  function renderExpenseRows(t){
+    const body = document.getElementById('expBody');
+    if (!t.expenses.length){ body.innerHTML = `<tr><td colspan="6" class="empty-state">No expenses yet.</td></tr>`; return; }
+    body.innerHTML = t.expenses.map(e=>{
+      const amount = (Number(e.quantity)||0)*(Number(e.unitCost)||0);
+      return `<tr data-id="${e.id}">
+        <td><textarea rows="1" class="exp-desc autogrow">${escapeHtml(e.description)}</textarea></td>
+        <td><select class="exp-cat">${state.categories.map(c=>`<option value="${escapeHtml(c.name)}" ${c.name===e.category?'selected':''}>${escapeHtml(c.name)}</option>`).join('')}</select></td>
+        <td class="num"><input type="number" class="exp-qty" value="${e.quantity}" min="0" step="1" style="text-align:right"></td>
+        <td class="num"><input type="number" class="exp-cost" value="${e.unitCost}" min="0" step="0.01" style="text-align:right"></td>
+        <td class="num">${fmt(amount)}</td>
+        <td><button class="exp-del" aria-label="Delete expense row" title="Delete row">\u2715</button></td>
+      </tr>`;
+    }).join('');
+
+    body.querySelectorAll('tr').forEach(row=>{
+      const id = row.dataset.id;
+      const e = t.expenses.find(x=>x.id===id);
+      row.querySelector('.exp-desc').addEventListener('change', ev=>{ e.description = singleLine(ev.target.value); commitExpense(t); });
+      row.querySelector('.exp-cat').addEventListener('change', ev=>{ e.category = ev.target.value; commitExpense(t); });
+      row.querySelector('.exp-qty').addEventListener('change', ev=>{ e.quantity = Math.max(0, Number(ev.target.value)||0); commitExpense(t); });
+      row.querySelector('.exp-cost').addEventListener('change', ev=>{ e.unitCost = Math.max(0, Number(ev.target.value)||0); commitExpense(t); });
+      row.querySelector('.exp-del').addEventListener('click', ()=>{
+        state.trash.expenses.unshift({ id: uid('trash'), tripId: t.id, tripName: t.name, expense: e, deletedAt: Date.now() });
+        t.expenses = t.expenses.filter(x=>x.id!==id); t.updatedAt = Date.now();
+        logEvent('expense-deleted', `Removed "${e.description}" (${fmt(e.quantity*e.unitCost)}) from ${t.name}`);
+        saveState(); renderTripView(); showToast('Moved to trash');
+      });
+    });
+    wireAutogrow(body, 'textarea.exp-desc', { singleValue: true });
+  }
+  function commitExpense(t){ t.updatedAt = Date.now(); saveState(); renderTripView(); }
+
+  /* ---------------- Plan tab (sheets + gantt) ---------------- */
+  function formatWhen(t, item){
+    const mode = tripTimelineMode(t);
+    if (mode === 'dates'){
+      if (!item.date) return '\u2014';
+      const d = new Date(item.date+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short'});
+      const d2 = item.endDate && item.endDate!==item.date ? ' \u2192 '+new Date(item.endDate+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short'}) : '';
+      return d + d2 + (item.time ? ' \u00b7 '+item.time : '');
+    }
+    if (!item.dayNumber) return '\u2014';
+    const d2 = item.dayNumberEnd && item.dayNumberEnd!==item.dayNumber ? '\u2013'+item.dayNumberEnd : '';
+    return 'Day '+item.dayNumber + d2 + (item.time ? ' \u00b7 '+item.time : '');
+  }
+
+  function renderPlanTab(t){
+    const panel = document.getElementById('tabPlan');
+    if (!panel) return;
+    const mode = tripTimelineMode(t);
+    panel.innerHTML = `
+      <div class="toolbar">
+        <button class="btn-primary" id="addPlanBtn">+ Add Item</button>
+        <div class="timeline-toggle">
+          <button class="btn-sm ${mode==='dates'?'btn-primary':'btn-ghost'}" id="modeDates">Dates</button>
+          <button class="btn-sm ${mode==='days'?'btn-primary':'btn-ghost'}" id="modeDays">Day numbers</button>
+        </div>
+        <div class="timeline-toggle">
+          <button class="btn-sm ${planView==='gantt'?'btn-primary':'btn-ghost'}" id="viewGantt">Gantt</button>
+          <button class="btn-sm ${planView==='hbh'?'btn-primary':'btn-ghost'}" id="viewHbh">Hour-by-Hour</button>
+        </div>
+        <button class="btn-ghost" id="exportPlanPdfBtn" style="margin-left:auto;">Export PDF</button>
+      </div>
+      <div class="chart-card" style="margin-bottom:18px;" id="timelineCard">
+        <h3>${planView==='gantt'?'Timeline':'Hour by Hour'}</h3>
+        <div id="ganttHolder" ${planView!=='gantt'?'hidden':''}></div>
+        <div id="hbhHolder" ${planView!=='hbh'?'hidden':''}></div>
+      </div>
+      <div id="sheetSections"></div>
+    `;
+    document.getElementById('addPlanBtn').addEventListener('click', ()=> openPlanItemModal(t, null, null));
+    document.getElementById('modeDates').addEventListener('click', ()=>{ t.timelineMode='dates'; t.updatedAt=Date.now(); saveState(); renderPlanTab(t); });
+    document.getElementById('modeDays').addEventListener('click', ()=>{ t.timelineMode='days'; t.updatedAt=Date.now(); saveState(); renderPlanTab(t); });
+    document.getElementById('viewGantt').addEventListener('click', ()=>{ planView='gantt'; renderPlanTab(t); });
+    document.getElementById('viewHbh').addEventListener('click', ()=>{ planView='hbh'; renderPlanTab(t); });
+    document.getElementById('exportPlanPdfBtn').addEventListener('click', ()=> exportPlanPDF(t));
+
+    if (planView==='gantt') renderGanttGrid(t); else renderHourByHour(t);
+
+    const sections = document.getElementById('sheetSections');
+    sections.innerHTML = SHEETS.map(s=>{
+      const items = t.planItems.filter(i=>i.sheet===s.key);
+      return `
+      <div class="sheet-section">
+        <div class="sheet-header">
+          <div><span class="sheet-dot" style="background:${s.color}"></span>${s.key} <span style="color:var(--ink-soft);font-family:var(--font-mono);font-size:11px;">(${items.length})</span></div>
+          <button class="btn-ghost btn-sm sheet-add" data-sheet="${escapeHtml(s.key)}">+ Add</button>
+        </div>
+        ${items.length ? `
+        <div class="table-scroll">
+        <table class="exp-table plan-table">
+          <colgroup><col class="col-name"><col class="col-status"><col class="col-when"><col class="col-cost"><col class="col-actions"></colgroup>
+          <thead><tr><th>Name</th><th>Status</th><th>When</th><th>Cost</th><th></th></tr></thead>
+          <tbody>
+            ${items.map(i=>`
+              <tr data-id="${i.id}">
+                <td>${escapeHtml(i.name)}${i.location?`<br><span style="color:var(--ink-soft);font-size:11px;">${escapeHtml(i.location)}</span>`:''}${renderLinksInline(i.links)}</td>
+                <td><span class="status-chip status-${i.status==='booked'?'completed':i.status==='cancelled'?'cancelled':'upcoming'}">${i.status}</span></td>
+                <td class="when-cell">${formatWhen(t,i)}</td>
+                <td class="num">${i.cost!=null ? fmt(i.cost) + (i.linkedExpenseId?' \u2713':'') : '\u2014'}</td>
+                <td><button class="exp-del plan-tores" aria-label="Move to Research" title="Move to Research">\u21a9</button><button class="exp-del plan-edit" aria-label="Edit item" title="Edit">\u270e</button><button class="exp-del plan-del" aria-label="Delete item" title="Delete">\u2715</button></td>
+              </tr>`).join('')}
+          </tbody>
+        </table>
+        </div>` : '<div class="empty-state">Nothing here yet.</div>'}
+      </div>`;
+    }).join('');
+
+    sections.querySelectorAll('.sheet-add').forEach(btn=> btn.addEventListener('click', ()=> openPlanItemModal(t, null, btn.dataset.sheet)));
+    sections.querySelectorAll('.plan-edit').forEach(btn=>{
+      const id = btn.closest('tr').dataset.id;
+      btn.addEventListener('click', ()=> openPlanItemModal(t, t.planItems.find(i=>i.id===id), null));
+    });
+    sections.querySelectorAll('.plan-tores').forEach(btn=>{
+      const id = btn.closest('tr').dataset.id;
+      btn.addEventListener('click', ()=> moveToResearch(t, id));
+    });
+    sections.querySelectorAll('.plan-del').forEach(btn=>{
+      const id = btn.closest('tr').dataset.id;
+      btn.addEventListener('click', ()=> deletePlanItem(t, id));
+    });
+  }
+
+  /* ---------------- Packing list ---------------- */
+  function renderPackingTab(t){
+    const panel = document.getElementById('tabPacking');
+    if (!panel) return;
+    const total = t.packingList.length;
+    const packed = t.packingList.filter(p=>p.packed).length;
+    const pct = total ? Math.round(packed/total*100) : 0;
+    panel.innerHTML = `
+      <div class="toolbar">
+        <button class="btn-primary" id="addPackBtn">+ Add Item</button>
+        <button class="btn-ghost" id="quickAddPackBtn">+ Quick Add Essentials</button>
+        ${total ? `<div style="margin-left:auto;display:flex;align-items:center;gap:10px;">
+          <div style="width:120px;height:6px;border-radius:3px;background:var(--paper-edge);overflow:hidden;"><div style="width:${pct}%;height:100%;background:var(--green);"></div></div>
+          <span style="font-family:var(--font-mono);font-size:12px;color:var(--ink-soft);">${packed} / ${total} packed</span>
+        </div>` : ''}
+      </div>
+      <div id="packSections"></div>
+    `;
+    document.getElementById('addPackBtn').addEventListener('click', ()=> openPackingItemModal(t, null));
+    document.getElementById('quickAddPackBtn').addEventListener('click', ()=> quickAddEssentials(t));
+
+    const sections = document.getElementById('packSections');
+    sections.innerHTML = PACKING_CATEGORIES.map(c=>{
+      const items = t.packingList.filter(i=>i.category===c.key);
+      return `
+      <div class="sheet-section">
+        <div class="sheet-header">
+          <div><span class="sheet-dot" style="background:${c.color}"></span>${c.key} <span style="color:var(--ink-soft);font-family:var(--font-mono);font-size:11px;">(${items.filter(i=>i.packed).length}/${items.length})</span></div>
+          <button class="btn-ghost btn-sm pack-add" data-cat="${escapeHtml(c.key)}">+ Add</button>
+        </div>
+        ${items.length ? `
+        <div class="table-scroll">
+        <table class="exp-table packing-table">
+          <colgroup><col class="col-check"><col class="col-item"><col class="col-qty"><col class="col-actions"></colgroup>
+          <thead><tr><th></th><th>Item</th><th>Qty</th><th></th></tr></thead>
+          <tbody>
+            ${items.map(i=>`
+              <tr data-id="${i.id}" class="${i.packed?'packed-row':''}">
+                <td><input type="checkbox" class="pack-check" ${i.packed?'checked':''} aria-label="Mark packed"></td>
+                <td><textarea rows="1" class="pack-name autogrow">${escapeHtml(i.name)}</textarea></td>
+                <td class="num"><input type="number" class="pack-qty" value="${i.qty}" min="1" step="1" style="text-align:right"></td>
+                <td><button class="exp-del pack-del" aria-label="Delete item" title="Delete">\u2715</button></td>
+              </tr>`).join('')}
+          </tbody>
+        </table>
+        </div>` : '<div class="empty-state">Nothing here yet.</div>'}
+      </div>`;
+    }).join('');
+
+    sections.querySelectorAll('.pack-add').forEach(btn=> btn.addEventListener('click', ()=> openPackingItemModal(t, btn.dataset.cat)));
+    sections.querySelectorAll('tr[data-id]').forEach(row=>{
+      const id = row.dataset.id;
+      const item = t.packingList.find(x=>x.id===id);
+      if (!item) return;
+      row.querySelector('.pack-check').addEventListener('change', ev=>{ item.packed = ev.target.checked; t.updatedAt=Date.now(); saveState(); renderTripView(); });
+      row.querySelector('.pack-name').addEventListener('change', ev=>{ item.name = singleLine(ev.target.value) || item.name; t.updatedAt=Date.now(); saveState(); renderTripView(); });
+      row.querySelector('.pack-qty').addEventListener('change', ev=>{ item.qty = Math.max(1, Number(ev.target.value)||1); t.updatedAt=Date.now(); saveState(); renderTripView(); });
+      row.querySelector('.pack-del').addEventListener('click', ()=>{
+        t.packingList = t.packingList.filter(x=>x.id!==id); t.updatedAt=Date.now();
+        logEvent('packing-item-deleted', `Removed "${item.name}" from ${t.name} packing list`);
+        saveState(); renderTripView(); showToast('Item deleted');
+      });
+    });
+    wireAutogrow(sections, 'textarea.pack-name', { singleValue: true });
+  }
+
+  function openPackingItemModal(t, defaultCategory){
+    modalRoot.innerHTML = `
+      <div class="modal-overlay">
+        <div class="modal-box">
+          <h3>Add Packing Item</h3>
+          <div class="field"><label>Item</label><textarea id="pk-name" rows="1" class="autogrow" placeholder="e.g. Passport"></textarea></div>
+          <div class="field-row">
+            <div class="field"><label>Category</label>
+              <select id="pk-cat">${PACKING_CATEGORIES.map(c=>`<option value="${escapeHtml(c.key)}" ${defaultCategory===c.key?'selected':''}>${escapeHtml(c.key)}</option>`).join('')}</select>
+            </div>
+            <div class="field"><label>Qty</label><input id="pk-qty" type="number" min="1" step="1" value="1"></div>
+          </div>
+          <div class="modal-actions">
+            <button class="btn-ghost" id="pk-cancel">Cancel</button>
+            <button class="btn-primary" id="pk-save">Add Item</button>
+          </div>
+        </div>
+      </div>
+    `;
+    document.getElementById('pk-cancel').addEventListener('click', closeModal);
+    document.getElementById('pk-name').focus();
+    wireAutogrow(modalRoot, '#pk-name', { singleValue: true });
+    document.getElementById('pk-save').addEventListener('click', ()=>{
+      const name = singleLine(document.getElementById('pk-name').value);
+      if (!name){ showToast('Item needs a name'); return; }
+      const category = document.getElementById('pk-cat').value;
+      const qty = Math.max(1, Number(document.getElementById('pk-qty').value)||1);
+      t.packingList.push(packingItem(category, name, qty));
+      t.updatedAt = Date.now();
+      logEvent('packing-item-added', `Added "${name}" to ${t.name} packing list`);
+      saveState(); closeModal(); renderTripView(); showToast('Item added');
+    });
+  }
+
+  function quickAddEssentials(t){
+    const existingNames = new Set(t.packingList.map(i=>i.name.toLowerCase()));
+    const toAdd = PACKING_ESSENTIALS.filter(e=> !existingNames.has(e.name.toLowerCase()));
+    if (!toAdd.length){ showToast('Essentials already added'); return; }
+    toAdd.forEach(e=> t.packingList.push(packingItem(e.category, e.name, e.qty)));
+    t.updatedAt = Date.now();
+    logEvent('packing-essentials-added', `Added ${toAdd.length} essential item(s) to ${t.name} packing list`);
+    saveState(); renderTripView(); showToast(`${toAdd.length} item(s) added`);
+  }
+
+  function hbhRowHtml(item){
+    return `<div class="tl-row ${item.status==='cancelled'?'is-cancelled':''}" data-id="${item.id}">
+      <div class="tl-time-cell"><input class="tl-time" type="time" value="${escapeHtml(item.time||'')}" data-f="time"></div>
+      <div class="tl-main">
+        <div class="tl-sheet-tag" style="color:${sheetColor(item.sheet)}">${escapeHtml(item.sheet)}</div>
+        <input class="tl-name" value="${escapeHtml(item.name)}" data-f="name" placeholder="What's happening">
+        <textarea class="tl-notes" data-f="notes" rows="1" placeholder="Notes\u2026">${escapeHtml(item.notes||'')}</textarea>
+      </div>
+      <div class="tl-del-cell"><button class="exp-del tl-del" aria-label="Delete" title="Delete">\u2715</button></div>
+    </div>`;
+  }
+
+  function renderHourByHour(t){
+    const holder = document.getElementById('hbhHolder');
+    if (!holder) return;
+    const mode = tripTimelineMode(t);
+    const groups = {}; const order = [];
+    const UNSCHEDULED = '\u0000unscheduled';
+    t.planItems.forEach(item=>{
+      let key, label;
+      if (mode === 'dates'){
+        key = item.date || UNSCHEDULED;
+        label = item.date ? new Date(item.date+'T00:00:00').toLocaleDateString('en-GB', {weekday:'short', day:'numeric', month:'short'}) : 'Unscheduled';
+      } else {
+        key = item.dayNumber != null ? String(item.dayNumber) : UNSCHEDULED;
+        label = item.dayNumber != null ? 'Day '+item.dayNumber : 'Unscheduled';
+      }
+      if (!groups[key]){ groups[key] = { label, items: [] }; order.push(key); }
+      groups[key].items.push(item);
+    });
+    if (!order.length){
+      holder.innerHTML = '<div class="empty-state">Add items with a date/day to build the hour-by-hour view.</div>';
+      return;
+    }
+    order.sort((a,b)=>{
+      if (a===UNSCHEDULED) return 1;
+      if (b===UNSCHEDULED) return -1;
+      return mode==='dates' ? a.localeCompare(b) : Number(a)-Number(b);
+    });
+    holder.innerHTML = order.map(key=>{
+      const g = groups[key];
+      g.items.sort((a,b)=> (a.time||'99:99').localeCompare(b.time||'99:99'));
+      return `
+      <div class="day-block">
+        <div class="day-label"><span class="day-date-num">${escapeHtml(g.label)}</span><span class="rule"></span></div>
+        <div class="day-card">
+          ${g.items.map(hbhRowHtml).join('')}
+          <div class="tl-add-row"><button class="btn-ghost btn-sm hbh-add" data-key="${escapeHtml(key)}">+ Add stop</button></div>
+        </div>
+      </div>`;
+    }).join('');
+
+    holder.querySelectorAll('.tl-row').forEach(row=>{
+      const id = row.dataset.id;
+      const item = t.planItems.find(i=>i.id===id);
+      if (!item) return;
+      row.querySelector('.tl-time').addEventListener('change', ev=>{ item.time = ev.target.value || null; t.updatedAt=Date.now(); saveState(); renderHourByHour(t); });
+      row.querySelector('.tl-name').addEventListener('change', ev=>{ item.name = ev.target.value.trim() || item.name; t.updatedAt=Date.now(); saveState(); renderHourByHour(t); refreshSheetSections(t); });
+      row.querySelector('.tl-notes').addEventListener('change', ev=>{ item.notes = ev.target.value; t.updatedAt=Date.now(); saveState(); });
+      row.querySelector('.tl-del').addEventListener('click', ()=> deletePlanItem(t, id));
+    });
+    holder.querySelectorAll('.hbh-add').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const key = btn.dataset.key;
+        const prefill = key===UNSCHEDULED ? {} : (mode==='dates' ? {date:key} : {dayNumber:Number(key)});
+        openPlanItemModal(t, null, null, prefill);
+      });
+    });
+  }
+
+  function refreshSheetSections(t){
+    const sections = document.getElementById('sheetSections');
+    if (sections) renderPlanTab(t);
+  }
+
+  function renderGanttGrid(t){
+    const holder = document.getElementById('ganttHolder');
+    const mode = tripTimelineMode(t);
+    const items = t.planItems.filter(i => mode==='dates' ? !!i.date : !!i.dayNumber);
+    if (!items.length){
+      holder.innerHTML = `<div class="empty-state">${mode==='dates' ? 'Add a date to an item to see it on the timeline, or switch to Day numbers.' : 'Add a day number to an item to see it on the timeline, or switch to Dates.'}</div>`;
+      return;
+    }
+    let colCount, colLabel;
+    if (mode === 'dates'){
+      const allDates = [];
+      items.forEach(i=>{ allDates.push(i.date); if (i.endDate) allDates.push(i.endDate); });
+      if (t.startDate) allDates.push(t.startDate);
+      if (t.endDate) allDates.push(t.endDate);
+      const times = allDates.map(d=> new Date(d+'T00:00:00').getTime());
+      const min = Math.min(...times), max = Math.max(...times);
+      colCount = Math.round((max-min)/86400000) + 1;
+      colLabel = (idx)=> new Date(min + idx*86400000).toLocaleDateString('en-GB',{day:'numeric',month:'short'});
+      items.forEach(i=>{
+        i._start = Math.round((new Date(i.date+'T00:00:00').getTime()-min)/86400000);
+        i._span = i.endDate ? Math.round((new Date(i.endDate+'T00:00:00').getTime()-new Date(i.date+'T00:00:00').getTime())/86400000)+1 : 1;
+      });
+    } else {
+      const maxDay = Math.max(...items.map(i=> i.dayNumberEnd || i.dayNumber));
+      colCount = Math.max(maxDay, 1);
+      colLabel = (idx)=> 'D'+(idx+1);
+      items.forEach(i=>{ i._start = i.dayNumber-1; i._span = i.dayNumberEnd ? (i.dayNumberEnd - i.dayNumber + 1) : 1; });
+    }
+    const sorted = [...items].sort((a,b)=> SHEETS.findIndex(s=>s.key===a.sheet) - SHEETS.findIndex(s=>s.key===b.sheet) || a._start-b._start);
+    let headerCells = '<div class="gantt-cell gantt-label"></div>';
+    for (let c=0;c<colCount;c++) headerCells += `<div class="gantt-cell gantt-head">${colLabel(c)}</div>`;
+    holder.innerHTML = `<div class="gantt-scroll"><div class="gantt-grid" style="grid-template-columns:150px repeat(${colCount}, minmax(30px,1fr));">
+      ${headerCells}
+      ${sorted.map((i,ri)=>`
+        <div class="gantt-cell gantt-label">${escapeHtml(i.name)}</div>
+        ${Array.from({length:colCount}).map(()=>'<div class="gantt-cell"></div>').join('')}
+      `).join('')}
+    </div></div>`;
+    // overlay bars positioned via absolute grid-column on a second pass
+    const grid = holder.querySelector('.gantt-grid');
+    sorted.forEach((i,ri)=>{
+      const bar = document.createElement('div');
+      bar.className = 'gantt-bar';
+      bar.style.gridRow = String(ri+2);
+      bar.style.gridColumn = `${i._start+2} / span ${Math.max(1,i._span)}`;
+      bar.style.background = sheetColor(i.sheet);
+      bar.style.opacity = i.status==='cancelled' ? '0.35' : '1';
+      bar.title = `${i.name} \u2014 ${formatWhen(t,i)}`;
+      bar.textContent = i.name;
+      grid.appendChild(bar);
+    });
+  }
+
+  function openPlanItemModal(t, existing, defaultSheet, prefill){
+    const isEdit = !!existing;
+    prefill = prefill || {};
+    const mode = tripTimelineMode(t);
+    modalRoot.innerHTML = `
+      <div class="modal-overlay">
+        <div class="modal-box wide">
+          <h3>${isEdit ? 'Edit Item' : 'Add Item'}</h3>
+          <div class="field-row">
+            <div class="field"><label>Sheet</label>
+              <select id="p-sheet">${SHEETS.map(s=>`<option value="${escapeHtml(s.key)}" ${(isEdit?existing.sheet:defaultSheet)===s.key?'selected':''}>${escapeHtml(s.key)}</option>`).join('')}</select>
+            </div>
+            <div class="field"><label>Status</label>
+              <select id="p-status">
+                <option value="idea" ${isEdit&&existing.status==='idea'?'selected':''}>Idea</option>
+                <option value="booked" ${isEdit&&existing.status==='booked'?'selected':''}>Booked</option>
+                <option value="cancelled" ${isEdit&&existing.status==='cancelled'?'selected':''}>Cancelled</option>
+              </select>
+            </div>
+          </div>
+          <div class="field"><label>Name</label><textarea id="p-name" rows="1" class="autogrow" placeholder="e.g. Hotel Les Deux Girafes">${isEdit?escapeHtml(existing.name):''}</textarea></div>
+          ${mode==='dates' ? `
+          <div class="field-row">
+            <div class="field"><label>Date</label><input id="p-date" type="date" value="${isEdit&&existing.date?existing.date:(prefill.date||t.startDate||'')}"></div>
+            <div class="field"><label>End Date (optional, for stays)</label><input id="p-enddate" type="date" value="${isEdit&&existing.endDate?existing.endDate:''}"></div>
+          </div>
+          <div class="field"><label>Time (optional)</label><input id="p-time" type="time" value="${isEdit&&existing.time?existing.time:''}"></div>
+          ` : `
+          <div class="field-row">
+            <div class="field"><label>Day</label><input id="p-day" type="number" min="1" value="${isEdit&&existing.dayNumber?existing.dayNumber:(prefill.dayNumber||1)}"></div>
+            <div class="field"><label>End Day (optional, for stays)</label><input id="p-dayend" type="number" min="1" value="${isEdit&&existing.dayNumberEnd?existing.dayNumberEnd:''}"></div>
+          </div>
+          <div class="field"><label>Time (optional)</label><input id="p-time" type="time" value="${isEdit&&existing.time?existing.time:''}"></div>
+          `}
+          <div class="field"><label>Location (optional)</label><textarea id="p-location" rows="1" class="autogrow">${isEdit?escapeHtml(existing.location||''):''}</textarea></div>
+          <div class="field">
+            <label>Links (optional)</label>
+            <div id="p-links-list"></div>
+            <button type="button" class="btn-ghost btn-sm" id="p-add-link">+ Add Link</button>
+          </div>
+          <div class="field"><label>Cost (optional, ${CUR})</label><input id="p-cost" type="number" step="0.01" value="${isEdit&&existing.cost!=null?existing.cost:''}"></div>
+          <div class="field" style="display:flex;align-items:center;gap:8px;">
+            <input type="checkbox" id="p-linkexp" style="width:auto;" ${isEdit&&existing.linkedExpenseId?'checked':''}>
+            <label style="margin:0;">Also add this cost to the trip's expenses</label>
+          </div>
+          <div class="field"><label>Notes (optional)</label><textarea id="p-notes" rows="2">${isEdit?escapeHtml(existing.notes||''):''}</textarea></div>
+          <div class="modal-actions">
+            <button class="btn-ghost" id="p-cancel">Cancel</button>
+            <button class="btn-primary" id="p-save">${isEdit?'Save Changes':'Add Item'}</button>
+          </div>
+        </div>
+      </div>`;
+    document.getElementById('p-cancel').addEventListener('click', closeModal);
+    document.getElementById('p-name').focus();
+    wireAutogrow(modalRoot, '#p-name, #p-location', { singleValue: true });
+    wireAutogrow(modalRoot, '#p-notes');
+    const planLinksEditor = setupLinksEditor('p', isEdit ? existing.links : []);
+    document.getElementById('p-save').addEventListener('click', ()=>{
+      const sheet = document.getElementById('p-sheet').value;
+      const status = document.getElementById('p-status').value;
+      const name = singleLine(document.getElementById('p-name').value);
+      if (!name){ alert('Please enter a name.'); return; }
+      const location = singleLine(document.getElementById('p-location').value);
+      const links = planLinksEditor.getLinks();
+      const notes = document.getElementById('p-notes').value.trim();
+      const time = document.getElementById('p-time') ? document.getElementById('p-time').value || null : null;
+      const costRaw = document.getElementById('p-cost').value;
+      const cost = costRaw === '' ? null : Math.max(0, Number(costRaw)||0);
+      const wantLink = document.getElementById('p-linkexp').checked;
+      let date=null, endDate=null, dayNumber=null, dayNumberEnd=null;
+      if (mode==='dates'){
+        date = document.getElementById('p-date').value || null;
+        endDate = document.getElementById('p-enddate').value || null;
+      } else {
+        dayNumber = document.getElementById('p-day').value ? Number(document.getElementById('p-day').value) : null;
+        dayNumberEnd = document.getElementById('p-dayend').value ? Number(document.getElementById('p-dayend').value) : null;
+      }
+
+      const item = isEdit ? existing : planItem(sheet, name, {});
+      Object.assign(item, { sheet, status, name, date, endDate, time, dayNumber, dayNumberEnd, location, links, cost, notes });
+
+      // sync linked expense
+      if (wantLink && cost != null && cost > 0){
+        const cat = resolveExpenseCategory(SHEET_TO_CAT[sheet] || 'Other');
+        if (item.linkedExpenseId){
+          const e = t.expenses.find(x=>x.id===item.linkedExpenseId);
+          if (e){ e.description = name; e.category = cat; e.quantity = 1; e.unitCost = cost; }
+          else { const ne = exp(name, cat, 1, cost); t.expenses.push(ne); item.linkedExpenseId = ne.id; }
+        } else {
+          const ne = exp(name, cat, 1, cost); t.expenses.push(ne); item.linkedExpenseId = ne.id;
+        }
+      } else if (item.linkedExpenseId){
+        const e = t.expenses.find(x=>x.id===item.linkedExpenseId);
+        if (e){
+          state.trash.expenses.unshift({ id: uid('trash'), tripId: t.id, tripName: t.name, expense: e, deletedAt: Date.now() });
+          t.expenses = t.expenses.filter(x=>x.id!==e.id);
+        }
+        item.linkedExpenseId = null;
+      }
+
+      if (!isEdit) t.planItems.push(item);
+      t.updatedAt = Date.now();
+      logEvent(isEdit?'plan-item-edited':'plan-item-added', `${isEdit?'Updated':'Added'} "${name}" (${sheet}) on ${t.name}`);
+      saveState(); closeModal(); renderTripView();
+    });
+  }
+
+  function deletePlanItem(t, id){
+    const item = t.planItems.find(i=>i.id===id);
+    if (!item) return;
+    if (item.linkedExpenseId){
+      const e = t.expenses.find(x=>x.id===item.linkedExpenseId);
+      if (e){
+        state.trash.expenses.unshift({ id: uid('trash'), tripId: t.id, tripName: t.name, expense: e, deletedAt: Date.now() });
+        t.expenses = t.expenses.filter(x=>x.id!==e.id);
+      }
+    }
+    t.planItems = t.planItems.filter(i=>i.id!==id);
+    t.updatedAt = Date.now();
+    logEvent('plan-item-deleted', `Removed "${item.name}" from ${t.name}`);
+    saveState(); renderTripView(); showToast('Item deleted');
+  }
+
+  /* ---------------- Research tab (candidate places + map) ---------------- */
+  const PRICE_LABELS = { 1:'\u00a3', 2:'\u00a3\u00a3', 3:'\u00a3\u00a3\u00a3', 4:'\u00a3\u00a3\u00a3\u00a3' };
+  const PRIORITY_LABELS = { 1:'\u2605', 2:'\u2605\u2605', 3:'\u2605\u2605\u2605', 4:'\u2605\u2605\u2605\u2605', 5:'\u2605\u2605\u2605\u2605\u2605' };
+  let mapsLoadPromise = null;
+  let activeGoogleMap = null;
+  let activeMapMarkers = [];
+
+  function ensureMapsLoaded(){
+    if (window.google && window.google.maps) return Promise.resolve();
+    if (mapsLoadPromise) return mapsLoadPromise;
+    const key = (state.settings && state.settings.mapsApiKey) || '';
+    if (!key) return Promise.reject(new Error('no-key'));
+    mapsLoadPromise = new Promise((resolve, reject)=>{
+      window.__ledgerMapsAuthFailure = function(){ reject(new Error('auth-failure')); };
+      window.gm_authFailure = window.__ledgerMapsAuthFailure;
+      const script = document.createElement('script');
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(key)}&libraries=places`;
+      script.async = true;
+      script.onerror = ()=> reject(new Error('load-failed'));
+      script.onload = ()=> resolve();
+      document.head.appendChild(script);
+    });
+    return mapsLoadPromise;
+  }
+
+  function renderResearchTab(t){
+    const panel = document.getElementById('tabResearch');
+    if (!panel) return;
+    panel.innerHTML = `
+      <div class="toolbar">
+        <button class="btn-primary" id="addResBtn">+ Add Place</button>
+        <div class="timeline-toggle">
+          <button class="btn-sm ${researchView==='list'?'btn-primary':'btn-ghost'}" id="resViewList">List</button>
+          <button class="btn-sm ${researchView==='map'?'btn-primary':'btn-ghost'}" id="resViewMap">Map</button>
+        </div>
+        <button class="btn-ghost btn-sm" id="mapSettingsBtn" style="margin-left:auto;">Map Settings</button>
+      </div>
+      <div id="resContent"></div>
+    `;
+    document.getElementById('addResBtn').addEventListener('click', ()=> openResearchItemModal(t, null, null));
+    document.getElementById('resViewList').addEventListener('click', ()=>{ researchView='list'; renderResearchTab(t); });
+    document.getElementById('resViewMap').addEventListener('click', ()=>{ researchView='map'; renderResearchTab(t); });
+    document.getElementById('mapSettingsBtn').addEventListener('click', openMapSettingsModal);
+
+    const content = document.getElementById('resContent');
+    if (researchView === 'map'){
+      renderResearchMap(t, content);
+    } else {
+      renderResearchList(t, content);
+    }
+  }
+
+  function renderResearchList(t, content){
+    content.innerHTML = SHEETS.map(s=>{
+      const items = t.research.filter(r=>r.sheet===s.key);
+      return `
+      <div class="sheet-section">
+        <div class="sheet-header">
+          <div><span class="sheet-dot" style="background:${s.color}"></span>${s.key} <span style="color:var(--ink-soft);font-family:var(--font-mono);font-size:11px;">(${items.length})</span></div>
+          <button class="btn-ghost btn-sm res-add" data-sheet="${escapeHtml(s.key)}">+ Add</button>
+        </div>
+        ${items.length ? `
+        <div class="table-scroll">
+        <table class="exp-table research-table">
+          <colgroup><col class="col-name"><col class="col-price"><col class="col-priority"><col class="col-estcost"><col class="col-status"><col class="col-actions"></colgroup>
+          <thead><tr><th>Name</th><th>Price</th><th>Priority</th><th>Est. Cost</th><th>Status</th><th></th></tr></thead>
+          <tbody>
+            ${items.map(r=>`
+              <tr data-id="${r.id}">
+                <td>${escapeHtml(r.name)}${r.address?`<br><span style="color:var(--ink-soft);font-size:11px;">${escapeHtml(r.address)}</span>`:''}${renderLinksInline(r.links)}${r.notes?`<br><span style="color:var(--ink-soft);font-size:11px;font-style:italic;">${escapeHtml(r.notes)}</span>`:''}</td>
+                <td>${r.priceLevel?PRICE_LABELS[r.priceLevel]:'\u2014'}</td>
+                <td>${r.priority?PRIORITY_LABELS[r.priority]:'\u2014'}</td>
+                <td class="num">${r.estCost!=null?fmt(r.estCost):'\u2014'}</td>
+                <td><span class="status-chip status-${r.status==='promoted'?'completed':r.status==='dismissed'?'cancelled':'upcoming'}">${r.status}</span></td>
+                <td style="white-space:nowrap;">
+                  ${r.status!=='promoted' ? '<button class="btn-ghost btn-sm res-promote" title="Promote to Plan">\u2192 Plan</button>' : ''}
+                  <button class="exp-del res-edit" aria-label="Edit" title="Edit">\u270e</button><button class="exp-del res-del" aria-label="Delete" title="Delete">\u2715</button>
+                </td>
+              </tr>`).join('')}
+          </tbody>
+        </table>
+        </div>` : '<div class="empty-state">Nothing here yet.</div>'}
+      </div>`;
+    }).join('');
+
+    content.querySelectorAll('.res-add').forEach(btn=> btn.addEventListener('click', ()=> openResearchItemModal(t, null, btn.dataset.sheet)));
+    content.querySelectorAll('tr[data-id]').forEach(row=>{
+      const id = row.dataset.id;
+      const item = t.research.find(r=>r.id===id);
+      const editBtn = row.querySelector('.res-edit');
+      if (editBtn) editBtn.addEventListener('click', ()=> openResearchItemModal(t, item, null));
+      const delBtn = row.querySelector('.res-del');
+      if (delBtn) delBtn.addEventListener('click', ()=> deleteResearchItem(t, id));
+      const promoteBtn = row.querySelector('.res-promote');
+      if (promoteBtn) promoteBtn.addEventListener('click', ()=> promoteResearchItem(t, id));
+    });
+  }
+
+  function renderResearchMap(t, content){
+    const key = (state.settings && state.settings.mapsApiKey) || '';
+    if (!key){
+      content.innerHTML = `<div class="chart-card"><div class="empty-state">Add a Google Maps API key in "Map Settings" to see your researched places on a map. Your places are still saved and visible in List view either way.</div></div>`;
+      return;
+    }
+    content.innerHTML = `<div class="chart-card"><div id="mapContainer" class="map-container"></div><div id="mapMsg" class="empty-state" style="display:none;"></div></div>`;
+    ensureMapsLoaded().then(()=>{
+      const pinned = t.research.filter(r=> r.status!=='dismissed' && r.lat!=null && r.lng!=null);
+      const mapEl = document.getElementById('mapContainer');
+      if (!mapEl) return; // tab changed before load finished
+      if (!pinned.length){
+        document.getElementById('mapMsg').style.display = 'block';
+        document.getElementById('mapMsg').textContent = 'No places with a location yet \u2014 add places using the map search box in "+ Add Place" so they get coordinates.';
+        mapEl.style.display = 'none';
+        return;
+      }
+      const bounds = new google.maps.LatLngBounds();
+      const map = new google.maps.Map(mapEl, { zoom: 12, center: { lat: pinned[0].lat, lng: pinned[0].lng } });
+      activeGoogleMap = map;
+      activeMapMarkers = pinned.map(r=>{
+        const marker = new google.maps.Marker({ position: { lat: r.lat, lng: r.lng }, map, title: r.name, label: r.sheet[0] });
+        const info = new google.maps.InfoWindow({ content: `<div style="font-family:sans-serif;font-size:13px;max-width:200px;"><strong>${escapeHtml(r.name)}</strong><br>${escapeHtml(r.sheet)}${r.priceLevel?' \u00b7 '+PRICE_LABELS[r.priceLevel]:''}${r.priority?' \u00b7 '+PRIORITY_LABELS[r.priority]:''}${r.notes?'<br><em>'+escapeHtml(r.notes)+'</em>':''}</div>` });
+        marker.addListener('click', ()=> info.open(map, marker));
+        bounds.extend(marker.getPosition());
+        return marker;
+      });
+      if (pinned.length > 1) map.fitBounds(bounds);
+    }).catch(err=>{
+      const msg = err.message === 'auth-failure'
+        ? 'Google rejected that API key (check it has the Maps JavaScript API + Places API enabled, and billing set up).'
+        : 'Could not load Google Maps \u2014 check your API key in Map Settings.';
+      const mapMsg = document.getElementById('mapMsg');
+      if (mapMsg){ mapMsg.style.display='block'; mapMsg.textContent = msg; }
+      const mapEl = document.getElementById('mapContainer');
+      if (mapEl) mapEl.style.display = 'none';
+    });
+  }
+
+  function openMapSettingsModal(){
+    modalRoot.innerHTML = `
+      <div class="modal-overlay">
+        <div class="modal-box">
+          <h3>Map Settings</h3>
+          <div class="field"><label>Google Maps API Key</label><input id="s-key" type="text" value="${escapeHtml((state.settings&&state.settings.mapsApiKey)||'')}" placeholder="AIza\u2026"></div>
+          <p style="font-size:12px;color:var(--ink-soft);line-height:1.5;">
+            Free to create: in the Google Cloud Console, make a project, enable the <strong>Maps JavaScript API</strong> and <strong>Places API</strong>, then create an API key under Credentials. This scale of personal use stays well within the free monthly quota.
+            The key is saved in this artifact's storage only.
+          </p>
+          <div class="modal-actions">
+            <button class="btn-ghost" id="s-cancel">Cancel</button>
+            <button class="btn-primary" id="s-save">Save</button>
+          </div>
+        </div>
+      </div>`;
+    document.getElementById('s-cancel').addEventListener('click', closeModal);
+    document.getElementById('s-save').addEventListener('click', ()=>{
+      state.settings.mapsApiKey = document.getElementById('s-key').value.trim();
+      logEvent('settings-updated', 'Updated Google Maps API key');
+      saveState(); closeModal();
+      showToast('Saved \u2014 reopening map\u2026');
+      if (activeTripId) renderTripView();
+    });
+  }
+
+  function openGithubSyncModal(){
+    const s = state.settings;
+    const statusLine = !s.githubEnabled ? 'Sync is off.'
+      : !s.githubToken ? 'Enabled, but no token saved yet.'
+      : `Last synced: ${formatSyncTime(s.githubLastSyncAt)}`;
+    modalRoot.innerHTML = `
+      <div class="modal-overlay">
+        <div class="modal-box wide">
+          <h3>GitHub Sync</h3>
+          <div class="field" style="display:flex;align-items:center;gap:8px;">
+            <input type="checkbox" id="gh-enabled" style="width:auto;" ${s.githubEnabled?'checked':''}>
+            <label style="margin:0;">Enable automatic sync to GitHub</label>
+          </div>
+          <div class="field"><label>Personal Access Token</label><input id="gh-token" type="password" value="${escapeHtml(s.githubToken||'')}" placeholder="ghp_\u2026 or github_pat_\u2026" autocomplete="off"></div>
+          <div class="field-row">
+            <div class="field"><label>Repo Owner</label><input id="gh-owner" type="text" value="${escapeHtml(s.githubOwner||'')}" placeholder="e.g. Ello2003"></div>
+            <div class="field"><label>Repo Name</label><input id="gh-repo" type="text" value="${escapeHtml(s.githubRepo||'')}" placeholder="e.g. travel-ledger"></div>
+          </div>
+          <div class="field-row">
+            <div class="field"><label>File Path</label><input id="gh-path" type="text" value="${escapeHtml(s.githubPath||'data.json')}"></div>
+            <div class="field"><label>Branch</label><input id="gh-branch" type="text" value="${escapeHtml(s.githubBranch||'main')}"></div>
+          </div>
+          <p id="gh-status" style="font-size:12px;color:var(--ink-soft);font-family:var(--font-mono);">${statusLine}</p>
+          <p style="font-size:12px;color:var(--ink-soft);line-height:1.5;">
+            Your data (trips, expenses, categories) syncs to a file in this repo, so it's the same on every device you open this page from. Use a <strong>fine-grained</strong> token scoped to only this one repo with <strong>Contents: Read and write</strong> permission \u2014 not a broad classic token. The token itself is saved only in this browser and is never written into the synced file or committed to the repo.
+          </p>
+          <div class="modal-actions">
+            <button class="btn-ghost" id="gh-cancel">Cancel</button>
+            <button class="btn-ghost" id="gh-sync-now">Sync Now</button>
+            <button class="btn-primary" id="gh-save">Save</button>
+          </div>
+        </div>
+      </div>`;
+    document.getElementById('gh-cancel').addEventListener('click', closeModal);
+    document.getElementById('gh-sync-now').addEventListener('click', async ()=>{
+      const statusEl = document.getElementById('gh-status');
+      statusEl.textContent = 'Syncing\u2026';
+      try {
+        if (!githubConfigured()){ statusEl.textContent = 'Fill in and save the fields above first.'; return; }
+        await githubPushRemote(false);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        statusEl.textContent = `Synced just now (${formatSyncTime(state.settings.githubLastSyncAt)})`;
+        setSyncStatus('', `\u2601 synced ${formatSyncTime(state.settings.githubLastSyncAt)}`);
+      } catch(err){
+        statusEl.textContent = err.message === 'github-auth-failed' ? 'Sync failed: check your token and permissions.' : 'Sync failed \u2014 check repo/path/branch are correct.';
+      }
+    });
+    document.getElementById('gh-save').addEventListener('click', async ()=>{
+      s.githubEnabled = document.getElementById('gh-enabled').checked;
+      s.githubToken = document.getElementById('gh-token').value.trim();
+      s.githubOwner = singleLine(document.getElementById('gh-owner').value);
+      s.githubRepo = singleLine(document.getElementById('gh-repo').value);
+      s.githubPath = singleLine(document.getElementById('gh-path').value) || 'data.json';
+      s.githubBranch = singleLine(document.getElementById('gh-branch').value) || 'main';
+      logEvent('settings-updated', 'Updated GitHub Sync settings');
+      await saveState();
+      closeModal();
+      if (githubConfigured()){
+        showToast('Saved \u2014 syncing now\u2026');
+        scheduleGithubSync();
+      } else if (s.githubEnabled) {
+        showToast('Saved \u2014 fill in token, owner and repo to start syncing');
+      } else {
+        showToast('Saved');
+        syncFlag.hidden = true;
+      }
+    });
+  }
+
+  function openResearchItemModal(t, existing, defaultSheet){
+    const isEdit = !!existing;
+    let picked = isEdit ? { lat: existing.lat, lng: existing.lng, address: existing.address } : { lat: null, lng: null, address: '' };
+    modalRoot.innerHTML = `
+      <div class="modal-overlay">
+        <div class="modal-box wide">
+          <h3>${isEdit ? 'Edit Place' : 'Add Place'}</h3>
+          <div class="field-row">
+            <div class="field"><label>Sheet</label>
+              <select id="r-sheet">${SHEETS.map(s=>`<option value="${escapeHtml(s.key)}" ${(isEdit?existing.sheet:defaultSheet)===s.key?'selected':''}>${escapeHtml(s.key)}</option>`).join('')}</select>
+            </div>
+            <div class="field"><label>Status</label>
+              <select id="r-status">
+                <option value="researching" ${isEdit&&existing.status==='researching'?'selected':''}>Researching</option>
+                <option value="shortlisted" ${isEdit&&existing.status==='shortlisted'?'selected':''}>Shortlisted</option>
+                <option value="dismissed" ${isEdit&&existing.status==='dismissed'?'selected':''}>Dismissed</option>
+              </select>
+            </div>
+          </div>
+          <div class="field"><label>Name / Search</label><input id="r-name" type="text" value="${isEdit?escapeHtml(existing.name):''}" placeholder="Start typing a place name\u2026"></div>
+          <div class="field"><label>Address</label><textarea id="r-address" rows="1" class="autogrow" placeholder="Autofills from search, or type your own">${isEdit?escapeHtml(existing.address||''):''}</textarea></div>
+          <div class="field-row">
+            <div class="field"><label>Price Level</label><select id="r-price">
+              <option value="">Not sure</option>
+              ${[1,2,3,4].map(p=>`<option value="${p}" ${isEdit&&existing.priceLevel===p?'selected':''}>${PRICE_LABELS[p]}</option>`).join('')}
+            </select></div>
+            <div class="field"><label>Priority</label><select id="r-priority">
+              <option value="">Not set</option>
+              ${[1,2,3,4,5].map(p=>`<option value="${p}" ${isEdit&&existing.priority===p?'selected':''}>${PRIORITY_LABELS[p]}</option>`).join('')}
+            </select></div>
+          </div>
+          <div class="field"><label>Estimated Cost (optional, ${CUR})</label><input id="r-cost" type="number" step="0.01" value="${isEdit&&existing.estCost!=null?existing.estCost:''}"></div>
+          <div class="field">
+            <label>Links (optional)</label>
+            <div id="r-links-list"></div>
+            <button type="button" class="btn-ghost btn-sm" id="r-add-link">+ Add Link</button>
+          </div>
+          <div class="field"><label>Why interested (optional)</label><textarea id="r-notes" rows="2">${isEdit?escapeHtml(existing.notes||''):''}</textarea></div>
+          <div class="modal-actions">
+            <button class="btn-ghost" id="r-cancel">Cancel</button>
+            <button class="btn-primary" id="r-save">${isEdit?'Save Changes':'Add Place'}</button>
+          </div>
+        </div>
+      </div>`;
+    document.getElementById('r-cancel').addEventListener('click', closeModal);
+    document.getElementById('r-name').focus();
+    wireAutogrow(modalRoot, '#r-address', { singleValue: true });
+    wireAutogrow(modalRoot, '#r-notes');
+    const researchLinksEditor = setupLinksEditor('r', isEdit ? existing.links : []);
+
+    // Wire up Places Autocomplete if maps/key are available; degrade silently to plain text entry otherwise.
+    ensureMapsLoaded().then(()=>{
+      const input = document.getElementById('r-name');
+      if (!input || !window.google || !google.maps.places) return;
+      const auto = new google.maps.places.Autocomplete(input, { fields: ['name','formatted_address','geometry','website'] });
+      auto.addListener('place_changed', ()=>{
+        const place = auto.getPlace();
+        if (!place || !place.geometry) return;
+        picked.lat = place.geometry.location.lat();
+        picked.lng = place.geometry.location.lng();
+        picked.address = place.formatted_address || '';
+        const addrEl = document.getElementById('r-address'); if (addrEl){ addrEl.value = picked.address; autoGrow(addrEl); }
+        if (place.website){ researchLinksEditor.addLink('Website', place.website); }
+      });
+    }).catch(()=>{ /* no key set \u2014 plain text search only, that's fine */ });
+
+    document.getElementById('r-save').addEventListener('click', ()=>{
+      const sheet = document.getElementById('r-sheet').value;
+      const status = document.getElementById('r-status').value;
+      const name = document.getElementById('r-name').value.trim();
+      if (!name){ alert('Please enter a name.'); return; }
+      const address = singleLine(document.getElementById('r-address').value) || picked.address;
+      const priceRaw = document.getElementById('r-price').value;
+      const priorityRaw = document.getElementById('r-priority').value;
+      const costRaw = document.getElementById('r-cost').value;
+      const links = researchLinksEditor.getLinks();
+      const notes = document.getElementById('r-notes').value.trim();
+
+      const item = isEdit ? existing : researchItem(sheet, name, {});
+      Object.assign(item, {
+        sheet, status, name, address,
+        lat: picked.lat != null ? picked.lat : (isEdit ? existing.lat : null),
+        lng: picked.lng != null ? picked.lng : (isEdit ? existing.lng : null),
+        priceLevel: priceRaw ? Number(priceRaw) : null,
+        priority: priorityRaw ? Number(priorityRaw) : null,
+        estCost: costRaw === '' ? null : Math.max(0, Number(costRaw)||0),
+        links, notes
+      });
+      if (!isEdit) t.research.push(item);
+      t.updatedAt = Date.now();
+      logEvent(isEdit?'research-edited':'research-added', `${isEdit?'Updated':'Added'} "${name}" to ${t.name} research`);
+      saveState(); closeModal(); renderTripView();
+    });
+  }
+
+  function deleteResearchItem(t, id){
+    const item = t.research.find(r=>r.id===id);
+    if (!item) return;
+    t.research = t.research.filter(r=>r.id!==id);
+    t.updatedAt = Date.now();
+    logEvent('research-deleted', `Removed "${item.name}" from ${t.name} research`);
+    saveState(); renderTripView(); showToast('Removed');
+  }
+
+  function promoteResearchItem(t, id){
+    const item = t.research.find(r=>r.id===id);
+    if (!item) return;
+    const newPlan = planItem(item.sheet, item.name, {
+      status: 'idea', location: item.address,
+      links: (item.links||[]).map(l=>({ id: uid('link'), label: l.label, url: l.url })),
+      cost: item.estCost, notes: item.notes
+    });
+    t.planItems.push(newPlan);
+    item.status = 'promoted';
+    item.linkedPlanItemId = newPlan.id;
+    t.updatedAt = Date.now();
+    logEvent('research-promoted', `Promoted "${item.name}" to Plan on ${t.name}`);
+    saveState();
+    activeTripTab = 'plan';
+    renderTripView();
+    openPlanItemModal(t, newPlan, null);
+    showToast('Promoted \u2014 set a date/day to place it on the timeline');
+  }
+
+  function moveToResearch(t, id){
+    const item = t.planItems.find(i=>i.id===id);
+    if (!item) return;
+    if (!confirm(`Move "${item.name}" back to Research? It will be removed from Plan${item.linkedExpenseId?' and its linked expense moved to trash':''}.`)) return;
+    const newResearch = researchItem(item.sheet, item.name, {
+      address: item.location,
+      links: (item.links||[]).map(l=>({ id: uid('link'), label: l.label, url: l.url })),
+      estCost: item.cost, notes: item.notes, status: 'researching'
+    });
+    t.research.push(newResearch);
+    if (item.linkedExpenseId){
+      const e = t.expenses.find(x=>x.id===item.linkedExpenseId);
+      if (e){
+        state.trash.expenses.unshift({ id: uid('trash'), tripId: t.id, tripName: t.name, expense: e, deletedAt: Date.now() });
+        t.expenses = t.expenses.filter(x=>x.id!==e.id);
+      }
+    }
+    t.planItems = t.planItems.filter(i=>i.id!==id);
+    t.updatedAt = Date.now();
+    logEvent('plan-moved-to-research', `Moved "${item.name}" from Plan back to Research on ${t.name}`);
+    saveState();
+    activeTripTab = 'research';
+    renderTripView();
+    showToast('Moved to Research');
+  }
+
+  function duplicateTrip(t){
+    const copy = mkTrip(t.name + ' (copy)', t.year+1, 'upcoming', t.budget,
+      t.expenses.map(e=> exp(e.description, e.category, e.quantity, e.unitCost)).length ? [] : [],
+      { travelers: t.travelers });
+    state.trips.push(copy);
+    logEvent('trip-duplicated', `Duplicated "${t.name}" as "${copy.name}"`);
+    saveState(); openTrip(copy.id);
+  }
+  function deleteTrip(t){
+    state.trash.trips.unshift({ ...JSON.parse(JSON.stringify(t)), deletedAt: Date.now() });
+    state.trips = state.trips.filter(x=>x.id!==t.id);
+    logEvent('trip-deleted', `Deleted trip "${t.name}"`);
+    saveState(); closeTrip(); showToast('Trip moved to trash');
+  }
+
+  /* ---------------- Modals ---------------- */
+  function closeModal(){ modalRoot.innerHTML = ''; }
+  root.addEventListener('keydown', ()=>{});
+  document.addEventListener('keydown', (e)=>{ if (e.key === 'Escape' && modalRoot.innerHTML) closeModal(); });
+
+  function openTripModal(existing){
+    const isEdit = !!existing;
+    modalRoot.innerHTML = `
+      <div class="modal-overlay">
+        <div class="modal-box">
+          <h3>${isEdit? 'Edit Trip' : 'New Trip'}</h3>
+          <div class="field"><label>Trip Name</label><textarea id="m-name" rows="1" class="autogrow" placeholder="e.g. Lake District">${isEdit?escapeHtml(existing.name):''}</textarea></div>
+          <div class="field"><label>Country (optional)</label>
+            <input id="m-country" type="text" list="countryList" value="${isEdit?escapeHtml(existing.country||''):''}" placeholder="Start typing a country\u2026" autocomplete="off">
+            <datalist id="countryList">${COUNTRIES.map(c=>`<option value="${escapeHtml(c.name)}">`).join('')}</datalist>
+          </div>
+          <div class="field-row">
+            <div class="field"><label>Start Date (optional)</label><input id="m-start" type="date" value="${isEdit&&existing.startDate?existing.startDate:''}"></div>
+            <div class="field"><label>End Date (optional)</label><input id="m-end" type="date" value="${isEdit&&existing.endDate?existing.endDate:''}"></div>
+          </div>
+          <div class="field-row">
+            <div class="field"><label>Year</label><input id="m-year" type="number" value="${isEdit?existing.year:new Date().getFullYear()}"></div>
+            <div class="field"><label>Travelers</label><input id="m-travelers" type="number" min="1" value="${isEdit?existing.travelers:2}"></div>
+          </div>
+          <div class="field-row">
+            <div class="field"><label>Total Budget (${CUR})</label><input id="m-budget" type="number" step="0.01" value="${isEdit?existing.budget:''}" placeholder="0.00"></div>
+            <div class="field"><label>Status</label>
+              <select id="m-status">
+                <option value="upcoming" ${isEdit&&existing.status==='upcoming'?'selected':''}>Upcoming</option>
+                <option value="completed" ${isEdit&&existing.status==='completed'?'selected':''}>Completed</option>
+                <option value="cancelled" ${isEdit&&existing.status==='cancelled'?'selected':''}>Cancelled</option>
+              </select>
+            </div>
+          </div>
+          <div class="modal-actions">
+            <button class="btn-ghost" id="m-cancel">Cancel</button>
+            <button class="btn-primary" id="m-save">${isEdit?'Save Changes':'Create Trip'}</button>
+          </div>
+        </div>
+      </div>`;
+    document.getElementById('m-start').addEventListener('change', (e)=>{
+      if (e.target.value) document.getElementById('m-year').value = new Date(e.target.value+'T00:00:00').getFullYear();
+    });
+    if (!isEdit){
+      document.getElementById('m-name').addEventListener('change', (e)=>{
+        const countryEl = document.getElementById('m-country');
+        if (!countryEl.value.trim()){
+          const guess = guessCountryFromName(e.target.value);
+          if (guess) countryEl.value = guess;
+        }
+      });
+    }
+    document.getElementById('m-cancel').addEventListener('click', closeModal);
+    document.getElementById('m-name').focus();
+    wireAutogrow(modalRoot, '#m-name', { singleValue: true });
+    document.getElementById('m-save').addEventListener('click', ()=>{
+      const name = singleLine(document.getElementById('m-name').value);
+      const country = singleLine(document.getElementById('m-country').value);
+      const year = Number(document.getElementById('m-year').value) || new Date().getFullYear();
+      const budget = Math.max(0, Number(document.getElementById('m-budget').value) || 0);
+      const status = document.getElementById('m-status').value;
+      const travelers = Math.max(1, Number(document.getElementById('m-travelers').value) || 1);
+      const startDate = document.getElementById('m-start').value || null;
+      const endDate = document.getElementById('m-end').value || null;
+      if (!name){ alert('Please enter a trip name.'); return; }
+      if (isEdit){
+        Object.assign(existing, { name, country, countryGuessed: false, year, budget, status, travelers, startDate, endDate, updatedAt: Date.now() });
+        logEvent('trip-edited', `Updated details for "${name}"`);
+        saveState(); closeModal(); renderTripView();
+      } else {
+        const t = mkTrip(name, year, status, budget, [], { travelers, startDate, endDate, country });
+        state.trips.push(t);
+        logEvent('trip-created', `Created trip "${name}"`);
+        saveState(); closeModal(); openTrip(t.id);
+      }
+    });
+  }
+
+  function openExpenseModal(t){
+    modalRoot.innerHTML = `
+      <div class="modal-overlay">
+        <div class="modal-box">
+          <h3>Add Expense</h3>
+          <div class="field"><label>Description</label><textarea id="m-desc" rows="1" class="autogrow" placeholder="e.g. Hotel deposit"></textarea></div>
+          <div class="field"><label>Category</label><select id="m-cat">${state.categories.map(c=>`<option value="${escapeHtml(c.name)}">${escapeHtml(c.name)}</option>`).join('')}</select></div>
+          <div class="field-row">
+            <div class="field"><label>Quantity</label><input id="m-qty" type="number" value="1" min="0" step="1"></div>
+            <div class="field"><label>Unit Cost (${CUR})</label><input id="m-cost" type="number" value="" step="0.01" placeholder="0.00"></div>
+          </div>
+          <div class="modal-actions">
+            <button class="btn-ghost" id="m-cancel">Cancel</button>
+            <button class="btn-primary" id="m-save">Add Expense</button>
+          </div>
+        </div>
+      </div>`;
+    document.getElementById('m-cancel').addEventListener('click', closeModal);
+    document.getElementById('m-desc').focus();
+    wireAutogrow(modalRoot, '#m-desc', { singleValue: true });
+    document.getElementById('m-save').addEventListener('click', ()=>{
+      const description = singleLine(document.getElementById('m-desc').value) || 'Untitled expense';
+      const category = document.getElementById('m-cat').value;
+      const quantity = Math.max(0, Number(document.getElementById('m-qty').value) || 0);
+      const unitCost = Math.max(0, Number(document.getElementById('m-cost').value) || 0);
+      t.expenses.push(exp(description, category, quantity, unitCost));
+      t.updatedAt = Date.now();
+      logEvent('expense-added', `Added "${description}" (${fmt(quantity*unitCost)}) to ${t.name}`);
+      saveState(); closeModal(); renderTripView();
+    });
+  }
+
+  function openCategoriesModal(){
+    function draw(){
+      modalRoot.innerHTML = `
+        <div class="modal-overlay">
+          <div class="modal-box wide">
+            <h3>Manage Categories</h3>
+            <div id="catList"></div>
+            <div class="modal-actions" style="justify-content:space-between;">
+              <button class="btn-ghost btn-sm" id="addCatBtn">+ Add Category</button>
+              <button class="btn-primary" id="catDone">Done</button>
+            </div>
+          </div>
+        </div>`;
+      const list = document.getElementById('catList');
+      list.innerHTML = state.categories.map((c,i)=>`
+        <div class="cat-row" data-i="${i}">
+          <input type="color" class="cat-color" value="${c.color}">
+          <textarea rows="1" class="cat-name autogrow">${escapeHtml(c.name)}</textarea>
+          ${c.name!=='Other' ? '<button class="btn-ghost btn-sm cat-del">Delete</button>' : '<span style="width:64px;display:inline-block"></span>'}
+        </div>`).join('');
+      list.querySelectorAll('.cat-row').forEach(row=>{
+        const i = Number(row.dataset.i);
+        row.querySelector('.cat-color').addEventListener('change', ev=>{ state.categories[i].color = ev.target.value; saveState(); renderAll(); if(activeTripId) renderTripView(); });
+        row.querySelector('.cat-name').addEventListener('change', ev=>{
+          const oldName = state.categories[i].name, newName = singleLine(ev.target.value) || oldName;
+          state.categories[i].name = newName;
+          state.trips.forEach(t=> t.expenses.forEach(e=>{ if (e.category===oldName) e.category=newName; }));
+          logEvent('category-renamed', `Renamed category "${oldName}" to "${newName}"`);
+          saveState(); draw(); renderAll(); if(activeTripId) renderTripView();
+        });
+        const delBtn = row.querySelector('.cat-del');
+        if (delBtn) delBtn.addEventListener('click', ()=>{
+          const name = state.categories[i].name;
+          const affected = state.trips.reduce((n,t)=> n + t.expenses.filter(e=>e.category===name).length, 0);
+          const msg = affected
+            ? `Delete "${name}"? ${affected} expense(s) using it will be moved to "Other".`
+            : `Delete "${name}"?`;
+          if (!confirm(msg)) return;
+          state.trips.forEach(t=> t.expenses.forEach(e=>{ if (e.category===name) e.category='Other'; }));
+          state.categories.splice(i,1);
+          logEvent('category-deleted', `Deleted category "${name}" (expenses moved to Other)`);
+          saveState(); draw(); renderAll(); if(activeTripId) renderTripView();
+        });
+      });
+      wireAutogrow(list, 'textarea.cat-name', { singleValue: true });
+      document.getElementById('addCatBtn').addEventListener('click', ()=>{
+        state.categories.splice(state.categories.length-1, 0, { name: 'New Category', color: '#6a4a6e' });
+        logEvent('category-added', 'Added a new category');
+        saveState(); draw(); renderAll();
+      });
+      document.getElementById('catDone').addEventListener('click', closeModal);
+    }
+    draw();
+  }
+
+  function openActivityLogModal(){
+    modalRoot.innerHTML = `
+      <div class="modal-overlay">
+        <div class="modal-box wide">
+          <h3>Activity Log</h3>
+          <div>${state.activityLog.length ? state.activityLog.slice(0,100).map(l=>`
+            <div class="log-item"><span>${escapeHtml(l.detail)}</span><span class="ts">${new Date(l.ts).toLocaleString('en-GB')}</span></div>
+          `).join('') : '<div class="empty-state">No activity yet.</div>'}</div>
+          <div class="modal-actions"><button class="btn-primary" id="logDone">Close</button></div>
+        </div>
+      </div>`;
+    document.getElementById('logDone').addEventListener('click', closeModal);
+  }
+
+  function openTrashModal(){
+    function draw(){
+      const tripsHtml = state.trash.trips.map((t,i)=>`
+        <div class="trash-item"><span>Trip: ${escapeHtml(t.name)} (${t.year})</span>
+          <span><button class="btn-ghost btn-sm restore-trip" data-i="${i}">Restore</button> <span class="ts">${new Date(t.deletedAt).toLocaleDateString('en-GB')}</span></span>
+        </div>`).join('');
+      const expHtml = state.trash.expenses.map((x,i)=>`
+        <div class="trash-item"><span>Expense: ${escapeHtml(x.expense.description)} \u2014 from ${escapeHtml(x.tripName)}</span>
+          <span><button class="btn-ghost btn-sm restore-exp" data-i="${i}">Restore</button> <span class="ts">${new Date(x.deletedAt).toLocaleDateString('en-GB')}</span></span>
+        </div>`).join('');
+      const empty = !state.trash.trips.length && !state.trash.expenses.length;
+      modalRoot.innerHTML = `
+        <div class="modal-overlay">
+          <div class="modal-box wide">
+            <h3>Trash</h3>
+            ${empty ? '<div class="empty-state">Trash is empty.</div>' : (tripsHtml + expHtml)}
+            <div class="modal-actions">
+              ${!empty ? '<button class="btn-danger" id="emptyTrash">Empty Trash</button>' : ''}
+              <button class="btn-primary" id="trashDone">Close</button>
+            </div>
+          </div>
+        </div>`;
+      modalRoot.querySelectorAll('.restore-trip').forEach(btn=> btn.addEventListener('click', ()=>{
+        const i = Number(btn.dataset.i);
+        const t = state.trash.trips.splice(i,1)[0];
+        delete t.deletedAt;
+        state.trips.push(t);
+        logEvent('trip-restored', `Restored trip "${t.name}" from trash`);
+        saveState(); draw(); renderAll(); showToast('Trip restored');
+      }));
+      modalRoot.querySelectorAll('.restore-exp').forEach(btn=> btn.addEventListener('click', ()=>{
+        const i = Number(btn.dataset.i);
+        const entry = state.trash.expenses[i];
+        const trip = state.trips.find(t=>t.id===entry.tripId);
+        if (!trip){ alert("The original trip no longer exists, so this expense cannot be restored to it."); return; }
+        trip.expenses.push(entry.expense);
+        trip.updatedAt = Date.now();
+        state.trash.expenses.splice(i,1);
+        logEvent('expense-restored', `Restored "${entry.expense.description}" to ${trip.name}`);
+        saveState(); draw(); renderAll(); if(activeTripId===trip.id) renderTripView(); showToast('Expense restored');
+      }));
+      const emptyBtn = document.getElementById('emptyTrash');
+      if (emptyBtn) emptyBtn.addEventListener('click', ()=>{
+        state.trash = { trips: [], expenses: [] };
+        logEvent('trash-emptied', 'Trash emptied permanently');
+        saveState(); draw(); showToast('Trash emptied');
+      });
+      document.getElementById('trashDone').addEventListener('click', closeModal);
+    }
+    draw();
+  }
+
+  /* ---------------- Export / Import ---------------- */
+  function exportPlanPDF(t){
+    const printArea = document.getElementById('printArea');
+    const days = tripDuration(t);
+    let subLine = `${t.year} \u00b7 ${t.status}`;
+    if (t.startDate) subLine += ` \u00b7 ${t.startDate}${t.endDate?' \u2192 '+t.endDate:''}`;
+    if (days) subLine += ` \u00b7 ${days} day${days!==1?'s':''}`;
+    if (t.country) subLine += ` \u00b7 ${t.country}`;
+
+    const sectionsHtml = SHEETS.map(s=>{
+      const items = t.planItems.filter(i=>i.sheet===s.key).sort((a,b)=>{
+        const av = a.date || (a.dayNumber!=null?String(a.dayNumber).padStart(4,'0'):'') || '';
+        const bv = b.date || (b.dayNumber!=null?String(b.dayNumber).padStart(4,'0'):'') || '';
+        return av.localeCompare(bv);
+      });
+      if (!items.length) return '';
+      const itemsHtml = items.map(i=>{
+        const when = formatWhen(t, i);
+        const linksLine = (i.links&&i.links.length) ? i.links.map((l,idx)=>`${l.label?escapeHtml(l.label):('Link'+(i.links.length>1?(idx+1):''))}: ${escapeHtml(l.url)}`).join(' \u00b7 ') : '';
+        return `
+        <div class="p-item">
+          <div class="p-item-top">
+            <span class="p-item-name">${escapeHtml(i.name)}</span>
+            <span class="p-item-meta">${escapeHtml(i.status)}${when&&when!=='\u2014'?' \u00b7 '+escapeHtml(when):''}${i.cost!=null?' \u00b7 '+fmt(i.cost):''}</span>
+          </div>
+          ${i.location?`<div class="p-item-line"><b>Address:</b> ${escapeHtml(i.location)}</div>`:''}
+          ${linksLine?`<div class="p-item-line"><b>Links:</b> ${linksLine}</div>`:''}
+          ${i.notes?`<div class="p-item-line"><b>Notes:</b> ${escapeHtml(i.notes)}</div>`:''}
+        </div>`;
+      }).join('');
+      return `<div class="p-section"><h2>${escapeHtml(s.key)}</h2>${itemsHtml}</div>`;
+    }).filter(Boolean).join('');
+
+    printArea.innerHTML = `
+      <div class="p-hdr">
+        <h1>${t.country&&countryFlagForTrip(t)?countryFlagForTrip(t)+' ':''}${escapeHtml(t.name)}</h1>
+        <div class="p-sub">${escapeHtml(subLine)}</div>
+      </div>
+      ${sectionsHtml || '<div class="p-empty">No plan items yet.</div>'}
+    `;
+    logEvent('plan-pdf-exported', `Exported Plan PDF for ${t.name}`);
+    setTimeout(()=>{ window.print(); }, 50);
+  }
+  function exportBackup(){
+    const payload = Object.assign({}, state, { _exportedByVersion: APP_VERSION });
+    const blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = `travel-ledger-v${APP_VERSION}-backup-${new Date().toISOString().slice(0,10)}.json`;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    logEvent('backup-exported', `Exported a JSON backup (v${APP_VERSION})`);
+    saveState();
+  }
+  function importBackup(file){
+    const reader = new FileReader();
+    reader.onload = (e)=>{
+      try {
+        const parsed = JSON.parse(e.target.result);
+        if (!parsed.trips || !Array.isArray(parsed.trips)) throw new Error('Invalid file');
+        parsed.trips.forEach(t=>{ if (!Array.isArray(t.expenses)) t.expenses = []; if (t.budget==null) t.budget = 0; });
+        if (!confirm(`Import ${parsed.trips.length} trip(s)? Your current trips will be moved to Trash so you can recover them if needed.`)) return;
+        state.trash.trips.push(...state.trips.map(t=>({ ...JSON.parse(JSON.stringify(t)), deletedAt: Date.now() })));
+        state.trips = parsed.trips;
+        if (parsed.categories && Array.isArray(parsed.categories) && parsed.categories.length) state.categories = parsed.categories;
+        if (!state.categories.some(c=>c.name==='Other')) state.categories.push({ name:'Other', color:'#5b6672' });
+        let reassigned = 0;
+        state.trips.forEach(t=> t.expenses.forEach(e=>{
+          const resolved = resolveExpenseCategory(e.category);
+          if (resolved !== e.category){ e.category = resolved; reassigned += 1; }
+        }));
+        logEvent('backup-imported', `Imported ${parsed.trips.length} trip(s) from backup${reassigned ? ` (${reassigned} expense(s) reassigned to Other \u2014 category missing from imported set)` : ''}`);
+        saveState(); renderAll();
+        showToast('Backup imported');
+      } catch(err){ alert('Could not read that file \u2014 is it a Travel Ledger backup?'); }
+    };
+    reader.readAsText(file);
+  }
+
+  /* ---------------- Wire up static controls ---------------- */
+  document.getElementById('newTripBtn').addEventListener('click', ()=> openTripModal(null));
+  document.getElementById('manageCatsBtn').addEventListener('click', openCategoriesModal);
+  document.getElementById('activityLogBtn').addEventListener('click', openActivityLogModal);
+  document.getElementById('trashBtn').addEventListener('click', openTrashModal);
+  document.getElementById('githubSyncBtn').addEventListener('click', openGithubSyncModal);
+  document.getElementById('toggleMyMap').addEventListener('click', ()=>{
+    const embed = document.getElementById('myMapEmbed');
+    const btn = document.getElementById('toggleMyMap');
+    embed.hidden = !embed.hidden;
+    btn.textContent = embed.hidden ? 'Show' : 'Hide';
+  });
+  document.getElementById('exportBtn').addEventListener('click', exportBackup);
+  const storageWarningExportBtn = document.getElementById('storageWarningExport');
+  if (storageWarningExportBtn) storageWarningExportBtn.addEventListener('click', exportBackup);
+  document.getElementById('importInput').addEventListener('change', (e)=>{ if (e.target.files[0]) importBackup(e.target.files[0]); e.target.value = ''; });
+  document.getElementById('searchInput').addEventListener('input', (e)=>{ uiFilter.search = e.target.value; renderTripsGrid(); });
+  document.getElementById('statusFilter').addEventListener('change', (e)=>{ uiFilter.status = e.target.value; renderTripsGrid(); });
+  document.getElementById('sortSelect').addEventListener('change', (e)=>{ uiFilter.sort = e.target.value; renderTripsGrid(); });
+
+  function renderDashTabs(){
+    document.getElementById('dashTabTrips').classList.toggle('active', activeDashTab==='trips');
+    document.getElementById('dashTabCharts').classList.toggle('active', activeDashTab==='charts');
+    document.getElementById('dashTrips').hidden = activeDashTab!=='trips';
+    document.getElementById('dashCharts').hidden = activeDashTab!=='charts';
+  }
+  document.getElementById('dashTabTrips').addEventListener('click', ()=>{ activeDashTab='trips'; renderDashTabs(); });
+  document.getElementById('dashTabCharts').addEventListener('click', ()=>{ activeDashTab='charts'; renderDashTabs(); });
+  renderDashTabs();
+
+  function renderAll(){
+    renderKPIs(); renderUpNext(); renderCatBars(); renderYearRows(); renderTrend(); renderTripsGrid();
+  }
+
+  function openChangelogModal(){
+    const rows = Object.keys(CHANGELOG).sort((a,b)=> b.localeCompare(a, undefined, {numeric:true}));
+    modalRoot.innerHTML = `
+      <div class="modal-overlay">
+        <div class="modal-box wide">
+          <h3>Version History</h3>
+          <div>${rows.map(v=>`
+            <div class="log-item"><span><strong>v${v}</strong> \u2014 ${escapeHtml(CHANGELOG[v])}</span></div>
+          `).join('')}</div>
+          <div class="modal-actions"><button class="btn-primary" id="vDone">Close</button></div>
+        </div>
+      </div>`;
+    document.getElementById('vDone').addEventListener('click', closeModal);
+  }
+  const versionBadgeEl = document.getElementById('versionBadge');
+  if (versionBadgeEl){
+    versionBadgeEl.textContent = 'v' + APP_VERSION;
+    versionBadgeEl.style.cursor = 'pointer';
+    versionBadgeEl.title = 'View version history';
+    versionBadgeEl.addEventListener('click', openChangelogModal);
+  }
+
+  loadState().then(renderAll);
+})();
+</script>
