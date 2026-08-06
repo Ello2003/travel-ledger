@@ -241,6 +241,14 @@
   #travel-ledger-root table.packing-table input[type="checkbox"] { width: 16px; height: 16px; cursor: pointer; }
   #travel-ledger-root table.packing-table tr.packed-row .pack-name { text-decoration: line-through; opacity: .5; }
   #travel-ledger-root table.packing-table tr.packed-row td { opacity: .75; }
+  #travel-ledger-root table.budget-exp-table { table-layout: fixed; }
+  #travel-ledger-root table.budget-exp-table col.col-desc { width: 32%; }
+  #travel-ledger-root table.budget-exp-table col.col-cat { width: 22%; }
+  #travel-ledger-root table.budget-exp-table col.col-qty { width: 9%; }
+  #travel-ledger-root table.budget-exp-table col.col-unit { width: 14%; }
+  #travel-ledger-root table.budget-exp-table col.col-amt { width: 14%; }
+  #travel-ledger-root table.budget-exp-table col.col-actions { width: 9%; }
+  #travel-ledger-root table.budget-exp-table select.exp-cat { width: 100%; max-width: 100%; }
 
   #travel-ledger-root .notes-box { width: 100%; min-height: 70px; font-family: var(--font-body); font-size: 13px; padding: 10px; border: 1px solid var(--paper-edge); border-radius: 6px; background: var(--paper-raised); resize: vertical; }
 
@@ -446,16 +454,6 @@
         </div>
 
         <div class="trips-grid" id="tripsGrid"></div>
-
-        <div class="chart-card" id="myMapCard" style="margin-top:16px;">
-          <div style="display:flex;align-items:center;justify-content:space-between;">
-            <h3 style="margin:0;">My Maps</h3>
-            <button class="btn-ghost btn-sm" id="toggleMyMap">Show</button>
-          </div>
-          <div id="myMapEmbed" hidden style="margin-top:12px;">
-            <iframe src="https://www.google.com/maps/d/embed?mid=1agtFV4DvC-eE9MuhqqB5i3a2XWuJ0e4&hl=en&ehbc=2E312F" width="100%" height="480" style="border:0;border-radius:6px;display:block;" loading="lazy"></iframe>
-          </div>
-        </div>
       </div>
 
       <div id="dashCharts" hidden>
@@ -505,9 +503,10 @@
 <script>
 (function(){
   const STORAGE_KEY = 'trips-data';
-  const APP_VERSION = '1.7.3';
+  const APP_VERSION = '1.7.4';
   const CHANGELOG = {
-    '1.7.3': 'Plan and Research items can now move both ways (\u21a9 button on a Plan item sends it back to Research; \u2192 Plan on a Research item promotes it), and any item can now have multiple links (add/remove, with optional labels) instead of just one. Added a "My Maps" section on the dashboard embedding a personal Google My Maps. Added a Plan tab "Export PDF" button that builds a clean, printable itinerary (name, status, when, address, links, notes, grouped by category) via the browser\u2019s Print \u2192 Save as PDF.',
+    '1.7.4': 'Budget table: fixed the Category column being cut off and Qty being oversized with a proper fixed-width layout. Added Food & Drink and Shopping expense categories, plus a "+ Add new category" option right in the Add Expense modal that preserves whatever you\u2019ve already typed. Move-to-Research no longer shows a confirm popup and stays on the Plan tab. Plan/Research categories (Hotels, Restaurants, etc.) are now fully editable \u2014 added "Cheap Eats" and a "Manage Categories" button in the Plan tab to add/rename/delete your own. Moved the My Maps embed off the main dashboard to sit below Expenses on the London trip specifically.',
+    '1.7.3': 'Plan and Research items can now move both ways (\u21a9 button on a Plan item sends it back to Research; \u2192 Plan on a Research item promotes it), and any item can now have multiple links (add/remove, with optional labels) instead of just one. Added a Plan tab "Export PDF" button that builds a clean, printable itinerary (name, status, when, address, links, notes, grouped by category) via the browser\u2019s Print \u2192 Save as PDF.',
     '1.7.2': 'Added GitHub Sync (footer link) \u2014 your trips, expenses, categories, and trash automatically sync to a file in a GitHub repo of your choice via a personal access token, so the same data shows up on any device you open this page from. Syncs are debounced (batched a few seconds after you stop editing, not per keystroke) and auto-retry once on conflict. The token itself is stored only in this browser\u2019s local storage and is never included in the synced file or committed to the repo \u2014 only trips/expenses/categories/trash sync, not settings.',
     '1.7.1': 'Country is now auto-guessed from the trip name (e.g. "Brugge" \u2192 Belgium, "Liverpool \u2014 Springsteen" \u2192 United Kingdom) using a lookup of ~250 well-known destinations, applied to existing trips on load and live-suggested while typing a new trip name. Guessed flags show a dotted underline so you know they haven\u2019t been confirmed \u2014 opening Edit Trip and saving clears that marker.',
     '1.7.0': 'Added an optional Country field to trips (type-ahead over ~190 countries) \u2014 the matching flag now appears next to the trip name on the boarding pass card and the trip detail header. Unrecognised or blank entries just show no flag rather than breaking anything.',
@@ -542,7 +541,7 @@
   const syncFlag = document.getElementById('syncFlag');
   const toastEl = document.getElementById('toast');
 
-  let state = { categories: [], trips: [], trash: { trips: [], expenses: [] }, activityLog: [], settings: defaultSettings() };
+  let state = { categories: [], sheets: [], trips: [], trash: { trips: [], expenses: [] }, activityLog: [], settings: defaultSettings() };
   let activeTripId = null;
   let activeTripTab = 'budget';
   let activeDashTab = 'trips';
@@ -550,18 +549,21 @@
   let planView = 'gantt';
   let uiFilter = { search: '', status: 'all', sort: 'year-desc' };
 
-  const SHEETS = [
-    { key: 'Hotels', color: '#35695c' },
-    { key: 'Restaurants', color: '#8a7a3a' },
-    { key: 'Bars', color: '#6a4a6e' },
-    { key: 'Coffee Shops', color: '#b8874f' },
-    { key: 'Activities', color: '#35597a' },
-    { key: 'Sights', color: '#4a8a86' },
-    { key: 'Things To Do', color: '#9c5a3f' },
-    { key: 'Transport / Transfers', color: '#5b6672' }
-  ];
+  function defaultSheets(){
+    return [
+      { key: 'Hotels', color: '#35695c' },
+      { key: 'Restaurants', color: '#8a7a3a' },
+      { key: 'Cheap Eats', color: '#b8874f' },
+      { key: 'Bars', color: '#6a4a6e' },
+      { key: 'Coffee Shops', color: '#9c6b3f' },
+      { key: 'Activities', color: '#35597a' },
+      { key: 'Sights', color: '#4a8a86' },
+      { key: 'Things To Do', color: '#9c5a3f' },
+      { key: 'Transport / Transfers', color: '#5b6672' }
+    ];
+  }
   const SHEET_TO_CAT = {
-    'Hotels': 'Hotels', 'Restaurants': 'Spends', 'Bars': 'Spends', 'Coffee Shops': 'Spends',
+    'Hotels': 'Hotels', 'Restaurants': 'Food & Drink', 'Cheap Eats': 'Food & Drink', 'Bars': 'Food & Drink', 'Coffee Shops': 'Food & Drink',
     'Activities': 'Excursions', 'Sights': 'Excursions', 'Things To Do': 'Excursions', 'Transport / Transfers': 'Transportation'
   };
   const PACKING_CATEGORIES = [
@@ -694,7 +696,7 @@
     }
     return null;
   }
-  function sheetColor(key){ const s = SHEETS.find(s=>s.key===key); return s ? s.color : '#5b6672'; }
+  function sheetColor(key){ const s = state.sheets.find(s=>s.key===key); return s ? s.color : '#5b6672'; }
   function resolveExpenseCategory(name){ return state.categories.some(c=>c.name===name) ? name : 'Other'; }
   function tripTimelineMode(t){ return t.timelineMode || (t.startDate ? 'dates' : 'days'); }
 
@@ -706,8 +708,10 @@
       { name: 'Flights', color: '#b8874f' },
       { name: 'Hotels', color: '#35695c' },
       { name: 'Transportation', color: '#35597a' },
-      { name: 'Spends', color: '#a63a2e' },
-      { name: 'Excursions', color: '#6a4a6e' },
+      { name: 'Food & Drink', color: '#a63a2e' },
+      { name: 'Shopping', color: '#6a4a6e' },
+      { name: 'Spends', color: '#9c5a3f' },
+      { name: 'Excursions', color: '#4a8a86' },
       { name: 'Misc', color: '#8a7a3a' },
       { name: 'Other', color: '#5b6672' }
     ];
@@ -1028,6 +1032,7 @@
     } catch(e) { /* no existing data, or storage unavailable */ }
     state = seedData();
     state.categories = defaultCategories();
+    state.sheets = defaultSheets();
     state.trash = { trips: [], expenses: [] };
     state.activityLog = [];
     state.settings = defaultSettings();
@@ -1037,6 +1042,16 @@
   }
   function migrate(){
     if (!state.categories || !state.categories.length) state.categories = defaultCategories();
+    ['Food & Drink','Shopping'].forEach(name=>{
+      if (!state.categories.some(c=>c.name===name)){
+        const src = defaultCategories().find(c=>c.name===name);
+        state.categories.push({ name, color: src.color });
+      }
+    });
+    if (!Array.isArray(state.sheets) || !state.sheets.length) state.sheets = defaultSheets();
+    defaultSheets().forEach(s=>{
+      if (!state.sheets.some(x=>x.key===s.key)) state.sheets.push(s);
+    });
     if (!state.trash) state.trash = { trips: [], expenses: [] };
     if (!state.trash.trips) state.trash.trips = [];
     if (!state.trash.expenses) state.trash.expenses = [];
@@ -1388,7 +1403,8 @@
           <div class="chart-card">
             <h3>Expenses</h3>
             <div class="table-scroll">
-            <table class="exp-table">
+            <table class="exp-table budget-exp-table">
+              <colgroup><col class="col-desc"><col class="col-cat"><col class="col-qty"><col class="col-unit"><col class="col-amt"><col class="col-actions"></colgroup>
               <thead><tr><th>Description</th><th>Category</th><th>Qty</th><th>Unit Cost</th><th>Amount</th><th></th></tr></thead>
               <tbody id="expBody"></tbody>
               <tfoot><tr class="exp-foot"><td colspan="4">Total Expenses</td><td class="num">${fmt(spent)}</td><td></td></tr></tfoot>
@@ -1397,6 +1413,17 @@
             <div class="toolbar" style="margin-top:12px;margin-bottom:0;"><button class="btn-primary" id="addExpBtn">+ Add Expense</button></div>
           </div>
         </div>
+
+        ${/london/i.test(t.name) ? `
+        <div class="chart-card" id="myMapCard">
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <h3 style="margin:0;">My Maps</h3>
+            <button class="btn-ghost btn-sm" id="toggleMyMap">Show</button>
+          </div>
+          <div id="myMapEmbed" hidden style="margin-top:12px;">
+            <iframe src="https://www.google.com/maps/d/embed?mid=1agtFV4DvC-eE9MuhqqB5i3a2XWuJ0e4&hl=en&ehbc=2E312F" width="100%" height="480" style="border:0;border-radius:6px;display:block;" loading="lazy"></iframe>
+          </div>
+        </div>` : ''}
 
         <div class="chart-card">
           <h3>Notes</h3>
@@ -1412,6 +1439,14 @@
     document.getElementById('backBtn').addEventListener('click', closeTrip);
     document.getElementById('editTripBtn').addEventListener('click', ()=> openTripModal(t));
     document.getElementById('duplicateTripBtn').addEventListener('click', ()=> duplicateTrip(t));
+    const toggleMyMapBtn = document.getElementById('toggleMyMap');
+    if (toggleMyMapBtn){
+      toggleMyMapBtn.addEventListener('click', ()=>{
+        const embed = document.getElementById('myMapEmbed');
+        embed.hidden = !embed.hidden;
+        toggleMyMapBtn.textContent = embed.hidden ? 'Show' : 'Hide';
+      });
+    }
     document.getElementById('deleteTripBtn').addEventListener('click', ()=> deleteTrip(t));
     document.getElementById('addExpBtn').addEventListener('click', ()=> openExpenseModal(t));
     document.getElementById('notesBox').addEventListener('change', (e)=>{ t.notes = e.target.value; t.updatedAt = Date.now(); saveState(); });
@@ -1484,7 +1519,8 @@
           <button class="btn-sm ${planView==='gantt'?'btn-primary':'btn-ghost'}" id="viewGantt">Gantt</button>
           <button class="btn-sm ${planView==='hbh'?'btn-primary':'btn-ghost'}" id="viewHbh">Hour-by-Hour</button>
         </div>
-        <button class="btn-ghost" id="exportPlanPdfBtn" style="margin-left:auto;">Export PDF</button>
+        <button class="btn-ghost" id="manageSheetsBtn" style="margin-left:auto;">Manage Categories</button>
+        <button class="btn-ghost" id="exportPlanPdfBtn">Export PDF</button>
       </div>
       <div class="chart-card" style="margin-bottom:18px;" id="timelineCard">
         <h3>${planView==='gantt'?'Timeline':'Hour by Hour'}</h3>
@@ -1499,11 +1535,12 @@
     document.getElementById('viewGantt').addEventListener('click', ()=>{ planView='gantt'; renderPlanTab(t); });
     document.getElementById('viewHbh').addEventListener('click', ()=>{ planView='hbh'; renderPlanTab(t); });
     document.getElementById('exportPlanPdfBtn').addEventListener('click', ()=> exportPlanPDF(t));
+    document.getElementById('manageSheetsBtn').addEventListener('click', openManageSheetsModal);
 
     if (planView==='gantt') renderGanttGrid(t); else renderHourByHour(t);
 
     const sections = document.getElementById('sheetSections');
-    sections.innerHTML = SHEETS.map(s=>{
+    sections.innerHTML = state.sheets.map(s=>{
       const items = t.planItems.filter(i=>i.sheet===s.key);
       return `
       <div class="sheet-section">
@@ -1759,7 +1796,7 @@
       colLabel = (idx)=> 'D'+(idx+1);
       items.forEach(i=>{ i._start = i.dayNumber-1; i._span = i.dayNumberEnd ? (i.dayNumberEnd - i.dayNumber + 1) : 1; });
     }
-    const sorted = [...items].sort((a,b)=> SHEETS.findIndex(s=>s.key===a.sheet) - SHEETS.findIndex(s=>s.key===b.sheet) || a._start-b._start);
+    const sorted = [...items].sort((a,b)=> state.sheets.findIndex(s=>s.key===a.sheet) - state.sheets.findIndex(s=>s.key===b.sheet) || a._start-b._start);
     let headerCells = '<div class="gantt-cell gantt-label"></div>';
     for (let c=0;c<colCount;c++) headerCells += `<div class="gantt-cell gantt-head">${colLabel(c)}</div>`;
     holder.innerHTML = `<div class="gantt-scroll"><div class="gantt-grid" style="grid-template-columns:150px repeat(${colCount}, minmax(30px,1fr));">
@@ -1794,7 +1831,7 @@
           <h3>${isEdit ? 'Edit Item' : 'Add Item'}</h3>
           <div class="field-row">
             <div class="field"><label>Sheet</label>
-              <select id="p-sheet">${SHEETS.map(s=>`<option value="${escapeHtml(s.key)}" ${(isEdit?existing.sheet:defaultSheet)===s.key?'selected':''}>${escapeHtml(s.key)}</option>`).join('')}</select>
+              <select id="p-sheet">${state.sheets.map(s=>`<option value="${escapeHtml(s.key)}" ${(isEdit?existing.sheet:defaultSheet)===s.key?'selected':''}>${escapeHtml(s.key)}</option>`).join('')}</select>
             </div>
             <div class="field"><label>Status</label>
               <select id="p-status">
@@ -1960,7 +1997,7 @@
   }
 
   function renderResearchList(t, content){
-    content.innerHTML = SHEETS.map(s=>{
+    content.innerHTML = state.sheets.map(s=>{
       const items = t.research.filter(r=>r.sheet===s.key);
       return `
       <div class="sheet-section">
@@ -2148,7 +2185,7 @@
           <h3>${isEdit ? 'Edit Place' : 'Add Place'}</h3>
           <div class="field-row">
             <div class="field"><label>Sheet</label>
-              <select id="r-sheet">${SHEETS.map(s=>`<option value="${escapeHtml(s.key)}" ${(isEdit?existing.sheet:defaultSheet)===s.key?'selected':''}>${escapeHtml(s.key)}</option>`).join('')}</select>
+              <select id="r-sheet">${state.sheets.map(s=>`<option value="${escapeHtml(s.key)}" ${(isEdit?existing.sheet:defaultSheet)===s.key?'selected':''}>${escapeHtml(s.key)}</option>`).join('')}</select>
             </div>
             <div class="field"><label>Status</label>
               <select id="r-status">
@@ -2266,7 +2303,6 @@
   function moveToResearch(t, id){
     const item = t.planItems.find(i=>i.id===id);
     if (!item) return;
-    if (!confirm(`Move "${item.name}" back to Research? It will be removed from Plan${item.linkedExpenseId?' and its linked expense moved to trash':''}.`)) return;
     const newResearch = researchItem(item.sheet, item.name, {
       address: item.location,
       links: (item.links||[]).map(l=>({ id: uid('link'), label: l.label, url: l.url })),
@@ -2284,7 +2320,6 @@
     t.updatedAt = Date.now();
     logEvent('plan-moved-to-research', `Moved "${item.name}" from Plan back to Research on ${t.name}`);
     saveState();
-    activeTripTab = 'research';
     renderTripView();
     showToast('Moved to Research');
   }
@@ -2382,16 +2417,50 @@
     });
   }
 
-  function openExpenseModal(t){
+  function openQuickAddCategoryModal(onSave, onCancel){
+    const savedHtml = modalRoot.innerHTML;
+    modalRoot.innerHTML = `
+      <div class="modal-overlay">
+        <div class="modal-box">
+          <h3>New Category</h3>
+          <div class="field"><label>Name</label><textarea id="qc-name" rows="1" class="autogrow" placeholder="e.g. Shopping"></textarea></div>
+          <div class="field"><label>Color</label><input id="qc-color" type="color" value="#8a7a3a"></div>
+          <div class="modal-actions">
+            <button class="btn-ghost" id="qc-cancel">Cancel</button>
+            <button class="btn-primary" id="qc-save">Add Category</button>
+          </div>
+        </div>
+      </div>`;
+    document.getElementById('qc-name').focus();
+    wireAutogrow(modalRoot, '#qc-name', { singleValue: true });
+    document.getElementById('qc-cancel').addEventListener('click', ()=>{ modalRoot.innerHTML = savedHtml; if (onCancel) onCancel(); });
+    document.getElementById('qc-save').addEventListener('click', ()=>{
+      const name = singleLine(document.getElementById('qc-name').value);
+      if (!name){ alert('Please enter a name.'); return; }
+      if (state.categories.some(c=>c.name.toLowerCase()===name.toLowerCase())){
+        modalRoot.innerHTML = savedHtml;
+        if (onSave) onSave(name);
+        return;
+      }
+      const color = document.getElementById('qc-color').value;
+      state.categories.push({ name, color });
+      logEvent('category-added', `Added category "${name}"`);
+      saveState();
+      modalRoot.innerHTML = savedHtml;
+      if (onSave) onSave(name);
+    });
+  }
+  function openExpenseModal(t, draft, selectCategory){
+    draft = draft || {};
     modalRoot.innerHTML = `
       <div class="modal-overlay">
         <div class="modal-box">
           <h3>Add Expense</h3>
-          <div class="field"><label>Description</label><textarea id="m-desc" rows="1" class="autogrow" placeholder="e.g. Hotel deposit"></textarea></div>
-          <div class="field"><label>Category</label><select id="m-cat">${state.categories.map(c=>`<option value="${escapeHtml(c.name)}">${escapeHtml(c.name)}</option>`).join('')}</select></div>
+          <div class="field"><label>Description</label><textarea id="m-desc" rows="1" class="autogrow" placeholder="e.g. Hotel deposit">${escapeHtml(draft.desc||'')}</textarea></div>
+          <div class="field"><label>Category</label><select id="m-cat">${state.categories.map(c=>`<option value="${escapeHtml(c.name)}" ${selectCategory===c.name?'selected':''}>${escapeHtml(c.name)}</option>`).join('')}<option value="__add_new__">+ Add new category\u2026</option></select></div>
           <div class="field-row">
-            <div class="field"><label>Quantity</label><input id="m-qty" type="number" value="1" min="0" step="1"></div>
-            <div class="field"><label>Unit Cost (${CUR})</label><input id="m-cost" type="number" value="" step="0.01" placeholder="0.00"></div>
+            <div class="field"><label>Quantity</label><input id="m-qty" type="number" value="${draft.qty!=null&&draft.qty!==''?draft.qty:1}" min="0" step="1"></div>
+            <div class="field"><label>Unit Cost (${CUR})</label><input id="m-cost" type="number" value="${draft.cost||''}" step="0.01" placeholder="0.00"></div>
           </div>
           <div class="modal-actions">
             <button class="btn-ghost" id="m-cancel">Cancel</button>
@@ -2402,9 +2471,23 @@
     document.getElementById('m-cancel').addEventListener('click', closeModal);
     document.getElementById('m-desc').focus();
     wireAutogrow(modalRoot, '#m-desc', { singleValue: true });
+    document.getElementById('m-cat').addEventListener('change', ev=>{
+      if (ev.target.value === '__add_new__'){
+        const currentDraft = {
+          desc: document.getElementById('m-desc').value,
+          qty: document.getElementById('m-qty').value,
+          cost: document.getElementById('m-cost').value
+        };
+        openQuickAddCategoryModal(
+          (newName)=> openExpenseModal(t, currentDraft, newName),
+          ()=> openExpenseModal(t, currentDraft, null)
+        );
+      }
+    });
     document.getElementById('m-save').addEventListener('click', ()=>{
       const description = singleLine(document.getElementById('m-desc').value) || 'Untitled expense';
       const category = document.getElementById('m-cat').value;
+      if (category === '__add_new__'){ showToast('Pick or add a category first'); return; }
       const quantity = Math.max(0, Number(document.getElementById('m-qty').value) || 0);
       const unitCost = Math.max(0, Number(document.getElementById('m-cost').value) || 0);
       t.expenses.push(exp(description, category, quantity, unitCost));
@@ -2465,6 +2548,74 @@
         saveState(); draw(); renderAll();
       });
       document.getElementById('catDone').addEventListener('click', closeModal);
+    }
+    draw();
+  }
+
+  function openManageSheetsModal(){
+    function draw(){
+      modalRoot.innerHTML = `
+        <div class="modal-overlay">
+          <div class="modal-box wide">
+            <h3>Manage Plan &amp; Research Categories</h3>
+            <p style="font-size:12px;color:var(--ink-soft);margin-top:-6px;">These are the sections shown in both the Plan and Research tabs (Hotels, Restaurants, etc.).</p>
+            <div id="sheetList"></div>
+            <div class="modal-actions" style="justify-content:space-between;">
+              <button class="btn-ghost btn-sm" id="addSheetBtn">+ Add Category</button>
+              <button class="btn-primary" id="sheetDone">Done</button>
+            </div>
+          </div>
+        </div>`;
+      const list = document.getElementById('sheetList');
+      list.innerHTML = state.sheets.map((s,i)=>`
+        <div class="cat-row" data-i="${i}">
+          <input type="color" class="sheet-color" value="${s.color}">
+          <textarea rows="1" class="sheet-name autogrow">${escapeHtml(s.key)}</textarea>
+          <button class="btn-ghost btn-sm sheet-del">Delete</button>
+        </div>`).join('');
+      list.querySelectorAll('.cat-row').forEach(row=>{
+        const i = Number(row.dataset.i);
+        row.querySelector('.sheet-color').addEventListener('change', ev=>{ state.sheets[i].color = ev.target.value; saveState(); if(activeTripId) renderTripView(); });
+        row.querySelector('.sheet-name').addEventListener('change', ev=>{
+          const oldKey = state.sheets[i].key, newKey = singleLine(ev.target.value) || oldKey;
+          if (newKey !== oldKey && state.sheets.some((s,j)=>j!==i && s.key===newKey)){
+            showToast('A category with that name already exists'); draw(); return;
+          }
+          state.sheets[i].key = newKey;
+          state.trips.forEach(t=>{
+            t.planItems.forEach(p=>{ if (p.sheet===oldKey) p.sheet=newKey; });
+            t.research.forEach(r=>{ if (r.sheet===oldKey) r.sheet=newKey; });
+          });
+          logEvent('sheet-renamed', `Renamed Plan/Research category "${oldKey}" to "${newKey}"`);
+          saveState(); draw(); if(activeTripId) renderTripView();
+        });
+        row.querySelector('.sheet-del').addEventListener('click', ()=>{
+          if (state.sheets.length <= 1){ showToast('Keep at least one category'); return; }
+          const key = state.sheets[i].key;
+          const fallback = state.sheets.find((s,j)=>j!==i) ? state.sheets.find((s,j)=>j!==i).key : 'Things To Do';
+          const affected = state.trips.reduce((n,t)=> n + t.planItems.filter(p=>p.sheet===key).length + t.research.filter(r=>r.sheet===key).length, 0);
+          const msg = affected
+            ? `Delete "${key}"? ${affected} item(s) using it will be moved to "${fallback}".`
+            : `Delete "${key}"?`;
+          if (!confirm(msg)) return;
+          state.trips.forEach(t=>{
+            t.planItems.forEach(p=>{ if (p.sheet===key) p.sheet=fallback; });
+            t.research.forEach(r=>{ if (r.sheet===key) r.sheet=fallback; });
+          });
+          state.sheets.splice(i,1);
+          logEvent('sheet-deleted', `Deleted Plan/Research category "${key}" (items moved to ${fallback})`);
+          saveState(); draw(); if(activeTripId) renderTripView();
+        });
+      });
+      wireAutogrow(list, 'textarea.sheet-name', { singleValue: true });
+      document.getElementById('addSheetBtn').addEventListener('click', ()=>{
+        let name = 'New Category', n = 2;
+        while (state.sheets.some(s=>s.key===name)){ name = `New Category ${n}`; n++; }
+        state.sheets.push({ key: name, color: '#6a4a6e' });
+        logEvent('sheet-added', `Added Plan/Research category "${name}"`);
+        saveState(); draw();
+      });
+      document.getElementById('sheetDone').addEventListener('click', closeModal);
     }
     draw();
   }
@@ -2544,7 +2695,7 @@
     if (days) subLine += ` \u00b7 ${days} day${days!==1?'s':''}`;
     if (t.country) subLine += ` \u00b7 ${t.country}`;
 
-    const sectionsHtml = SHEETS.map(s=>{
+    const sectionsHtml = state.sheets.map(s=>{
       const items = t.planItems.filter(i=>i.sheet===s.key).sort((a,b)=>{
         const av = a.date || (a.dayNumber!=null?String(a.dayNumber).padStart(4,'0'):'') || '';
         const bv = b.date || (b.dayNumber!=null?String(b.dayNumber).padStart(4,'0'):'') || '';
@@ -2620,12 +2771,6 @@
   document.getElementById('activityLogBtn').addEventListener('click', openActivityLogModal);
   document.getElementById('trashBtn').addEventListener('click', openTrashModal);
   document.getElementById('githubSyncBtn').addEventListener('click', openGithubSyncModal);
-  document.getElementById('toggleMyMap').addEventListener('click', ()=>{
-    const embed = document.getElementById('myMapEmbed');
-    const btn = document.getElementById('toggleMyMap');
-    embed.hidden = !embed.hidden;
-    btn.textContent = embed.hidden ? 'Show' : 'Hide';
-  });
   document.getElementById('exportBtn').addEventListener('click', exportBackup);
   const storageWarningExportBtn = document.getElementById('storageWarningExport');
   if (storageWarningExportBtn) storageWarningExportBtn.addEventListener('click', exportBackup);
