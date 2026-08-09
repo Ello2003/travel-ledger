@@ -218,11 +218,11 @@
   #travel-ledger-root .exp-del { background: none; border: none; color: var(--red); cursor: pointer; font-size: 15px; padding: 2px 6px; }
   #travel-ledger-root .exp-foot td { font-family: var(--font-mono); font-weight: 700; border-top: 2px solid var(--ink); border-bottom: none; }
   #travel-ledger-root table.plan-table { table-layout: fixed; }
-  #travel-ledger-root table.plan-table col.col-name { width: 38%; }
-  #travel-ledger-root table.plan-table col.col-status { width: 13%; }
-  #travel-ledger-root table.plan-table col.col-when { width: 17%; }
-  #travel-ledger-root table.plan-table col.col-cost { width: 12%; }
-  #travel-ledger-root table.plan-table col.col-actions { width: 20%; }
+  #travel-ledger-root table.plan-table col.col-name { width: 34%; }
+  #travel-ledger-root table.plan-table col.col-status { width: 12%; }
+  #travel-ledger-root table.plan-table col.col-when { width: 16%; }
+  #travel-ledger-root table.plan-table col.col-cost { width: 11%; }
+  #travel-ledger-root table.plan-table col.col-actions { width: 27%; }
   #travel-ledger-root table.plan-table td, #travel-ledger-root table.plan-table th { overflow: hidden; text-overflow: ellipsis; }
   #travel-ledger-root td.when-cell { font-family: var(--font-mono); font-size: 12px; text-align: left; white-space: nowrap; }
   #travel-ledger-root table.research-table { table-layout: fixed; }
@@ -284,6 +284,12 @@
   #travel-ledger-root .empty-state { text-align: center; padding: 50px 20px; color: var(--ink-soft); font-family: var(--font-mono); font-size: 13px; }
 
   #travel-ledger-root .cat-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  #travel-ledger-root .reorder-btns { display: flex; flex-direction: column; gap: 1px; flex-shrink: 0; }
+  #travel-ledger-root .reorder-btn {
+    padding: 1px 6px; font-size: 9px; line-height: 1.4; border: 1px solid var(--paper-edge); background: var(--paper-raised);
+  }
+  #travel-ledger-root .reorder-btn:disabled { opacity: .3; cursor: default; }
+  #travel-ledger-root .reorder-btn:not(:disabled):hover { background: var(--paper); }
   #travel-ledger-root .cat-row input[type="color"] { width: 30px; height: 30px; padding: 0; border: 1px solid var(--paper-edge); border-radius: 5px; }
   #travel-ledger-root .cat-row textarea.autogrow { flex: 1; }
 
@@ -348,20 +354,11 @@
   #travel-ledger-root .tl-del-cell { display: flex; align-items: center; justify-content: center; padding: 0 8px; }
   #travel-ledger-root .tl-add-row { border-top: 1px dashed var(--paper-edge); padding: 8px 14px; }
 
-  #travel-ledger-root .gantt-scroll { overflow-x: auto; padding-bottom: 4px; }
   #travel-ledger-root .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
   #travel-ledger-root .table-scroll table.plan-table,
   #travel-ledger-root .table-scroll table.research-table,
   #travel-ledger-root .table-scroll table.packing-table { min-width: 460px; }
   #travel-ledger-root .table-scroll table.exp-table:not(.plan-table):not(.research-table):not(.packing-table) { min-width: 520px; }
-  #travel-ledger-root .gantt-grid { display: grid; grid-auto-rows: 30px; position: relative; min-width: 100%; width: max-content; }
-  #travel-ledger-root .gantt-cell { border-bottom: 1px solid var(--paper-edge); border-right: 1px solid var(--paper-edge); font-family: var(--font-mono); font-size: 10px; padding: 4px 6px; color: var(--ink-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  #travel-ledger-root .gantt-cell.gantt-label { position: -webkit-sticky; position: sticky; left: 0; background: var(--paper-raised); border-right: 2px solid var(--ink); font-size: 11px; color: var(--ink); z-index: 2; }
-  #travel-ledger-root .gantt-cell.gantt-head { text-align: center; font-weight: 700; background: var(--paper); }
-  #travel-ledger-root .gantt-bar {
-    border-radius: 5px; color: #fff; font-family: var(--font-mono); font-size: 10px; padding: 4px 8px; margin: 3px 2px;
-    overflow: hidden; text-overflow: ellipsis; white-space: nowrap; align-self: center; box-shadow: 0 1px 2px rgba(0,0,0,0.2);
-  }
 
   /* ---------- Up Next ---------- */
   #travel-ledger-root .upnext-card { margin-bottom: 22px; }
@@ -503,8 +500,9 @@
 <script>
 (function(){
   const STORAGE_KEY = 'trips-data';
-  const APP_VERSION = '1.7.4';
+  const APP_VERSION = '1.7.5';
   const CHANGELOG = {
+    '1.7.5': 'Added a Post Trip tab next to Research \u2014 mark a Plan item as visited (\u2713 button) and it shows up there for a post-trip rating and notes. Removed the Gantt view (wasn\u2019t rendering correctly); Plan tab now shows Hour-by-Hour directly with no toggle needed. Plan/Research categories (Hotels, Restaurants, etc.) can now be reordered up/down in Manage Categories. Shopping expenses no longer count toward budget variance, over-budget status, or the Budget vs Actual chart \u2014 they still show in Total Expenses and the category breakdown, just not against your budget target.',
     '1.7.4': 'Budget table: fixed the Category column being cut off and Qty being oversized with a proper fixed-width layout. Added Food & Drink and Shopping expense categories, plus a "+ Add new category" option right in the Add Expense modal that preserves whatever you\u2019ve already typed. Move-to-Research no longer shows a confirm popup and stays on the Plan tab. Plan/Research categories (Hotels, Restaurants, etc.) are now fully editable \u2014 added "Cheap Eats" and a "Manage Categories" button in the Plan tab to add/rename/delete your own. Moved the My Maps embed off the main dashboard to sit below Expenses on the London trip specifically.',
     '1.7.3': 'Plan and Research items can now move both ways (\u21a9 button on a Plan item sends it back to Research; \u2192 Plan on a Research item promotes it), and any item can now have multiple links (add/remove, with optional labels) instead of just one. Added a Plan tab "Export PDF" button that builds a clean, printable itinerary (name, status, when, address, links, notes, grouped by category) via the browser\u2019s Print \u2192 Save as PDF.',
     '1.7.2': 'Added GitHub Sync (footer link) \u2014 your trips, expenses, categories, and trash automatically sync to a file in a GitHub repo of your choice via a personal access token, so the same data shows up on any device you open this page from. Syncs are debounced (batched a few seconds after you stop editing, not per keystroke) and auto-retry once on conflict. The token itself is stored only in this browser\u2019s local storage and is never included in the synced file or committed to the repo \u2014 only trips/expenses/categories/trash sync, not settings.',
@@ -546,7 +544,6 @@
   let activeTripTab = 'budget';
   let activeDashTab = 'trips';
   let researchView = 'list';
-  let planView = 'gantt';
   let uiFilter = { search: '', status: 'all', sort: 'year-desc' };
 
   function defaultSheets(){
@@ -794,7 +791,8 @@
       date: opts.date || null, endDate: opts.endDate || null, time: opts.time || null,
       dayNumber: opts.dayNumber || null, dayNumberEnd: opts.dayNumberEnd || null,
       location: opts.location || '', links: opts.links || [], cost: opts.cost != null ? opts.cost : null,
-      linkedExpenseId: opts.linkedExpenseId || null, notes: opts.notes || ''
+      linkedExpenseId: opts.linkedExpenseId || null, notes: opts.notes || '',
+      visited: opts.visited || false, actualNotes: opts.actualNotes || '', actualRating: opts.actualRating || null
     };
   }
   function packingItem(category, name, qty){
@@ -802,6 +800,7 @@
   }
 
   function tripTotal(trip){ return trip.expenses.reduce((s,e)=> s + (Number(e.quantity)||0) * (Number(e.unitCost)||0), 0); }
+  function budgetCountedTotal(trip){ return trip.expenses.reduce((s,e)=> e.category==='Shopping' ? s : s + (Number(e.quantity)||0) * (Number(e.unitCost)||0), 0); }
   function tripCategoryTotals(trip){
     const totals = {}; state.categories.forEach(c => totals[c.name] = 0);
     trip.expenses.forEach(e => { totals[e.category] = (totals[e.category]||0) + (Number(e.quantity)||0)*(Number(e.unitCost)||0); });
@@ -1081,6 +1080,9 @@
           i.links = (i.link ? [mkLink('', i.link)] : []);
           delete i.link;
         }
+        if (i.visited === undefined) i.visited = false;
+        if (i.actualNotes === undefined) i.actualNotes = '';
+        if (i.actualRating === undefined) i.actualRating = null;
       });
       t.research.forEach(i=>{
         if (i.sheet === 'Activities / Sights') i.sheet = 'Activities';
@@ -1187,7 +1189,7 @@
   function renderKPIs(){
     const live = state.trips.filter(t => t.status !== 'cancelled');
     const totalBudget = live.reduce((s,t)=> s + Number(t.budget||0), 0);
-    const totalSpent = live.reduce((s,t)=> s + tripTotal(t), 0);
+    const totalSpent = live.reduce((s,t)=> s + budgetCountedTotal(t), 0);
     const variance = totalBudget - totalSpent;
     const upcoming = state.trips.filter(t=>t.status==='upcoming').length;
     document.getElementById('kpiBoard').innerHTML = `
@@ -1221,7 +1223,7 @@
       if (t.status==='cancelled') return;
       if (!years[t.year]) years[t.year] = { budget:0, spent:0, count:0 };
       years[t.year].budget += Number(t.budget||0);
-      years[t.year].spent += tripTotal(t);
+      years[t.year].spent += budgetCountedTotal(t);
       years[t.year].count += 1;
     });
     const keys = Object.keys(years).sort();
@@ -1244,7 +1246,7 @@
     if (!trips.length){ svg.innerHTML = ''; return; }
     const w = 900, h = 200, padL = 46, padB = 34, padT = 10, padR = 10;
     const chartW = w - padL - padR, chartH = h - padT - padB;
-    const maxVal = Math.max(1, ...trips.map(t=> Math.max(Number(t.budget||0), tripTotal(t))));
+    const maxVal = Math.max(1, ...trips.map(t=> Math.max(Number(t.budget||0), budgetCountedTotal(t))));
     const bw = chartW / trips.length;
     let bars = '', labels = '', gridlines = '';
     for (let i=0;i<=4;i++){
@@ -1253,7 +1255,7 @@
       gridlines += `<text x="${padL-6}" y="${y+3}" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="9" fill="#37455a" text-anchor="end">${CUR}${Math.round(maxVal*i/4)}</text>`;
     }
     trips.forEach((t,i)=>{
-      const spent = tripTotal(t), budget = Number(t.budget||0);
+      const spent = budgetCountedTotal(t), budget = Number(t.budget||0);
       const groupX = padL + i*bw;
       const bH1 = (budget/maxVal)*chartH, bH2 = (spent/maxVal)*chartH;
       const bwEach = Math.min(24, bw*0.32);
@@ -1267,7 +1269,7 @@
   }
 
   function statusLabel(t){
-    const spent = tripTotal(t);
+    const spent = budgetCountedTotal(t);
     if (t.status === 'cancelled') return {cls:'status-cancelled', text:'Cancelled'};
     if (spent > Number(t.budget||0)) return {cls:'status-over', text:'Over Budget'};
     if (t.status === 'upcoming') return {cls:'status-upcoming', text:'Upcoming'};
@@ -1284,7 +1286,7 @@
       case 'year-asc': out.sort((a,b)=> a.year-b.year); break;
       case 'name': out.sort((a,b)=> a.name.localeCompare(b.name)); break;
       case 'budget-desc': out.sort((a,b)=> Number(b.budget)-Number(a.budget)); break;
-      case 'spend-desc': out.sort((a,b)=> tripTotal(b)-tripTotal(a)); break;
+      case 'spend-desc': out.sort((a,b)=> budgetCountedTotal(b)-budgetCountedTotal(a)); break;
       default: out.sort((a,b)=> b.year-a.year || (b.updatedAt||0)-(a.updatedAt||0));
     }
     return out;
@@ -1296,7 +1298,7 @@
     const sorted = applyFilterSort(state.trips);
     if (!sorted.length){ grid.innerHTML = '<div class="empty-state">No trips match that search/filter.</div>'; return; }
     grid.innerHTML = sorted.map(t=>{
-      const spent = tripTotal(t), budget = Number(t.budget||0), diff = budget - spent;
+      const spent = budgetCountedTotal(t), budget = Number(t.budget||0), diff = budget - spent;
       const pct = budget>0 ? Math.min(100,(spent/budget)*100) : 0;
       const st = statusLabel(t);
       const fillColor = spent>budget ? 'var(--red)' : 'var(--green)';
@@ -1334,14 +1336,14 @@
   }
 
   /* ---------------- Trip detail ---------------- */
-  function openTrip(id){ activeTripId = id; activeTripTab = 'budget'; researchView = 'list'; planView = 'gantt'; dashboardView.hidden = true; tripView.hidden = false; renderTripView(); }
+  function openTrip(id){ activeTripId = id; activeTripTab = 'budget'; researchView = 'list'; dashboardView.hidden = true; tripView.hidden = false; renderTripView(); }
   function closeTrip(){ activeTripId = null; tripView.hidden = true; dashboardView.hidden = false; renderAll(); }
   function currentTrip(){ return state.trips.find(t=>t.id===activeTripId); }
 
   function renderTripView(){
     const t = currentTrip();
     if (!t) { closeTrip(); return; }
-    const spent = tripTotal(t), budget = Number(t.budget||0), diff = budget - spent;
+    const spent = tripTotal(t), budgetSpent = budgetCountedTotal(t), budget = Number(t.budget||0), diff = budget - budgetSpent;
     const catTotals = tripCategoryTotals(t);
     const activeCats = state.categories.map(c=>c.name).filter(c=>catTotals[c]>0);
     let cumPct = 0; const stops = [];
@@ -1370,7 +1372,7 @@
         </div>
         <div class="detail-figs">
           <div class="detail-fig"><div class="label">Budget</div><div class="value">${fmt(budget)}</div></div>
-          <div class="detail-fig"><div class="label">Spent</div><div class="value">${fmt(spent)}</div></div>
+          <div class="detail-fig"><div class="label">Spent</div><div class="value">${fmt(budgetSpent)}</div></div>
           <div class="detail-fig"><div class="label">Variance</div><div class="value" style="color:${diff<0?'#e0897c':'#8fd6c3'}">${diff<0?'-':''}${fmt(Math.abs(diff))}</div></div>
           ${perPerson!=null ? `<div class="detail-fig"><div class="label">Per Person (${t.travelers})</div><div class="value">${fmt(perPerson)}</div></div>` : ''}
         </div>
@@ -1386,6 +1388,7 @@
         <button class="tab-btn ${activeTripTab==='budget'?'active':''}" data-tab="budget">Budget</button>
         <button class="tab-btn ${activeTripTab==='plan'?'active':''}" data-tab="plan">Plan${t.planItems.length?' ('+t.planItems.length+')':''}</button>
         <button class="tab-btn ${activeTripTab==='research'?'active':''}" data-tab="research">Research${t.research.length?' ('+t.research.length+')':''}</button>
+        <button class="tab-btn ${activeTripTab==='posttrip'?'active':''}" data-tab="posttrip">Post Trip${t.planItems.filter(p=>p.visited).length?` (${t.planItems.filter(p=>p.visited).length})`:''}</button>
         <button class="tab-btn ${activeTripTab==='packing'?'active':''}" data-tab="packing">Packing${t.packingList.length?` (${t.packingList.filter(p=>p.packed).length}/${t.packingList.length})`:''}</button>
       </div>
 
@@ -1433,6 +1436,7 @@
 
       <div id="tabPlan" ${activeTripTab!=='plan'?'hidden':''}></div>
       <div id="tabResearch" ${activeTripTab!=='research'?'hidden':''}></div>
+      <div id="tabPostTrip" ${activeTripTab!=='posttrip'?'hidden':''}></div>
       <div id="tabPacking" ${activeTripTab!=='packing'?'hidden':''}></div>
     `;
 
@@ -1454,6 +1458,7 @@
     renderExpenseRows(t);
     if (activeTripTab === 'plan') renderPlanTab(t);
     if (activeTripTab === 'research') renderResearchTab(t);
+    if (activeTripTab === 'posttrip') renderPostTripTab(t);
     if (activeTripTab === 'packing') renderPackingTab(t);
   }
 
@@ -1515,29 +1520,22 @@
           <button class="btn-sm ${mode==='dates'?'btn-primary':'btn-ghost'}" id="modeDates">Dates</button>
           <button class="btn-sm ${mode==='days'?'btn-primary':'btn-ghost'}" id="modeDays">Day numbers</button>
         </div>
-        <div class="timeline-toggle">
-          <button class="btn-sm ${planView==='gantt'?'btn-primary':'btn-ghost'}" id="viewGantt">Gantt</button>
-          <button class="btn-sm ${planView==='hbh'?'btn-primary':'btn-ghost'}" id="viewHbh">Hour-by-Hour</button>
-        </div>
         <button class="btn-ghost" id="manageSheetsBtn" style="margin-left:auto;">Manage Categories</button>
         <button class="btn-ghost" id="exportPlanPdfBtn">Export PDF</button>
       </div>
       <div class="chart-card" style="margin-bottom:18px;" id="timelineCard">
-        <h3>${planView==='gantt'?'Timeline':'Hour by Hour'}</h3>
-        <div id="ganttHolder" ${planView!=='gantt'?'hidden':''}></div>
-        <div id="hbhHolder" ${planView!=='hbh'?'hidden':''}></div>
+        <h3>Hour by Hour</h3>
+        <div id="hbhHolder"></div>
       </div>
       <div id="sheetSections"></div>
     `;
     document.getElementById('addPlanBtn').addEventListener('click', ()=> openPlanItemModal(t, null, null));
     document.getElementById('modeDates').addEventListener('click', ()=>{ t.timelineMode='dates'; t.updatedAt=Date.now(); saveState(); renderPlanTab(t); });
     document.getElementById('modeDays').addEventListener('click', ()=>{ t.timelineMode='days'; t.updatedAt=Date.now(); saveState(); renderPlanTab(t); });
-    document.getElementById('viewGantt').addEventListener('click', ()=>{ planView='gantt'; renderPlanTab(t); });
-    document.getElementById('viewHbh').addEventListener('click', ()=>{ planView='hbh'; renderPlanTab(t); });
     document.getElementById('exportPlanPdfBtn').addEventListener('click', ()=> exportPlanPDF(t));
     document.getElementById('manageSheetsBtn').addEventListener('click', openManageSheetsModal);
 
-    if (planView==='gantt') renderGanttGrid(t); else renderHourByHour(t);
+    renderHourByHour(t);
 
     const sections = document.getElementById('sheetSections');
     sections.innerHTML = state.sheets.map(s=>{
@@ -1556,11 +1554,11 @@
           <tbody>
             ${items.map(i=>`
               <tr data-id="${i.id}">
-                <td>${escapeHtml(i.name)}${i.location?`<br><span style="color:var(--ink-soft);font-size:11px;">${escapeHtml(i.location)}</span>`:''}${renderLinksInline(i.links)}</td>
+                <td>${escapeHtml(i.name)}${i.visited?' <span class="status-chip status-completed" style="font-size:9px;">visited</span>':''}${i.location?`<br><span style="color:var(--ink-soft);font-size:11px;">${escapeHtml(i.location)}</span>`:''}${renderLinksInline(i.links)}</td>
                 <td><span class="status-chip status-${i.status==='booked'?'completed':i.status==='cancelled'?'cancelled':'upcoming'}">${i.status}</span></td>
                 <td class="when-cell">${formatWhen(t,i)}</td>
                 <td class="num">${i.cost!=null ? fmt(i.cost) + (i.linkedExpenseId?' \u2713':'') : '\u2014'}</td>
-                <td><button class="exp-del plan-tores" aria-label="Move to Research" title="Move to Research">\u21a9</button><button class="exp-del plan-edit" aria-label="Edit item" title="Edit">\u270e</button><button class="exp-del plan-del" aria-label="Delete item" title="Delete">\u2715</button></td>
+                <td><button class="exp-del plan-visited" aria-label="${i.visited?'Unmark as visited':'Mark as visited'}" title="${i.visited?'Unmark as visited':'Mark as visited'}" style="${i.visited?'color:var(--green);':''}">\u2713</button><button class="exp-del plan-tores" aria-label="Move to Research" title="Move to Research">\u21a9</button><button class="exp-del plan-edit" aria-label="Edit item" title="Edit">\u270e</button><button class="exp-del plan-del" aria-label="Delete item" title="Delete">\u2715</button></td>
               </tr>`).join('')}
           </tbody>
         </table>
@@ -1577,9 +1575,112 @@
       const id = btn.closest('tr').dataset.id;
       btn.addEventListener('click', ()=> moveToResearch(t, id));
     });
+    sections.querySelectorAll('.plan-visited').forEach(btn=>{
+      const id = btn.closest('tr').dataset.id;
+      btn.addEventListener('click', ()=>{
+        const item = t.planItems.find(i=>i.id===id);
+        if (!item) return;
+        item.visited = !item.visited;
+        t.updatedAt = Date.now();
+        logEvent(item.visited?'plan-marked-visited':'plan-unmarked-visited', `${item.visited?'Marked':'Unmarked'} "${item.name}" as visited on ${t.name}`);
+        saveState(); renderTripView();
+        showToast(item.visited ? 'Added to Post Trip' : 'Removed from Post Trip');
+      });
+    });
     sections.querySelectorAll('.plan-del').forEach(btn=>{
       const id = btn.closest('tr').dataset.id;
       btn.addEventListener('click', ()=> deletePlanItem(t, id));
+    });
+  }
+
+  /* ---------------- Post Trip (actual places visited) ---------------- */
+  const ACTUAL_RATING_LABELS = { 1:'\u2605', 2:'\u2605\u2605', 3:'\u2605\u2605\u2605', 4:'\u2605\u2605\u2605\u2605', 5:'\u2605\u2605\u2605\u2605\u2605' };
+  function renderPostTripTab(t){
+    const panel = document.getElementById('tabPostTrip');
+    if (!panel) return;
+    const visited = t.planItems.filter(i=>i.visited);
+    panel.innerHTML = `
+      <div class="toolbar">
+        <p style="font-size:12px;color:var(--ink-soft);margin:0;">Places marked "visited" from your Plan tab show up here \u2014 add notes or a rating on how it actually went.</p>
+      </div>
+      <div id="postTripSections"></div>
+    `;
+    const sections = document.getElementById('postTripSections');
+    if (!visited.length){
+      sections.innerHTML = '<div class="empty-state">Nothing marked as visited yet. In the Plan tab, click the \u2713 button on an item to add it here.</div>';
+      return;
+    }
+    sections.innerHTML = state.sheets.map(s=>{
+      const items = visited.filter(i=>i.sheet===s.key);
+      if (!items.length) return '';
+      return `
+      <div class="sheet-section">
+        <div class="sheet-header">
+          <div><span class="sheet-dot" style="background:${s.color}"></span>${escapeHtml(s.key)} <span style="color:var(--ink-soft);font-family:var(--font-mono);font-size:11px;">(${items.length})</span></div>
+        </div>
+        <div class="table-scroll">
+        <table class="exp-table plan-table">
+          <colgroup><col class="col-name"><col class="col-status"><col class="col-when"><col class="col-cost"><col class="col-actions"></colgroup>
+          <thead><tr><th>Name</th><th>Rating</th><th>Planned For</th><th>Cost</th><th></th></tr></thead>
+          <tbody>
+            ${items.map(i=>`
+              <tr data-id="${i.id}">
+                <td>${escapeHtml(i.name)}${i.location?`<br><span style="color:var(--ink-soft);font-size:11px;">${escapeHtml(i.location)}</span>`:''}${renderLinksInline(i.links)}${i.actualNotes?`<br><span style="color:var(--ink-soft);font-size:11px;font-style:italic;">${escapeHtml(i.actualNotes)}</span>`:''}</td>
+                <td>${i.actualRating?ACTUAL_RATING_LABELS[i.actualRating]:'\u2014'}</td>
+                <td class="when-cell">${formatWhen(t,i)}</td>
+                <td class="num">${i.cost!=null ? fmt(i.cost) : '\u2014'}</td>
+                <td><button class="exp-del pt-edit" aria-label="Edit visit" title="Add notes/rating">\u270e</button><button class="exp-del pt-unmark" aria-label="Remove from Post Trip" title="Remove from Post Trip">\u2715</button></td>
+              </tr>`).join('')}
+          </tbody>
+        </table>
+        </div>
+      </div>`;
+    }).filter(Boolean).join('');
+
+    sections.querySelectorAll('.pt-edit').forEach(btn=>{
+      const id = btn.closest('tr').dataset.id;
+      btn.addEventListener('click', ()=> openPostTripEditModal(t, t.planItems.find(i=>i.id===id)));
+    });
+    sections.querySelectorAll('.pt-unmark').forEach(btn=>{
+      const id = btn.closest('tr').dataset.id;
+      btn.addEventListener('click', ()=>{
+        const item = t.planItems.find(i=>i.id===id);
+        if (!item) return;
+        item.visited = false;
+        t.updatedAt = Date.now();
+        logEvent('plan-unmarked-visited', `Removed "${item.name}" from Post Trip on ${t.name}`);
+        saveState(); renderTripView();
+        showToast('Removed from Post Trip');
+      });
+    });
+  }
+
+  function openPostTripEditModal(t, item){
+    if (!item) return;
+    modalRoot.innerHTML = `
+      <div class="modal-overlay">
+        <div class="modal-box">
+          <h3>${escapeHtml(item.name)}</h3>
+          <div class="field"><label>How was it?</label><select id="pt-rating">
+            <option value="">Not rated</option>
+            ${[1,2,3,4,5].map(r=>`<option value="${r}" ${item.actualRating===r?'selected':''}>${ACTUAL_RATING_LABELS[r]}</option>`).join('')}
+          </select></div>
+          <div class="field"><label>Notes (optional)</label><textarea id="pt-notes" rows="3">${escapeHtml(item.actualNotes||'')}</textarea></div>
+          <div class="modal-actions">
+            <button class="btn-ghost" id="pt-cancel">Cancel</button>
+            <button class="btn-primary" id="pt-save">Save</button>
+          </div>
+        </div>
+      </div>`;
+    document.getElementById('pt-cancel').addEventListener('click', closeModal);
+    document.getElementById('pt-notes').focus();
+    document.getElementById('pt-save').addEventListener('click', ()=>{
+      const ratingRaw = document.getElementById('pt-rating').value;
+      item.actualRating = ratingRaw ? Number(ratingRaw) : null;
+      item.actualNotes = document.getElementById('pt-notes').value.trim();
+      t.updatedAt = Date.now();
+      logEvent('post-trip-updated', `Updated post-trip notes for "${item.name}" on ${t.name}`);
+      saveState(); closeModal(); renderTripView();
     });
   }
 
@@ -1766,59 +1867,6 @@
   function refreshSheetSections(t){
     const sections = document.getElementById('sheetSections');
     if (sections) renderPlanTab(t);
-  }
-
-  function renderGanttGrid(t){
-    const holder = document.getElementById('ganttHolder');
-    const mode = tripTimelineMode(t);
-    const items = t.planItems.filter(i => mode==='dates' ? !!i.date : !!i.dayNumber);
-    if (!items.length){
-      holder.innerHTML = `<div class="empty-state">${mode==='dates' ? 'Add a date to an item to see it on the timeline, or switch to Day numbers.' : 'Add a day number to an item to see it on the timeline, or switch to Dates.'}</div>`;
-      return;
-    }
-    let colCount, colLabel;
-    if (mode === 'dates'){
-      const allDates = [];
-      items.forEach(i=>{ allDates.push(i.date); if (i.endDate) allDates.push(i.endDate); });
-      if (t.startDate) allDates.push(t.startDate);
-      if (t.endDate) allDates.push(t.endDate);
-      const times = allDates.map(d=> new Date(d+'T00:00:00').getTime());
-      const min = Math.min(...times), max = Math.max(...times);
-      colCount = Math.round((max-min)/86400000) + 1;
-      colLabel = (idx)=> new Date(min + idx*86400000).toLocaleDateString('en-GB',{day:'numeric',month:'short'});
-      items.forEach(i=>{
-        i._start = Math.round((new Date(i.date+'T00:00:00').getTime()-min)/86400000);
-        i._span = i.endDate ? Math.round((new Date(i.endDate+'T00:00:00').getTime()-new Date(i.date+'T00:00:00').getTime())/86400000)+1 : 1;
-      });
-    } else {
-      const maxDay = Math.max(...items.map(i=> i.dayNumberEnd || i.dayNumber));
-      colCount = Math.max(maxDay, 1);
-      colLabel = (idx)=> 'D'+(idx+1);
-      items.forEach(i=>{ i._start = i.dayNumber-1; i._span = i.dayNumberEnd ? (i.dayNumberEnd - i.dayNumber + 1) : 1; });
-    }
-    const sorted = [...items].sort((a,b)=> state.sheets.findIndex(s=>s.key===a.sheet) - state.sheets.findIndex(s=>s.key===b.sheet) || a._start-b._start);
-    let headerCells = '<div class="gantt-cell gantt-label"></div>';
-    for (let c=0;c<colCount;c++) headerCells += `<div class="gantt-cell gantt-head">${colLabel(c)}</div>`;
-    holder.innerHTML = `<div class="gantt-scroll"><div class="gantt-grid" style="grid-template-columns:150px repeat(${colCount}, minmax(30px,1fr));">
-      ${headerCells}
-      ${sorted.map((i,ri)=>`
-        <div class="gantt-cell gantt-label">${escapeHtml(i.name)}</div>
-        ${Array.from({length:colCount}).map(()=>'<div class="gantt-cell"></div>').join('')}
-      `).join('')}
-    </div></div>`;
-    // overlay bars positioned via absolute grid-column on a second pass
-    const grid = holder.querySelector('.gantt-grid');
-    sorted.forEach((i,ri)=>{
-      const bar = document.createElement('div');
-      bar.className = 'gantt-bar';
-      bar.style.gridRow = String(ri+2);
-      bar.style.gridColumn = `${i._start+2} / span ${Math.max(1,i._span)}`;
-      bar.style.background = sheetColor(i.sheet);
-      bar.style.opacity = i.status==='cancelled' ? '0.35' : '1';
-      bar.title = `${i.name} \u2014 ${formatWhen(t,i)}`;
-      bar.textContent = i.name;
-      grid.appendChild(bar);
-    });
   }
 
   function openPlanItemModal(t, existing, defaultSheet, prefill){
@@ -2569,12 +2617,26 @@
       const list = document.getElementById('sheetList');
       list.innerHTML = state.sheets.map((s,i)=>`
         <div class="cat-row" data-i="${i}">
+          <div class="reorder-btns">
+            <button class="reorder-btn sheet-up" ${i===0?'disabled':''} aria-label="Move up" title="Move up">\u25b2</button>
+            <button class="reorder-btn sheet-down" ${i===state.sheets.length-1?'disabled':''} aria-label="Move down" title="Move down">\u25bc</button>
+          </div>
           <input type="color" class="sheet-color" value="${s.color}">
           <textarea rows="1" class="sheet-name autogrow">${escapeHtml(s.key)}</textarea>
           <button class="btn-ghost btn-sm sheet-del">Delete</button>
         </div>`).join('');
       list.querySelectorAll('.cat-row').forEach(row=>{
         const i = Number(row.dataset.i);
+        row.querySelector('.sheet-up').addEventListener('click', ()=>{
+          if (i<=0) return;
+          [state.sheets[i-1], state.sheets[i]] = [state.sheets[i], state.sheets[i-1]];
+          saveState(); draw(); if(activeTripId) renderTripView();
+        });
+        row.querySelector('.sheet-down').addEventListener('click', ()=>{
+          if (i>=state.sheets.length-1) return;
+          [state.sheets[i+1], state.sheets[i]] = [state.sheets[i], state.sheets[i+1]];
+          saveState(); draw(); if(activeTripId) renderTripView();
+        });
         row.querySelector('.sheet-color').addEventListener('change', ev=>{ state.sheets[i].color = ev.target.value; saveState(); if(activeTripId) renderTripView(); });
         row.querySelector('.sheet-name').addEventListener('change', ev=>{
           const oldKey = state.sheets[i].key, newKey = singleLine(ev.target.value) || oldKey;
