@@ -1,5 +1,4 @@
 <meta charset="UTF-8">
-<title>Travel Ledger</title>
 <style>
   #travel-ledger-root {
     text-rendering: optimizeLegibility;
@@ -45,10 +44,11 @@
   #travel-ledger-root .footer-sep { color: var(--paper-edge); font-size: 11px; }
 
   #travel-ledger-root .masthead {
-    display: flex; justify-content: space-between; align-items: flex-end;
+    display: flex; justify-content: space-between; align-items: flex-start;
     border-bottom: 3px solid var(--ink); padding-bottom: 14px; margin-bottom: 18px;
     flex-wrap: wrap; gap: 10px;
   }
+  #travel-ledger-root .masthead-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
   #travel-ledger-root .wordmark { font-family: var(--font-display); font-weight: 900; font-size: 30px; letter-spacing: 0.5px; }
   #travel-ledger-root .wordmark small {
     display: block; font-family: var(--font-mono); font-weight: 400; font-size: 11px;
@@ -243,13 +243,14 @@
   #travel-ledger-root table.packing-table tr.packed-row .pack-name { text-decoration: line-through; opacity: .5; }
   #travel-ledger-root table.packing-table tr.packed-row td { opacity: .75; }
   #travel-ledger-root table.budget-exp-table { table-layout: fixed; }
-  #travel-ledger-root table.budget-exp-table col.col-desc { width: 32%; }
-  #travel-ledger-root table.budget-exp-table col.col-cat { width: 22%; }
-  #travel-ledger-root table.budget-exp-table col.col-qty { width: 9%; }
-  #travel-ledger-root table.budget-exp-table col.col-unit { width: 14%; }
-  #travel-ledger-root table.budget-exp-table col.col-amt { width: 14%; }
-  #travel-ledger-root table.budget-exp-table col.col-actions { width: 9%; }
-  #travel-ledger-root table.budget-exp-table select.exp-cat { width: 100%; max-width: 100%; }
+  #travel-ledger-root table.budget-exp-table col.col-desc { width: 22%; }
+  #travel-ledger-root table.budget-exp-table col.col-cat { width: 20%; }
+  #travel-ledger-root table.budget-exp-table col.col-qty { width: 7%; }
+  #travel-ledger-root table.budget-exp-table col.col-unit { width: 12%; }
+  #travel-ledger-root table.budget-exp-table col.col-planned { width: 12%; }
+  #travel-ledger-root table.budget-exp-table col.col-actual { width: 13%; }
+  #travel-ledger-root table.budget-exp-table col.col-actions { width: 6%; }
+  #travel-ledger-root table.budget-exp-table select.exp-cat { width: 100%; max-width: 100%; font-size: 12px; }
 
   #travel-ledger-root .notes-box { width: 100%; min-height: 70px; font-family: var(--font-body); font-size: 13px; padding: 10px; border: 1px solid var(--paper-edge); border-radius: 6px; background: var(--paper-raised); resize: vertical; }
 
@@ -359,7 +360,7 @@
   #travel-ledger-root .table-scroll table.plan-table,
   #travel-ledger-root .table-scroll table.research-table,
   #travel-ledger-root .table-scroll table.packing-table { min-width: 460px; }
-  #travel-ledger-root .table-scroll table.exp-table:not(.plan-table):not(.research-table):not(.packing-table) { min-width: 520px; }
+  #travel-ledger-root .table-scroll table.exp-table:not(.plan-table):not(.research-table):not(.packing-table) { min-width: 620px; }
 
   /* ---------- Up Next ---------- */
   #travel-ledger-root .upnext-card { margin-bottom: 22px; }
@@ -403,7 +404,7 @@
   <div class="wrap">
     <div class="masthead">
       <div class="wordmark">&#x2708; Travel Ledger<small>Budget &amp; Expense Log</small></div>
-      <div style="text-align:right;">
+      <div class="masthead-meta">
         <div class="version-badge" id="versionBadge"></div>
         <div class="save-flag" id="saveFlag">&#x25cf; saved</div>
         <div class="sync-flag" id="syncFlag" hidden></div>
@@ -420,7 +421,7 @@
 
     <div class="kpi-board" id="kpiBoard"></div>
 
-    <div class="tab-bar">
+    <div class="tab-bar" id="dashTabBar">
       <button class="tab-btn" data-dashtab="trips" id="dashTabTrips">Trips</button>
       <button class="tab-btn" data-dashtab="charts" id="dashTabCharts">Charts</button>
     </div>
@@ -501,8 +502,9 @@
 <script>
 (function(){
   const STORAGE_KEY = 'trips-data';
-  const APP_VERSION = '1.7.5';
+  const APP_VERSION = '1.7.6';
   const CHANGELOG = {
+    '1.7.6': 'Fixed the header layout overlapping as sync status appeared. Fixed the Trips/Charts toggle and KPI board staying visible-but-dead when viewing a trip (they now hide/restore properly). Budget expenses table: widened the Category column and added separate Planned vs Actual columns (Planned pulls from a linked Plan item, Actual highlights red if it overshoots). Renamed "Post Trip" to "Visited" and right-justified the Packing tab. Added a collapse toggle for the Hour-by-Hour timeline. Trip tabs (Budget/Plan/Research/Visited) are now reorderable via a button next to the tab bar; Packing always stays last. My Maps is now available on every trip (not just London) with a paste-a-link-or-embed-code box, opens expanded by default instead of collapsed, and can be changed or removed per trip.',
     '1.7.5': 'Added a Post Trip tab next to Research \u2014 mark a Plan item as visited (\u2713 button) and it shows up there for a post-trip rating and notes. Removed the Gantt view (wasn\u2019t rendering correctly); Plan tab now shows Hour-by-Hour directly with no toggle needed. Plan/Research categories (Hotels, Restaurants, etc.) can now be reordered up/down in Manage Categories. Shopping expenses no longer count toward budget variance, over-budget status, or the Budget vs Actual chart \u2014 they still show in Total Expenses and the category breakdown, just not against your budget target.',
     '1.7.4': 'Budget table: fixed the Category column being cut off and Qty being oversized with a proper fixed-width layout. Added Food & Drink and Shopping expense categories, plus a "+ Add new category" option right in the Add Expense modal that preserves whatever you\u2019ve already typed. Move-to-Research no longer shows a confirm popup and stays on the Plan tab. Plan/Research categories (Hotels, Restaurants, etc.) are now fully editable \u2014 added "Cheap Eats" and a "Manage Categories" button in the Plan tab to add/rename/delete your own. Moved the My Maps embed off the main dashboard to sit below Expenses on the London trip specifically.',
     '1.7.3': 'Plan and Research items can now move both ways (\u21a9 button on a Plan item sends it back to Research; \u2192 Plan on a Research item promotes it), and any item can now have multiple links (add/remove, with optional labels) instead of just one. Added a Plan tab "Export PDF" button that builds a clean, printable itinerary (name, status, when, address, links, notes, grouped by category) via the browser\u2019s Print \u2192 Save as PDF.',
@@ -545,6 +547,8 @@
   let activeTripTab = 'budget';
   let activeDashTab = 'trips';
   let researchView = 'list';
+  let timelineCollapsed = false;
+  let mapEditMode = false;
   let uiFilter = { search: '', status: 'all', sort: 'year-desc' };
 
   function defaultSheets(){
@@ -718,8 +722,17 @@
     return {
       mapsApiKey: '',
       githubEnabled: false, githubToken: '', githubOwner: '', githubRepo: '',
-      githubPath: 'data.json', githubBranch: 'main', githubSha: null, githubLastSyncAt: null
+      githubPath: 'data.json', githubBranch: 'main', githubSha: null, githubLastSyncAt: null,
+      tripTabOrder: ['budget','plan','research','posttrip']
     };
+  }
+  const TRIP_TAB_LABELS = { budget: 'Budget', plan: 'Plan', research: 'Research', posttrip: 'Visited' };
+  function tripTabButtonHtml(key, t){
+    let count = '';
+    if (key==='plan' && t.planItems.length) count = ` (${t.planItems.length})`;
+    if (key==='research' && t.research.length) count = ` (${t.research.length})`;
+    if (key==='posttrip' && t.planItems.filter(p=>p.visited).length) count = ` (${t.planItems.filter(p=>p.visited).length})`;
+    return `<button class="tab-btn ${activeTripTab===key?'active':''}" data-tab="${key}">${TRIP_TAB_LABELS[key]}${count}</button>`;
   }
   function getCategoryColor(name){
     const c = state.categories.find(c=>c.name===name);
@@ -738,7 +751,7 @@
         exp('NCL - LDN', 'Transportation', 2, 115.00), exp('Westbourne Hotel', 'Hotels', 2, 235.26),
         exp('Tube', 'Transportation', 2, 25.00), exp('Spends', 'Spends', 1, 400.00),
         exp('Stevie Nicks Tickets', 'Excursions', 2, 119.95)
-      ], {travelers: 2}),
+      ], {travelers: 2, mapEmbedUrl: 'https://www.google.com/maps/d/embed?mid=1agtFV4DvC-eE9MuhqqB5i3a2XWuJ0e4&hl=en&ehbc=2E312F'}),
       mkTrip('Paris', 2025, 'completed', 2500, [
         exp('NCL - CDG', 'Flights', 2, 254.71), exp('Hotel Les Deux Girafes', 'Hotels', 4, 182.25),
         exp('Les Deux to CDG', 'Transportation', 1, 53.80), exp('Spends', 'Spends', 4, 193.18),
@@ -767,6 +780,7 @@
       travelers: opts.travelers || 2, notes: opts.notes || '',
       expenses, planItems: opts.planItems || [], timelineMode: opts.timelineMode || null,
       research: opts.research || [], packingList: opts.packingList || [], country: opts.country || '', countryGuessed: opts.countryGuessed || false,
+      mapEmbedUrl: opts.mapEmbedUrl || '',
       createdAt: Date.now(), updatedAt: Date.now()
     };
   }
@@ -811,6 +825,13 @@
   function daysUntil(dateStr){ const d = new Date(dateStr + 'T00:00:00'); const now = new Date(); now.setHours(0,0,0,0); return Math.round((d-now)/86400000); }
   function shortDate(dateStr){ return new Date(dateStr + 'T00:00:00').toLocaleDateString('en-GB', {day:'numeric', month:'short'}); }
   function autoGrow(el){ if (!el) return; el.style.height = 'auto'; el.style.height = el.scrollHeight + 'px'; }
+  function extractMapEmbedUrl(raw){
+    raw = (raw||'').trim();
+    if (!raw) return '';
+    const srcMatch = raw.match(/src=["']([^"']+)["']/i);
+    if (srcMatch) return srcMatch[1];
+    return raw;
+  }
   function singleLine(str){ return (str||'').replace(/[\r\n]+/g, ' ').trim(); }
   function wireAutogrow(root, selector, opts){
     opts = opts || {};
@@ -1059,6 +1080,8 @@
     if (!state.settings) state.settings = defaultSettings();
     const sDefaults = defaultSettings();
     Object.keys(sDefaults).forEach(k=>{ if (state.settings[k] === undefined) state.settings[k] = sDefaults[k]; });
+    if (!Array.isArray(state.settings.tripTabOrder) || !state.settings.tripTabOrder.length) state.settings.tripTabOrder = sDefaults.tripTabOrder;
+    sDefaults.tripTabOrder.forEach(key=>{ if (!state.settings.tripTabOrder.includes(key)) state.settings.tripTabOrder.push(key); });
     let guessedCount = 0;
     (state.trips||[]).forEach(t=>{
       if (t.travelers == null) t.travelers = 2;
@@ -1071,6 +1094,9 @@
       if (!Array.isArray(t.packingList)) t.packingList = [];
       if (t.country === undefined) t.country = '';
       if (t.countryGuessed === undefined) t.countryGuessed = false;
+      if (t.mapEmbedUrl === undefined){
+        t.mapEmbedUrl = /london/i.test(t.name) ? 'https://www.google.com/maps/d/embed?mid=1agtFV4DvC-eE9MuhqqB5i3a2XWuJ0e4&hl=en&ehbc=2E312F' : '';
+      }
       if (!t.country){
         const guess = guessCountryFromName(t.name);
         if (guess){ t.country = guess; t.countryGuessed = true; guessedCount++; }
@@ -1337,8 +1363,16 @@
   }
 
   /* ---------------- Trip detail ---------------- */
-  function openTrip(id){ activeTripId = id; activeTripTab = 'budget'; researchView = 'list'; dashboardView.hidden = true; tripView.hidden = false; renderTripView(); }
-  function closeTrip(){ activeTripId = null; tripView.hidden = true; dashboardView.hidden = false; renderAll(); }
+  function openTrip(id){
+    activeTripId = id; activeTripTab = 'budget'; researchView = 'list';
+    dashboardView.hidden = true; document.getElementById('kpiBoard').hidden = true; document.getElementById('dashTabBar').hidden = true;
+    tripView.hidden = false; renderTripView();
+  }
+  function closeTrip(){
+    activeTripId = null; tripView.hidden = true;
+    dashboardView.hidden = false; document.getElementById('kpiBoard').hidden = false; document.getElementById('dashTabBar').hidden = false;
+    renderAll();
+  }
   function currentTrip(){ return state.trips.find(t=>t.id===activeTripId); }
 
   function renderTripView(){
@@ -1386,11 +1420,9 @@
       </div>
 
       <div class="tab-bar">
-        <button class="tab-btn ${activeTripTab==='budget'?'active':''}" data-tab="budget">Budget</button>
-        <button class="tab-btn ${activeTripTab==='plan'?'active':''}" data-tab="plan">Plan${t.planItems.length?' ('+t.planItems.length+')':''}</button>
-        <button class="tab-btn ${activeTripTab==='research'?'active':''}" data-tab="research">Research${t.research.length?' ('+t.research.length+')':''}</button>
-        <button class="tab-btn ${activeTripTab==='posttrip'?'active':''}" data-tab="posttrip">Post Trip${t.planItems.filter(p=>p.visited).length?` (${t.planItems.filter(p=>p.visited).length})`:''}</button>
-        <button class="tab-btn ${activeTripTab==='packing'?'active':''}" data-tab="packing">Packing${t.packingList.length?` (${t.packingList.filter(p=>p.packed).length}/${t.packingList.length})`:''}</button>
+        ${state.settings.tripTabOrder.map(key=> tripTabButtonHtml(key, t)).join('')}
+        <button class="btn-ghost btn-sm" id="reorderTabsBtn" title="Reorder tabs" style="align-self:center;padding:4px 8px;">\u2195</button>
+        <button class="tab-btn ${activeTripTab==='packing'?'active':''}" data-tab="packing" style="margin-left:auto;">Packing${t.packingList.length?` (${t.packingList.filter(p=>p.packed).length}/${t.packingList.length})`:''}</button>
       </div>
 
       <div id="tabBudget" ${activeTripTab!=='budget'?'hidden':''}>
@@ -1408,26 +1440,33 @@
             <h3>Expenses</h3>
             <div class="table-scroll">
             <table class="exp-table budget-exp-table">
-              <colgroup><col class="col-desc"><col class="col-cat"><col class="col-qty"><col class="col-unit"><col class="col-amt"><col class="col-actions"></colgroup>
-              <thead><tr><th>Description</th><th>Category</th><th>Qty</th><th>Unit Cost</th><th>Amount</th><th></th></tr></thead>
+              <colgroup><col class="col-desc"><col class="col-cat"><col class="col-qty"><col class="col-unit"><col class="col-planned"><col class="col-actual"><col class="col-actions"></colgroup>
+              <thead><tr><th>Description</th><th>Category</th><th>Qty</th><th>Unit Cost</th><th>Planned</th><th>Actual</th><th></th></tr></thead>
               <tbody id="expBody"></tbody>
-              <tfoot><tr class="exp-foot"><td colspan="4">Total Expenses</td><td class="num">${fmt(spent)}</td><td></td></tr></tfoot>
+              <tfoot><tr class="exp-foot"><td colspan="5">Total Expenses</td><td class="num">${fmt(spent)}</td><td></td></tr></tfoot>
             </table>
             </div>
             <div class="toolbar" style="margin-top:12px;margin-bottom:0;"><button class="btn-primary" id="addExpBtn">+ Add Expense</button></div>
           </div>
         </div>
 
-        ${/london/i.test(t.name) ? `
         <div class="chart-card" id="myMapCard">
           <div style="display:flex;align-items:center;justify-content:space-between;">
             <h3 style="margin:0;">My Maps</h3>
-            <button class="btn-ghost btn-sm" id="toggleMyMap">Show</button>
+            ${t.mapEmbedUrl && !mapEditMode ? `<button class="btn-ghost btn-sm" id="editMyMapBtn">Change</button>` : ''}
           </div>
-          <div id="myMapEmbed" hidden style="margin-top:12px;">
-            <iframe src="https://www.google.com/maps/d/embed?mid=1agtFV4DvC-eE9MuhqqB5i3a2XWuJ0e4&hl=en&ehbc=2E312F" width="100%" height="480" style="border:0;border-radius:6px;display:block;" loading="lazy"></iframe>
+          ${t.mapEmbedUrl && !mapEditMode ? `
+          <div style="margin-top:12px;">
+            <iframe src="${escapeHtml(t.mapEmbedUrl)}" width="100%" height="480" style="border:0;border-radius:6px;display:block;" loading="lazy"></iframe>
+          </div>` : `
+          <div style="margin-top:10px;display:flex;gap:8px;align-items:flex-start;">
+            <textarea id="mapUrlInput" rows="1" class="autogrow" placeholder="Paste a Google My Maps share/embed link (or the full embed code)" style="flex:1;">${mapEditMode?escapeHtml(t.mapEmbedUrl):''}</textarea>
+            <button class="btn-primary btn-sm" id="saveMyMapBtn">${t.mapEmbedUrl?'Save':'Add Map'}</button>
+            ${mapEditMode ? `<button class="btn-ghost btn-sm" id="cancelMyMapBtn">Cancel</button><button class="btn-ghost btn-sm" id="removeMyMapBtn">Remove</button>` : ''}
           </div>
-        </div>` : ''}
+          <p style="font-size:11px;color:var(--ink-soft);margin:6px 0 0;">In Google My Maps: Share \u2192 Embed on my site, then paste the link or code here.</p>
+          `}
+        </div>
 
         <div class="chart-card">
           <h3>Notes</h3>
@@ -1444,14 +1483,27 @@
     document.getElementById('backBtn').addEventListener('click', closeTrip);
     document.getElementById('editTripBtn').addEventListener('click', ()=> openTripModal(t));
     document.getElementById('duplicateTripBtn').addEventListener('click', ()=> duplicateTrip(t));
-    const toggleMyMapBtn = document.getElementById('toggleMyMap');
-    if (toggleMyMapBtn){
-      toggleMyMapBtn.addEventListener('click', ()=>{
-        const embed = document.getElementById('myMapEmbed');
-        embed.hidden = !embed.hidden;
-        toggleMyMapBtn.textContent = embed.hidden ? 'Show' : 'Hide';
-      });
-    }
+    document.getElementById('reorderTabsBtn').addEventListener('click', openReorderTabsModal);
+    const editMyMapBtn = document.getElementById('editMyMapBtn');
+    if (editMyMapBtn) editMyMapBtn.addEventListener('click', ()=>{ mapEditMode = true; renderTripView(); });
+    const saveMyMapBtn = document.getElementById('saveMyMapBtn');
+    if (saveMyMapBtn) saveMyMapBtn.addEventListener('click', ()=>{
+      const raw = document.getElementById('mapUrlInput').value;
+      const url = extractMapEmbedUrl(raw);
+      if (!url){ showToast('Paste a map link or embed code first'); return; }
+      t.mapEmbedUrl = url; t.updatedAt = Date.now(); mapEditMode = false;
+      logEvent('map-updated', `Updated My Maps embed for ${t.name}`);
+      saveState(); renderTripView();
+    });
+    const cancelMyMapBtn = document.getElementById('cancelMyMapBtn');
+    if (cancelMyMapBtn) cancelMyMapBtn.addEventListener('click', ()=>{ mapEditMode = false; renderTripView(); });
+    const removeMyMapBtn = document.getElementById('removeMyMapBtn');
+    if (removeMyMapBtn) removeMyMapBtn.addEventListener('click', ()=>{
+      t.mapEmbedUrl = ''; t.updatedAt = Date.now(); mapEditMode = false;
+      logEvent('map-removed', `Removed My Maps embed for ${t.name}`);
+      saveState(); renderTripView();
+    });
+    wireAutogrow(document, '#mapUrlInput', { singleValue: true });
     document.getElementById('deleteTripBtn').addEventListener('click', ()=> deleteTrip(t));
     document.getElementById('addExpBtn').addEventListener('click', ()=> openExpenseModal(t));
     document.getElementById('notesBox').addEventListener('change', (e)=>{ t.notes = e.target.value; t.updatedAt = Date.now(); saveState(); });
@@ -1465,15 +1517,19 @@
 
   function renderExpenseRows(t){
     const body = document.getElementById('expBody');
-    if (!t.expenses.length){ body.innerHTML = `<tr><td colspan="6" class="empty-state">No expenses yet.</td></tr>`; return; }
+    if (!t.expenses.length){ body.innerHTML = `<tr><td colspan="7" class="empty-state">No expenses yet.</td></tr>`; return; }
     body.innerHTML = t.expenses.map(e=>{
-      const amount = (Number(e.quantity)||0)*(Number(e.unitCost)||0);
+      const actual = (Number(e.quantity)||0)*(Number(e.unitCost)||0);
+      const linkedPlan = t.planItems.find(p=>p.linkedExpenseId===e.id);
+      const planned = linkedPlan && linkedPlan.cost!=null ? linkedPlan.cost : null;
+      const overPlan = planned!=null && actual>planned;
       return `<tr data-id="${e.id}">
         <td><textarea rows="1" class="exp-desc autogrow">${escapeHtml(e.description)}</textarea></td>
         <td><select class="exp-cat">${state.categories.map(c=>`<option value="${escapeHtml(c.name)}" ${c.name===e.category?'selected':''}>${escapeHtml(c.name)}</option>`).join('')}</select></td>
         <td class="num"><input type="number" class="exp-qty" value="${e.quantity}" min="0" step="1" style="text-align:right"></td>
         <td class="num"><input type="number" class="exp-cost" value="${e.unitCost}" min="0" step="0.01" style="text-align:right"></td>
-        <td class="num">${fmt(amount)}</td>
+        <td class="num" style="color:var(--ink-soft);">${planned!=null ? fmt(planned) : '\u2014'}</td>
+        <td class="num" style="${overPlan?'color:var(--red);font-weight:700;':''}">${fmt(actual)}</td>
         <td><button class="exp-del" aria-label="Delete expense row" title="Delete row">\u2715</button></td>
       </tr>`;
     }).join('');
@@ -1525,8 +1581,11 @@
         <button class="btn-ghost" id="exportPlanPdfBtn">Export PDF</button>
       </div>
       <div class="chart-card" style="margin-bottom:18px;" id="timelineCard">
-        <h3>Hour by Hour</h3>
-        <div id="hbhHolder"></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <h3 style="margin:0;">Hour by Hour</h3>
+          <button class="btn-ghost btn-sm" id="toggleTimeline">${timelineCollapsed?'Show':'Hide'}</button>
+        </div>
+        <div id="hbhHolder" style="margin-top:12px;" ${timelineCollapsed?'hidden':''}></div>
       </div>
       <div id="sheetSections"></div>
     `;
@@ -1535,8 +1594,12 @@
     document.getElementById('modeDays').addEventListener('click', ()=>{ t.timelineMode='days'; t.updatedAt=Date.now(); saveState(); renderPlanTab(t); });
     document.getElementById('exportPlanPdfBtn').addEventListener('click', ()=> exportPlanPDF(t));
     document.getElementById('manageSheetsBtn').addEventListener('click', openManageSheetsModal);
+    document.getElementById('toggleTimeline').addEventListener('click', ()=>{
+      timelineCollapsed = !timelineCollapsed;
+      renderPlanTab(t);
+    });
 
-    renderHourByHour(t);
+    if (!timelineCollapsed) renderHourByHour(t);
 
     const sections = document.getElementById('sheetSections');
     sections.innerHTML = state.sheets.map(s=>{
@@ -1585,7 +1648,7 @@
         t.updatedAt = Date.now();
         logEvent(item.visited?'plan-marked-visited':'plan-unmarked-visited', `${item.visited?'Marked':'Unmarked'} "${item.name}" as visited on ${t.name}`);
         saveState(); renderTripView();
-        showToast(item.visited ? 'Added to Post Trip' : 'Removed from Post Trip');
+        showToast(item.visited ? 'Added to Visited' : 'Removed from Visited');
       });
     });
     sections.querySelectorAll('.plan-del').forEach(btn=>{
@@ -1630,7 +1693,7 @@
                 <td>${i.actualRating?ACTUAL_RATING_LABELS[i.actualRating]:'\u2014'}</td>
                 <td class="when-cell">${formatWhen(t,i)}</td>
                 <td class="num">${i.cost!=null ? fmt(i.cost) : '\u2014'}</td>
-                <td><button class="exp-del pt-edit" aria-label="Edit visit" title="Add notes/rating">\u270e</button><button class="exp-del pt-unmark" aria-label="Remove from Post Trip" title="Remove from Post Trip">\u2715</button></td>
+                <td><button class="exp-del pt-edit" aria-label="Edit visit" title="Add notes/rating">\u270e</button><button class="exp-del pt-unmark" aria-label="Remove from Visited" title="Remove from Visited">\u2715</button></td>
               </tr>`).join('')}
           </tbody>
         </table>
@@ -1649,9 +1712,9 @@
         if (!item) return;
         item.visited = false;
         t.updatedAt = Date.now();
-        logEvent('plan-unmarked-visited', `Removed "${item.name}" from Post Trip on ${t.name}`);
+        logEvent('plan-unmarked-visited', `Removed "${item.name}" from Visited on ${t.name}`);
         saveState(); renderTripView();
-        showToast('Removed from Post Trip');
+        showToast('Removed from Visited');
       });
     });
   }
@@ -2597,6 +2660,47 @@
         saveState(); draw(); renderAll();
       });
       document.getElementById('catDone').addEventListener('click', closeModal);
+    }
+    draw();
+  }
+
+  function openReorderTabsModal(){
+    function draw(){
+      const order = state.settings.tripTabOrder;
+      modalRoot.innerHTML = `
+        <div class="modal-overlay">
+          <div class="modal-box">
+            <h3>Reorder Tabs</h3>
+            <p style="font-size:12px;color:var(--ink-soft);margin-top:-6px;">Packing always stays last.</p>
+            <div id="tabOrderList"></div>
+            <div class="modal-actions">
+              <button class="btn-primary" id="tabOrderDone">Done</button>
+            </div>
+          </div>
+        </div>`;
+      const list = document.getElementById('tabOrderList');
+      list.innerHTML = order.map((key,i)=>`
+        <div class="cat-row" data-i="${i}">
+          <div class="reorder-btns">
+            <button class="reorder-btn to-up" ${i===0?'disabled':''} aria-label="Move up" title="Move up">\u25b2</button>
+            <button class="reorder-btn to-down" ${i===order.length-1?'disabled':''} aria-label="Move down" title="Move down">\u25bc</button>
+          </div>
+          <div style="flex:1;font-family:var(--font-body);font-size:13px;">${TRIP_TAB_LABELS[key]}</div>
+        </div>`).join('');
+      list.querySelectorAll('.cat-row').forEach(row=>{
+        const i = Number(row.dataset.i);
+        row.querySelector('.to-up').addEventListener('click', ()=>{
+          if (i<=0) return;
+          [order[i-1], order[i]] = [order[i], order[i-1]];
+          saveState(); draw();
+        });
+        row.querySelector('.to-down').addEventListener('click', ()=>{
+          if (i>=order.length-1) return;
+          [order[i+1], order[i]] = [order[i], order[i+1]];
+          saveState(); draw();
+        });
+      });
+      document.getElementById('tabOrderDone').addEventListener('click', ()=>{ closeModal(); renderTripView(); });
     }
     draw();
   }
