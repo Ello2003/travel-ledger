@@ -502,8 +502,9 @@
 <script>
 (function(){
   const STORAGE_KEY = 'trips-data';
-  const APP_VERSION = '1.7.6';
+  const APP_VERSION = '1.7.7';
   const CHANGELOG = {
+    '1.7.7': 'The reorder-categories feature was only reachable from the Plan tab \u2014 added the same "Manage Categories" button to the Research tab toolbar, so you can reorder Hotels/Restaurants/etc. from either tab.',
     '1.7.6': 'Fixed the header layout overlapping as sync status appeared. Fixed the Trips/Charts toggle and KPI board staying visible-but-dead when viewing a trip (they now hide/restore properly). Budget expenses table: widened the Category column and added separate Planned vs Actual columns (Planned pulls from a linked Plan item, Actual highlights red if it overshoots). Renamed "Post Trip" to "Visited" and right-justified the Packing tab. Added a collapse toggle for the Hour-by-Hour timeline. Trip tabs (Budget/Plan/Research/Visited) are now reorderable via a button next to the tab bar; Packing always stays last. My Maps is now available on every trip (not just London) with a paste-a-link-or-embed-code box, opens expanded by default instead of collapsed, and can be changed or removed per trip.',
     '1.7.5': 'Added a Post Trip tab next to Research \u2014 mark a Plan item as visited (\u2713 button) and it shows up there for a post-trip rating and notes. Removed the Gantt view (wasn\u2019t rendering correctly); Plan tab now shows Hour-by-Hour directly with no toggle needed. Plan/Research categories (Hotels, Restaurants, etc.) can now be reordered up/down in Manage Categories. Shopping expenses no longer count toward budget variance, over-budget status, or the Budget vs Actual chart \u2014 they still show in Total Expenses and the category breakdown, just not against your budget target.',
     '1.7.4': 'Budget table: fixed the Category column being cut off and Qty being oversized with a proper fixed-width layout. Added Food & Drink and Shopping expense categories, plus a "+ Add new category" option right in the Add Expense modal that preserves whatever you\u2019ve already typed. Move-to-Research no longer shows a confirm popup and stays on the Plan tab. Plan/Research categories (Hotels, Restaurants, etc.) are now fully editable \u2014 added "Cheap Eats" and a "Manage Categories" button in the Plan tab to add/rename/delete your own. Moved the My Maps embed off the main dashboard to sit below Expenses on the London trip specifically.',
@@ -2091,7 +2092,8 @@
           <button class="btn-sm ${researchView==='list'?'btn-primary':'btn-ghost'}" id="resViewList">List</button>
           <button class="btn-sm ${researchView==='map'?'btn-primary':'btn-ghost'}" id="resViewMap">Map</button>
         </div>
-        <button class="btn-ghost btn-sm" id="mapSettingsBtn" style="margin-left:auto;">Map Settings</button>
+        <button class="btn-ghost btn-sm" id="manageSheetsBtnRes" style="margin-left:auto;">Manage Categories</button>
+        <button class="btn-ghost btn-sm" id="mapSettingsBtn">Map Settings</button>
       </div>
       <div id="resContent"></div>
     `;
@@ -2099,6 +2101,7 @@
     document.getElementById('resViewList').addEventListener('click', ()=>{ researchView='list'; renderResearchTab(t); });
     document.getElementById('resViewMap').addEventListener('click', ()=>{ researchView='map'; renderResearchTab(t); });
     document.getElementById('mapSettingsBtn').addEventListener('click', openMapSettingsModal);
+    document.getElementById('manageSheetsBtnRes').addEventListener('click', openManageSheetsModal);
 
     const content = document.getElementById('resContent');
     if (researchView === 'map'){
