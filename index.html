@@ -1,4 +1,5 @@
 <meta charset="UTF-8">
+<title>Travel Dashboard</title>
 <style>
   #travel-ledger-root {
     text-rendering: optimizeLegibility;
@@ -502,8 +503,9 @@
 <script>
 (function(){
   const STORAGE_KEY = 'trips-data';
-  const APP_VERSION = '1.7.7';
+  const APP_VERSION = '1.7.8';
   const CHANGELOG = {
+    '1.7.8': 'Every section in Plan and Research (Hotels, Restaurants, etc.) is now individually collapsible via a chevron, not just hideable when empty. Added an "Estimated Costs" section to the Budget tab, pulling from Plan item costs, with a running "over/under estimate" comparison against actual spend \u2014 separate from the renamed "Actual Expenses" table below it. Browser tab title set to "Travel Dashboard".',
     '1.7.7': 'The reorder-categories feature was only reachable from the Plan tab \u2014 added the same "Manage Categories" button to the Research tab toolbar, so you can reorder Hotels/Restaurants/etc. from either tab.',
     '1.7.6': 'Fixed the header layout overlapping as sync status appeared. Fixed the Trips/Charts toggle and KPI board staying visible-but-dead when viewing a trip (they now hide/restore properly). Budget expenses table: widened the Category column and added separate Planned vs Actual columns (Planned pulls from a linked Plan item, Actual highlights red if it overshoots). Renamed "Post Trip" to "Visited" and right-justified the Packing tab. Added a collapse toggle for the Hour-by-Hour timeline. Trip tabs (Budget/Plan/Research/Visited) are now reorderable via a button next to the tab bar; Packing always stays last. My Maps is now available on every trip (not just London) with a paste-a-link-or-embed-code box, opens expanded by default instead of collapsed, and can be changed or removed per trip.',
     '1.7.5': 'Added a Post Trip tab next to Research \u2014 mark a Plan item as visited (\u2713 button) and it shows up there for a post-trip rating and notes. Removed the Gantt view (wasn\u2019t rendering correctly); Plan tab now shows Hour-by-Hour directly with no toggle needed. Plan/Research categories (Hotels, Restaurants, etc.) can now be reordered up/down in Manage Categories. Shopping expenses no longer count toward budget variance, over-budget status, or the Budget vs Actual chart \u2014 they still show in Total Expenses and the category breakdown, just not against your budget target.',
@@ -550,6 +552,7 @@
   let researchView = 'list';
   let timelineCollapsed = false;
   let mapEditMode = false;
+  const collapsedSheets = new Set();
   let uiFilter = { search: '', status: 'all', sort: 'year-desc' };
 
   function defaultSheets(){
@@ -1380,6 +1383,8 @@
     const t = currentTrip();
     if (!t) { closeTrip(); return; }
     const spent = tripTotal(t), budgetSpent = budgetCountedTotal(t), budget = Number(t.budget||0), diff = budget - budgetSpent;
+    const estimatedItems = t.planItems.filter(i=>i.cost!=null).sort((a,b)=> state.sheets.findIndex(s=>s.key===a.sheet) - state.sheets.findIndex(s=>s.key===b.sheet));
+    const totalEstimated = estimatedItems.reduce((s,i)=> s + (Number(i.cost)||0), 0);
     const catTotals = tripCategoryTotals(t);
     const activeCats = state.categories.map(c=>c.name).filter(c=>catTotals[c]>0);
     let cumPct = 0; const stops = [];
@@ -1427,6 +1432,23 @@
       </div>
 
       <div id="tabBudget" ${activeTripTab!=='budget'?'hidden':''}>
+        <div class="chart-card">
+          <h3>Estimated Costs</h3>
+          ${estimatedItems.length ? `
+          <div class="table-scroll">
+          <table class="exp-table">
+            <colgroup><col style="width:50%"><col style="width:25%"><col style="width:25%"></colgroup>
+            <thead><tr><th>Item</th><th>Category</th><th>Estimated</th></tr></thead>
+            <tbody>
+              ${estimatedItems.map(i=>`<tr><td>${escapeHtml(i.name)}</td><td>${escapeHtml(i.sheet)}</td><td class="num">${fmt(i.cost)}</td></tr>`).join('')}
+            </tbody>
+            <tfoot><tr class="exp-foot"><td colspan="2">Total Estimated</td><td class="num">${fmt(totalEstimated)}</td></tr></tfoot>
+          </table>
+          </div>
+          <p style="font-size:12px;color:var(--ink-soft);margin:10px 0 0;">Actual spend so far: <strong style="color:var(--ink);">${fmt(spent)}</strong> \u2014 ${spent>totalEstimated ? `<span style="color:var(--red);">${fmt(spent-totalEstimated)} over estimate</span>` : `<span style="color:var(--green);">${fmt(totalEstimated-spent)} under estimate</span>`}</p>
+          ` : '<div class="empty-state">No estimated costs yet \u2014 add a Cost when creating a Plan item and it\u2019ll show up here.</div>'}
+        </div>
+
         <div class="detail-grid">
           <div class="chart-card">
             <h3>Category Breakdown</h3>
@@ -1438,7 +1460,7 @@
           </div>
 
           <div class="chart-card">
-            <h3>Expenses</h3>
+            <h3>Actual Expenses</h3>
             <div class="table-scroll">
             <table class="exp-table budget-exp-table">
               <colgroup><col class="col-desc"><col class="col-cat"><col class="col-qty"><col class="col-unit"><col class="col-planned"><col class="col-actual"><col class="col-actions"></colgroup>
@@ -1605,12 +1627,14 @@
     const sections = document.getElementById('sheetSections');
     sections.innerHTML = state.sheets.map(s=>{
       const items = t.planItems.filter(i=>i.sheet===s.key);
+      const collapsed = collapsedSheets.has('plan:'+s.key);
       return `
       <div class="sheet-section">
         <div class="sheet-header">
-          <div><span class="sheet-dot" style="background:${s.color}"></span>${s.key} <span style="color:var(--ink-soft);font-family:var(--font-mono);font-size:11px;">(${items.length})</span></div>
+          <div style="display:flex;align-items:center;gap:6px;cursor:pointer;" class="sheet-toggle" data-key="plan:${escapeHtml(s.key)}"><span class="sheet-chevron">${collapsed?'\u25b8':'\u25be'}</span><span class="sheet-dot" style="background:${s.color}"></span>${s.key} <span style="color:var(--ink-soft);font-family:var(--font-mono);font-size:11px;">(${items.length})</span></div>
           <button class="btn-ghost btn-sm sheet-add" data-sheet="${escapeHtml(s.key)}">+ Add</button>
         </div>
+        <div ${collapsed?'hidden':''}>
         ${items.length ? `
         <div class="table-scroll">
         <table class="exp-table plan-table">
@@ -1628,9 +1652,15 @@
           </tbody>
         </table>
         </div>` : '<div class="empty-state">Nothing here yet.</div>'}
+        </div>
       </div>`;
     }).join('');
 
+    sections.querySelectorAll('.sheet-toggle').forEach(el=> el.addEventListener('click', ()=>{
+      const key = el.dataset.key;
+      if (collapsedSheets.has(key)) collapsedSheets.delete(key); else collapsedSheets.add(key);
+      renderPlanTab(t);
+    }));
     sections.querySelectorAll('.sheet-add').forEach(btn=> btn.addEventListener('click', ()=> openPlanItemModal(t, null, btn.dataset.sheet)));
     sections.querySelectorAll('.plan-edit').forEach(btn=>{
       const id = btn.closest('tr').dataset.id;
@@ -2114,12 +2144,14 @@
   function renderResearchList(t, content){
     content.innerHTML = state.sheets.map(s=>{
       const items = t.research.filter(r=>r.sheet===s.key);
+      const collapsed = collapsedSheets.has('research:'+s.key);
       return `
       <div class="sheet-section">
         <div class="sheet-header">
-          <div><span class="sheet-dot" style="background:${s.color}"></span>${s.key} <span style="color:var(--ink-soft);font-family:var(--font-mono);font-size:11px;">(${items.length})</span></div>
+          <div style="display:flex;align-items:center;gap:6px;cursor:pointer;" class="sheet-toggle" data-key="research:${escapeHtml(s.key)}"><span class="sheet-chevron">${collapsed?'\u25b8':'\u25be'}</span><span class="sheet-dot" style="background:${s.color}"></span>${s.key} <span style="color:var(--ink-soft);font-family:var(--font-mono);font-size:11px;">(${items.length})</span></div>
           <button class="btn-ghost btn-sm res-add" data-sheet="${escapeHtml(s.key)}">+ Add</button>
         </div>
+        <div ${collapsed?'hidden':''}>
         ${items.length ? `
         <div class="table-scroll">
         <table class="exp-table research-table">
@@ -2141,9 +2173,15 @@
           </tbody>
         </table>
         </div>` : '<div class="empty-state">Nothing here yet.</div>'}
+        </div>
       </div>`;
     }).join('');
 
+    content.querySelectorAll('.sheet-toggle').forEach(el=> el.addEventListener('click', ()=>{
+      const key = el.dataset.key;
+      if (collapsedSheets.has(key)) collapsedSheets.delete(key); else collapsedSheets.add(key);
+      renderResearchList(t, content);
+    }));
     content.querySelectorAll('.res-add').forEach(btn=> btn.addEventListener('click', ()=> openResearchItemModal(t, null, btn.dataset.sheet)));
     content.querySelectorAll('tr[data-id]').forEach(row=>{
       const id = row.dataset.id;
