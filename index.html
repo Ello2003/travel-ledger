@@ -342,7 +342,8 @@
   }
   #travel-ledger-root .tl-time-cell input.tl-time:focus { outline: none; color: var(--ink); }
   #travel-ledger-root .tl-main { padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
-  #travel-ledger-root .tl-sheet-tag { font-family: var(--font-mono); font-size: 10px; letter-spacing: 1px; text-transform: uppercase; }
+  #travel-ledger-root .tl-sheet-tag { font-family: var(--font-mono); font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--ink-soft); display: flex; align-items: center; gap: 5px; }
+  #travel-ledger-root .tl-sheet-tag .sheet-dot { width: 7px; height: 7px; margin-right: 0; }
   #travel-ledger-root .tl-main input.tl-name {
     font-size: 14px; font-family: var(--font-display); font-weight: 600; border: none; background: transparent;
     width: 100%; padding: 0; color: var(--ink);
@@ -503,8 +504,9 @@
 <script>
 (function(){
   const STORAGE_KEY = 'trips-data';
-  const APP_VERSION = '1.7.8';
+  const APP_VERSION = '1.7.9';
   const CHANGELOG = {
+    '1.7.9': 'Fixed a readability bug in the Hour-by-Hour timeline where each item\u2019s category tag used that category\u2019s color as text color, so some categories (like Bars) were hard to read against the paper background \u2014 now uses a small colored dot plus fixed readable text, like everywhere else in the app. Estimated Costs now supports manually-added entries (not just ones pulled from Plan items) via "+ Add Estimate". Sections in Plan/Research can now be fully hidden per trip (not just collapsed) via a "Show" checkbox in Manage Categories, in addition to the reordering already there.',
     '1.7.8': 'Every section in Plan and Research (Hotels, Restaurants, etc.) is now individually collapsible via a chevron, not just hideable when empty. Added an "Estimated Costs" section to the Budget tab, pulling from Plan item costs, with a running "over/under estimate" comparison against actual spend \u2014 separate from the renamed "Actual Expenses" table below it. Browser tab title set to "Travel Dashboard".',
     '1.7.7': 'The reorder-categories feature was only reachable from the Plan tab \u2014 added the same "Manage Categories" button to the Research tab toolbar, so you can reorder Hotels/Restaurants/etc. from either tab.',
     '1.7.6': 'Fixed the header layout overlapping as sync status appeared. Fixed the Trips/Charts toggle and KPI board staying visible-but-dead when viewing a trip (they now hide/restore properly). Budget expenses table: widened the Category column and added separate Planned vs Actual columns (Planned pulls from a linked Plan item, Actual highlights red if it overshoots). Renamed "Post Trip" to "Visited" and right-justified the Packing tab. Added a collapse toggle for the Hour-by-Hour timeline. Trip tabs (Budget/Plan/Research/Visited) are now reorderable via a button next to the tab bar; Packing always stays last. My Maps is now available on every trip (not just London) with a paste-a-link-or-embed-code box, opens expanded by default instead of collapsed, and can be changed or removed per trip.',
@@ -784,7 +786,7 @@
       travelers: opts.travelers || 2, notes: opts.notes || '',
       expenses, planItems: opts.planItems || [], timelineMode: opts.timelineMode || null,
       research: opts.research || [], packingList: opts.packingList || [], country: opts.country || '', countryGuessed: opts.countryGuessed || false,
-      mapEmbedUrl: opts.mapEmbedUrl || '',
+      mapEmbedUrl: opts.mapEmbedUrl || '', manualEstimates: opts.manualEstimates || [], hiddenSheets: opts.hiddenSheets || [],
       createdAt: Date.now(), updatedAt: Date.now()
     };
   }
@@ -1101,6 +1103,8 @@
       if (t.mapEmbedUrl === undefined){
         t.mapEmbedUrl = /london/i.test(t.name) ? 'https://www.google.com/maps/d/embed?mid=1agtFV4DvC-eE9MuhqqB5i3a2XWuJ0e4&hl=en&ehbc=2E312F' : '';
       }
+      if (!Array.isArray(t.manualEstimates)) t.manualEstimates = [];
+      if (!Array.isArray(t.hiddenSheets)) t.hiddenSheets = [];
       if (!t.country){
         const guess = guessCountryFromName(t.name);
         if (guess){ t.country = guess; t.countryGuessed = true; guessedCount++; }
@@ -1384,7 +1388,7 @@
     if (!t) { closeTrip(); return; }
     const spent = tripTotal(t), budgetSpent = budgetCountedTotal(t), budget = Number(t.budget||0), diff = budget - budgetSpent;
     const estimatedItems = t.planItems.filter(i=>i.cost!=null).sort((a,b)=> state.sheets.findIndex(s=>s.key===a.sheet) - state.sheets.findIndex(s=>s.key===b.sheet));
-    const totalEstimated = estimatedItems.reduce((s,i)=> s + (Number(i.cost)||0), 0);
+    const totalEstimated = estimatedItems.reduce((s,i)=> s + (Number(i.cost)||0), 0) + t.manualEstimates.reduce((s,m)=> s + (Number(m.cost)||0), 0);
     const catTotals = tripCategoryTotals(t);
     const activeCats = state.categories.map(c=>c.name).filter(c=>catTotals[c]>0);
     let cumPct = 0; const stops = [];
@@ -1434,19 +1438,21 @@
       <div id="tabBudget" ${activeTripTab!=='budget'?'hidden':''}>
         <div class="chart-card">
           <h3>Estimated Costs</h3>
-          ${estimatedItems.length ? `
+          ${(estimatedItems.length || t.manualEstimates.length) ? `
           <div class="table-scroll">
           <table class="exp-table">
-            <colgroup><col style="width:50%"><col style="width:25%"><col style="width:25%"></colgroup>
-            <thead><tr><th>Item</th><th>Category</th><th>Estimated</th></tr></thead>
+            <colgroup><col style="width:44%"><col style="width:22%"><col style="width:22%"><col style="width:12%"></colgroup>
+            <thead><tr><th>Item</th><th>Category</th><th>Estimated</th><th></th></tr></thead>
             <tbody>
-              ${estimatedItems.map(i=>`<tr><td>${escapeHtml(i.name)}</td><td>${escapeHtml(i.sheet)}</td><td class="num">${fmt(i.cost)}</td></tr>`).join('')}
+              ${estimatedItems.map(i=>`<tr><td>${escapeHtml(i.name)}<span style="color:var(--ink-soft);font-size:10px;"> (from Plan)</span></td><td>${escapeHtml(i.sheet)}</td><td class="num">${fmt(i.cost)}</td><td></td></tr>`).join('')}
+              ${t.manualEstimates.map(m=>`<tr data-mid="${m.id}"><td>${escapeHtml(m.name)}</td><td>${escapeHtml(m.category)}</td><td class="num">${fmt(m.cost)}</td><td><button class="exp-del me-del" aria-label="Delete estimate" title="Delete">\u2715</button></td></tr>`).join('')}
             </tbody>
-            <tfoot><tr class="exp-foot"><td colspan="2">Total Estimated</td><td class="num">${fmt(totalEstimated)}</td></tr></tfoot>
+            <tfoot><tr class="exp-foot"><td colspan="3">Total Estimated</td><td class="num">${fmt(totalEstimated)}</td></tr></tfoot>
           </table>
           </div>
-          <p style="font-size:12px;color:var(--ink-soft);margin:10px 0 0;">Actual spend so far: <strong style="color:var(--ink);">${fmt(spent)}</strong> \u2014 ${spent>totalEstimated ? `<span style="color:var(--red);">${fmt(spent-totalEstimated)} over estimate</span>` : `<span style="color:var(--green);">${fmt(totalEstimated-spent)} under estimate</span>`}</p>
-          ` : '<div class="empty-state">No estimated costs yet \u2014 add a Cost when creating a Plan item and it\u2019ll show up here.</div>'}
+          <p style="font-size:12px;color:var(--ink-soft);margin:10px 0;">Actual spend so far: <strong style="color:var(--ink);">${fmt(spent)}</strong> \u2014 ${spent>totalEstimated ? `<span style="color:var(--red);">${fmt(spent-totalEstimated)} over estimate</span>` : `<span style="color:var(--green);">${fmt(totalEstimated-spent)} under estimate</span>`}</p>
+          ` : '<div class="empty-state">No estimated costs yet.</div>'}
+          <button class="btn-ghost btn-sm" id="addEstimateBtn">+ Add Estimate</button>
         </div>
 
         <div class="detail-grid">
@@ -1529,6 +1535,17 @@
     wireAutogrow(document, '#mapUrlInput', { singleValue: true });
     document.getElementById('deleteTripBtn').addEventListener('click', ()=> deleteTrip(t));
     document.getElementById('addExpBtn').addEventListener('click', ()=> openExpenseModal(t));
+    document.getElementById('addEstimateBtn').addEventListener('click', ()=> openAddEstimateModal(t));
+    document.querySelectorAll('.me-del').forEach(btn=>{
+      const mid = btn.closest('tr').dataset.mid;
+      btn.addEventListener('click', ()=>{
+        const m = t.manualEstimates.find(x=>x.id===mid);
+        t.manualEstimates = t.manualEstimates.filter(x=>x.id!==mid);
+        t.updatedAt = Date.now();
+        logEvent('estimate-deleted', `Removed estimate "${m?m.name:''}" from ${t.name}`);
+        saveState(); renderTripView();
+      });
+    });
     document.getElementById('notesBox').addEventListener('change', (e)=>{ t.notes = e.target.value; t.updatedAt = Date.now(); saveState(); });
     tripView.querySelectorAll('.tab-btn').forEach(btn=> btn.addEventListener('click', ()=>{ activeTripTab = btn.dataset.tab; renderTripView(); }));
     renderExpenseRows(t);
@@ -1616,7 +1633,7 @@
     document.getElementById('modeDates').addEventListener('click', ()=>{ t.timelineMode='dates'; t.updatedAt=Date.now(); saveState(); renderPlanTab(t); });
     document.getElementById('modeDays').addEventListener('click', ()=>{ t.timelineMode='days'; t.updatedAt=Date.now(); saveState(); renderPlanTab(t); });
     document.getElementById('exportPlanPdfBtn').addEventListener('click', ()=> exportPlanPDF(t));
-    document.getElementById('manageSheetsBtn').addEventListener('click', openManageSheetsModal);
+    document.getElementById('manageSheetsBtn').addEventListener('click', ()=> openManageSheetsModal(t));
     document.getElementById('toggleTimeline').addEventListener('click', ()=>{
       timelineCollapsed = !timelineCollapsed;
       renderPlanTab(t);
@@ -1625,7 +1642,7 @@
     if (!timelineCollapsed) renderHourByHour(t);
 
     const sections = document.getElementById('sheetSections');
-    sections.innerHTML = state.sheets.map(s=>{
+    sections.innerHTML = state.sheets.filter(s=> !t.hiddenSheets.includes(s.key)).map(s=>{
       const items = t.planItems.filter(i=>i.sheet===s.key);
       const collapsed = collapsedSheets.has('plan:'+s.key);
       return `
@@ -1893,7 +1910,7 @@
     return `<div class="tl-row ${item.status==='cancelled'?'is-cancelled':''}" data-id="${item.id}">
       <div class="tl-time-cell"><input class="tl-time" type="time" value="${escapeHtml(item.time||'')}" data-f="time"></div>
       <div class="tl-main">
-        <div class="tl-sheet-tag" style="color:${sheetColor(item.sheet)}">${escapeHtml(item.sheet)}</div>
+        <div class="tl-sheet-tag"><span class="sheet-dot" style="background:${sheetColor(item.sheet)}"></span>${escapeHtml(item.sheet)}</div>
         <input class="tl-name" value="${escapeHtml(item.name)}" data-f="name" placeholder="What's happening">
         <textarea class="tl-notes" data-f="notes" rows="1" placeholder="Notes\u2026">${escapeHtml(item.notes||'')}</textarea>
       </div>
@@ -2131,7 +2148,7 @@
     document.getElementById('resViewList').addEventListener('click', ()=>{ researchView='list'; renderResearchTab(t); });
     document.getElementById('resViewMap').addEventListener('click', ()=>{ researchView='map'; renderResearchTab(t); });
     document.getElementById('mapSettingsBtn').addEventListener('click', openMapSettingsModal);
-    document.getElementById('manageSheetsBtnRes').addEventListener('click', openManageSheetsModal);
+    document.getElementById('manageSheetsBtnRes').addEventListener('click', ()=> openManageSheetsModal(t));
 
     const content = document.getElementById('resContent');
     if (researchView === 'map'){
@@ -2142,7 +2159,7 @@
   }
 
   function renderResearchList(t, content){
-    content.innerHTML = state.sheets.map(s=>{
+    content.innerHTML = state.sheets.filter(s=> !t.hiddenSheets.includes(s.key)).map(s=>{
       const items = t.research.filter(r=>r.sheet===s.key);
       const collapsed = collapsedSheets.has('research:'+s.key);
       return `
@@ -2570,6 +2587,35 @@
     });
   }
 
+  function openAddEstimateModal(t){
+    modalRoot.innerHTML = `
+      <div class="modal-overlay">
+        <div class="modal-box">
+          <h3>Add Estimated Cost</h3>
+          <div class="field"><label>Item</label><textarea id="me-name" rows="1" class="autogrow" placeholder="e.g. Souvenir budget"></textarea></div>
+          <div class="field"><label>Category</label><select id="me-cat">${state.categories.map(c=>`<option value="${escapeHtml(c.name)}">${escapeHtml(c.name)}</option>`).join('')}</select></div>
+          <div class="field"><label>Estimated Cost (${CUR})</label><input id="me-cost" type="number" step="0.01" placeholder="0.00"></div>
+          <div class="modal-actions">
+            <button class="btn-ghost" id="me-cancel">Cancel</button>
+            <button class="btn-primary" id="me-save">Add</button>
+          </div>
+        </div>
+      </div>`;
+    document.getElementById('me-cancel').addEventListener('click', closeModal);
+    document.getElementById('me-name').focus();
+    wireAutogrow(modalRoot, '#me-name', { singleValue: true });
+    document.getElementById('me-save').addEventListener('click', ()=>{
+      const name = singleLine(document.getElementById('me-name').value);
+      if (!name){ showToast('Enter a name first'); return; }
+      const category = document.getElementById('me-cat').value;
+      const cost = Math.max(0, Number(document.getElementById('me-cost').value)||0);
+      t.manualEstimates.push({ id: uid('est'), name, category, cost });
+      t.updatedAt = Date.now();
+      logEvent('estimate-added', `Added estimate "${name}" (${fmt(cost)}) to ${t.name}`);
+      saveState(); closeModal(); renderTripView();
+    });
+  }
+
   function openQuickAddCategoryModal(onSave, onCancel){
     const savedHtml = modalRoot.innerHTML;
     modalRoot.innerHTML = `
@@ -2746,13 +2792,13 @@
     draw();
   }
 
-  function openManageSheetsModal(){
+  function openManageSheetsModal(t){
     function draw(){
       modalRoot.innerHTML = `
         <div class="modal-overlay">
           <div class="modal-box wide">
             <h3>Manage Plan &amp; Research Categories</h3>
-            <p style="font-size:12px;color:var(--ink-soft);margin-top:-6px;">These are the sections shown in both the Plan and Research tabs (Hotels, Restaurants, etc.).</p>
+            <p style="font-size:12px;color:var(--ink-soft);margin-top:-6px;">These sections show in both Plan and Research.${t?` The "Show" checkbox controls visibility just for ${escapeHtml(t.name)}.`:''}</p>
             <div id="sheetList"></div>
             <div class="modal-actions" style="justify-content:space-between;">
               <button class="btn-ghost btn-sm" id="addSheetBtn">+ Add Category</button>
@@ -2769,6 +2815,7 @@
           </div>
           <input type="color" class="sheet-color" value="${s.color}">
           <textarea rows="1" class="sheet-name autogrow">${escapeHtml(s.key)}</textarea>
+          ${t ? `<label style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--ink-soft);white-space:nowrap;"><input type="checkbox" class="sheet-visible" style="width:auto;" ${t.hiddenSheets.includes(s.key)?'':'checked'}>Show</label>` : ''}
           <button class="btn-ghost btn-sm sheet-del">Delete</button>
         </div>`).join('');
       list.querySelectorAll('.cat-row').forEach(row=>{
@@ -2790,25 +2837,36 @@
             showToast('A category with that name already exists'); draw(); return;
           }
           state.sheets[i].key = newKey;
-          state.trips.forEach(t=>{
-            t.planItems.forEach(p=>{ if (p.sheet===oldKey) p.sheet=newKey; });
-            t.research.forEach(r=>{ if (r.sheet===oldKey) r.sheet=newKey; });
+          state.trips.forEach(tr=>{
+            tr.planItems.forEach(p=>{ if (p.sheet===oldKey) p.sheet=newKey; });
+            tr.research.forEach(r=>{ if (r.sheet===oldKey) r.sheet=newKey; });
+            tr.hiddenSheets = tr.hiddenSheets.map(k=> k===oldKey?newKey:k);
           });
           logEvent('sheet-renamed', `Renamed Plan/Research category "${oldKey}" to "${newKey}"`);
           saveState(); draw(); if(activeTripId) renderTripView();
+        });
+        const visEl = row.querySelector('.sheet-visible');
+        if (visEl) visEl.addEventListener('change', ev=>{
+          const key = state.sheets[i].key;
+          if (ev.target.checked) t.hiddenSheets = t.hiddenSheets.filter(k=>k!==key);
+          else if (!t.hiddenSheets.includes(key)) t.hiddenSheets.push(key);
+          t.updatedAt = Date.now();
+          logEvent('sheet-visibility-changed', `${ev.target.checked?'Showed':'Hid'} "${key}" for ${t.name}`);
+          saveState(); renderTripView();
         });
         row.querySelector('.sheet-del').addEventListener('click', ()=>{
           if (state.sheets.length <= 1){ showToast('Keep at least one category'); return; }
           const key = state.sheets[i].key;
           const fallback = state.sheets.find((s,j)=>j!==i) ? state.sheets.find((s,j)=>j!==i).key : 'Things To Do';
-          const affected = state.trips.reduce((n,t)=> n + t.planItems.filter(p=>p.sheet===key).length + t.research.filter(r=>r.sheet===key).length, 0);
+          const affected = state.trips.reduce((n,tr)=> n + tr.planItems.filter(p=>p.sheet===key).length + tr.research.filter(r=>r.sheet===key).length, 0);
           const msg = affected
             ? `Delete "${key}"? ${affected} item(s) using it will be moved to "${fallback}".`
             : `Delete "${key}"?`;
           if (!confirm(msg)) return;
-          state.trips.forEach(t=>{
-            t.planItems.forEach(p=>{ if (p.sheet===key) p.sheet=fallback; });
-            t.research.forEach(r=>{ if (r.sheet===key) r.sheet=fallback; });
+          state.trips.forEach(tr=>{
+            tr.planItems.forEach(p=>{ if (p.sheet===key) p.sheet=fallback; });
+            tr.research.forEach(r=>{ if (r.sheet===key) r.sheet=fallback; });
+            tr.hiddenSheets = tr.hiddenSheets.filter(k=>k!==key);
           });
           state.sheets.splice(i,1);
           logEvent('sheet-deleted', `Deleted Plan/Research category "${key}" (items moved to ${fallback})`);
@@ -2823,7 +2881,7 @@
         logEvent('sheet-added', `Added Plan/Research category "${name}"`);
         saveState(); draw();
       });
-      document.getElementById('sheetDone').addEventListener('click', closeModal);
+      document.getElementById('sheetDone').addEventListener('click', ()=>{ closeModal(); if(activeTripId) renderTripView(); });
     }
     draw();
   }
