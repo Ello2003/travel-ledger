@@ -189,7 +189,7 @@
   #travel-ledger-root .detail-fig .label { font-family: var(--font-mono); font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; opacity: .6; }
   #travel-ledger-root .detail-fig .value { font-family: var(--font-mono); font-size: 19px; font-weight: 600; margin-top: 2px; }
 
-  #travel-ledger-root .detail-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 18px; margin-bottom: 20px; }
+  #travel-ledger-root .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 20px; }
   @media (max-width: 780px) { #travel-ledger-root .detail-grid { grid-template-columns: 1fr; } }
 
   #travel-ledger-root .donut-wrap { display: flex; align-items: center; gap: 18px; }
@@ -251,6 +251,12 @@
   #travel-ledger-root table.budget-exp-table col.col-planned { width: 12%; }
   #travel-ledger-root table.budget-exp-table col.col-actual { width: 13%; }
   #travel-ledger-root table.budget-exp-table col.col-actions { width: 6%; }
+  #travel-ledger-root table.estimate-table col.col-desc { width: 28%; }
+  #travel-ledger-root table.estimate-table col.col-cat { width: 22%; }
+  #travel-ledger-root table.estimate-table col.col-qty { width: 12%; }
+  #travel-ledger-root table.estimate-table col.col-unit { width: 16%; }
+  #travel-ledger-root table.estimate-table col.col-actual { width: 16%; }
+  #travel-ledger-root table.estimate-table col.col-actions { width: 6%; }
   #travel-ledger-root table.budget-exp-table select.exp-cat { width: 100%; max-width: 100%; font-size: 12px; }
 
   #travel-ledger-root .notes-box { width: 100%; min-height: 70px; font-family: var(--font-body); font-size: 13px; padding: 10px; border: 1px solid var(--paper-edge); border-radius: 6px; background: var(--paper-raised); resize: vertical; }
@@ -362,7 +368,8 @@
   #travel-ledger-root .table-scroll table.plan-table,
   #travel-ledger-root .table-scroll table.research-table,
   #travel-ledger-root .table-scroll table.packing-table { min-width: 460px; }
-  #travel-ledger-root .table-scroll table.exp-table:not(.plan-table):not(.research-table):not(.packing-table) { min-width: 620px; }
+  #travel-ledger-root .table-scroll table.exp-table:not(.plan-table):not(.research-table):not(.packing-table):not(.estimate-table) { min-width: 620px; }
+  #travel-ledger-root .table-scroll table.estimate-table { min-width: 480px; }
 
   /* ---------- Up Next ---------- */
   #travel-ledger-root .upnext-card { margin-bottom: 22px; }
@@ -504,8 +511,9 @@
 <script>
 (function(){
   const STORAGE_KEY = 'trips-data';
-  const APP_VERSION = '1.7.9';
+  const APP_VERSION = '1.8.0';
   const CHANGELOG = {
+    '1.8.0': 'Estimated Costs now has the same editable Description/Category/Qty/Unit Cost structure as Actual Expenses (manually-added estimates are fully inline-editable; items pulled from Plan stay read-only there since they\u2019re edited at the source). Budget tab layout tidied up: Category Breakdown is now full-width on top, with Estimated Costs and Actual Expenses sitting in equal-width columns below it.',
     '1.7.9': 'Fixed a readability bug in the Hour-by-Hour timeline where each item\u2019s category tag used that category\u2019s color as text color, so some categories (like Bars) were hard to read against the paper background \u2014 now uses a small colored dot plus fixed readable text, like everywhere else in the app. Estimated Costs now supports manually-added entries (not just ones pulled from Plan items) via "+ Add Estimate". Sections in Plan/Research can now be fully hidden per trip (not just collapsed) via a "Show" checkbox in Manage Categories, in addition to the reordering already there.',
     '1.7.8': 'Every section in Plan and Research (Hotels, Restaurants, etc.) is now individually collapsible via a chevron, not just hideable when empty. Added an "Estimated Costs" section to the Budget tab, pulling from Plan item costs, with a running "over/under estimate" comparison against actual spend \u2014 separate from the renamed "Actual Expenses" table below it. Browser tab title set to "Travel Dashboard".',
     '1.7.7': 'The reorder-categories feature was only reachable from the Plan tab \u2014 added the same "Manage Categories" button to the Research tab toolbar, so you can reorder Hotels/Restaurants/etc. from either tab.',
@@ -1104,6 +1112,14 @@
         t.mapEmbedUrl = /london/i.test(t.name) ? 'https://www.google.com/maps/d/embed?mid=1agtFV4DvC-eE9MuhqqB5i3a2XWuJ0e4&hl=en&ehbc=2E312F' : '';
       }
       if (!Array.isArray(t.manualEstimates)) t.manualEstimates = [];
+      t.manualEstimates.forEach(m=>{
+        if (m.description === undefined){
+          m.description = m.name || 'Estimate';
+          m.quantity = 1;
+          m.unitCost = m.cost != null ? m.cost : 0;
+          delete m.name; delete m.cost;
+        }
+      });
       if (!Array.isArray(t.hiddenSheets)) t.hiddenSheets = [];
       if (!t.country){
         const guess = guessCountryFromName(t.name);
@@ -1388,7 +1404,7 @@
     if (!t) { closeTrip(); return; }
     const spent = tripTotal(t), budgetSpent = budgetCountedTotal(t), budget = Number(t.budget||0), diff = budget - budgetSpent;
     const estimatedItems = t.planItems.filter(i=>i.cost!=null).sort((a,b)=> state.sheets.findIndex(s=>s.key===a.sheet) - state.sheets.findIndex(s=>s.key===b.sheet));
-    const totalEstimated = estimatedItems.reduce((s,i)=> s + (Number(i.cost)||0), 0) + t.manualEstimates.reduce((s,m)=> s + (Number(m.cost)||0), 0);
+    const totalEstimated = estimatedItems.reduce((s,i)=> s + (Number(i.cost)||0), 0) + t.manualEstimates.reduce((s,m)=> s + (Number(m.quantity)||0)*(Number(m.unitCost)||0), 0);
     const catTotals = tripCategoryTotals(t);
     const activeCats = state.categories.map(c=>c.name).filter(c=>catTotals[c]>0);
     let cumPct = 0; const stops = [];
@@ -1437,32 +1453,40 @@
 
       <div id="tabBudget" ${activeTripTab!=='budget'?'hidden':''}>
         <div class="chart-card">
-          <h3>Estimated Costs</h3>
-          ${(estimatedItems.length || t.manualEstimates.length) ? `
-          <div class="table-scroll">
-          <table class="exp-table">
-            <colgroup><col style="width:44%"><col style="width:22%"><col style="width:22%"><col style="width:12%"></colgroup>
-            <thead><tr><th>Item</th><th>Category</th><th>Estimated</th><th></th></tr></thead>
-            <tbody>
-              ${estimatedItems.map(i=>`<tr><td>${escapeHtml(i.name)}<span style="color:var(--ink-soft);font-size:10px;"> (from Plan)</span></td><td>${escapeHtml(i.sheet)}</td><td class="num">${fmt(i.cost)}</td><td></td></tr>`).join('')}
-              ${t.manualEstimates.map(m=>`<tr data-mid="${m.id}"><td>${escapeHtml(m.name)}</td><td>${escapeHtml(m.category)}</td><td class="num">${fmt(m.cost)}</td><td><button class="exp-del me-del" aria-label="Delete estimate" title="Delete">\u2715</button></td></tr>`).join('')}
-            </tbody>
-            <tfoot><tr class="exp-foot"><td colspan="3">Total Estimated</td><td class="num">${fmt(totalEstimated)}</td></tr></tfoot>
-          </table>
-          </div>
-          <p style="font-size:12px;color:var(--ink-soft);margin:10px 0;">Actual spend so far: <strong style="color:var(--ink);">${fmt(spent)}</strong> \u2014 ${spent>totalEstimated ? `<span style="color:var(--red);">${fmt(spent-totalEstimated)} over estimate</span>` : `<span style="color:var(--green);">${fmt(totalEstimated-spent)} under estimate</span>`}</p>
-          ` : '<div class="empty-state">No estimated costs yet.</div>'}
-          <button class="btn-ghost btn-sm" id="addEstimateBtn">+ Add Estimate</button>
+          <h3>Category Breakdown</h3>
+          ${activeCats.length ? `
+          <div class="donut-wrap">
+            <div class="donut" style="background:${donutBg}"><div class="donut-center"><div class="amt">${fmt(spent)}</div><div class="lbl">spent</div></div></div>
+            <div class="donut-legend">${activeCats.map(c=>`<div><span class="swatch" style="background:${getCategoryColor(c)}"></span>${escapeHtml(c)} \u2014 ${fmt(catTotals[c])}</div>`).join('')}</div>
+          </div>` : '<div class="empty-state">No expenses logged yet.</div>'}
         </div>
 
         <div class="detail-grid">
           <div class="chart-card">
-            <h3>Category Breakdown</h3>
-            ${activeCats.length ? `
-            <div class="donut-wrap">
-              <div class="donut" style="background:${donutBg}"><div class="donut-center"><div class="amt">${fmt(spent)}</div><div class="lbl">spent</div></div></div>
-              <div class="donut-legend">${activeCats.map(c=>`<div><span class="swatch" style="background:${getCategoryColor(c)}"></span>${escapeHtml(c)} \u2014 ${fmt(catTotals[c])}</div>`).join('')}</div>
-            </div>` : '<div class="empty-state">No expenses logged yet.</div>'}
+            <h3>Estimated Costs</h3>
+            ${(estimatedItems.length || t.manualEstimates.length) ? `
+            <div class="table-scroll">
+            <table class="exp-table estimate-table">
+              <colgroup><col class="col-desc"><col class="col-cat"><col class="col-qty"><col class="col-unit"><col class="col-actual"><col class="col-actions"></colgroup>
+              <thead><tr><th>Description</th><th>Category</th><th>Qty</th><th>Unit Cost</th><th>Estimated</th><th></th></tr></thead>
+              <tbody>
+                ${estimatedItems.map(i=>`<tr><td>${escapeHtml(i.name)}<span style="color:var(--ink-soft);font-size:10px;"> (from Plan)</span></td><td>${escapeHtml(i.sheet)}</td><td class="num">1</td><td class="num">${fmt(i.cost)}</td><td class="num">${fmt(i.cost)}</td><td></td></tr>`).join('')}
+                ${t.manualEstimates.map(m=>`
+                <tr data-mid="${m.id}">
+                  <td><textarea rows="1" class="me-desc autogrow">${escapeHtml(m.description)}</textarea></td>
+                  <td><select class="me-cat">${state.categories.map(c=>`<option value="${escapeHtml(c.name)}" ${c.name===m.category?'selected':''}>${escapeHtml(c.name)}</option>`).join('')}</select></td>
+                  <td class="num"><input type="number" class="me-qty" value="${m.quantity}" min="0" step="1" style="text-align:right"></td>
+                  <td class="num"><input type="number" class="me-unit" value="${m.unitCost}" min="0" step="0.01" style="text-align:right"></td>
+                  <td class="num">${fmt((Number(m.quantity)||0)*(Number(m.unitCost)||0))}</td>
+                  <td><button class="exp-del me-del" aria-label="Delete estimate" title="Delete">\u2715</button></td>
+                </tr>`).join('')}
+              </tbody>
+              <tfoot><tr class="exp-foot"><td colspan="4">Total Estimated</td><td class="num">${fmt(totalEstimated)}</td><td></td></tr></tfoot>
+            </table>
+            </div>
+            <p style="font-size:12px;color:var(--ink-soft);margin:10px 0;">Actual spend so far: <strong style="color:var(--ink);">${fmt(spent)}</strong> \u2014 ${spent>totalEstimated ? `<span style="color:var(--red);">${fmt(spent-totalEstimated)} over estimate</span>` : `<span style="color:var(--green);">${fmt(totalEstimated-spent)} under estimate</span>`}</p>
+            ` : '<div class="empty-state">No estimated costs yet.</div>'}
+            <div class="toolbar" style="margin-top:12px;margin-bottom:0;"><button class="btn-primary" id="addEstimateBtn">+ Add Estimate</button></div>
           </div>
 
           <div class="chart-card">
@@ -1536,16 +1560,22 @@
     document.getElementById('deleteTripBtn').addEventListener('click', ()=> deleteTrip(t));
     document.getElementById('addExpBtn').addEventListener('click', ()=> openExpenseModal(t));
     document.getElementById('addEstimateBtn').addEventListener('click', ()=> openAddEstimateModal(t));
-    document.querySelectorAll('.me-del').forEach(btn=>{
-      const mid = btn.closest('tr').dataset.mid;
-      btn.addEventListener('click', ()=>{
-        const m = t.manualEstimates.find(x=>x.id===mid);
+    document.querySelectorAll('tr[data-mid]').forEach(row=>{
+      const mid = row.dataset.mid;
+      const m = t.manualEstimates.find(x=>x.id===mid);
+      if (!m) return;
+      row.querySelector('.me-desc').addEventListener('change', ev=>{ m.description = singleLine(ev.target.value) || m.description; commitEstimate(t); });
+      row.querySelector('.me-cat').addEventListener('change', ev=>{ m.category = ev.target.value; commitEstimate(t); });
+      row.querySelector('.me-qty').addEventListener('change', ev=>{ m.quantity = Math.max(0, Number(ev.target.value)||0); commitEstimate(t); });
+      row.querySelector('.me-unit').addEventListener('change', ev=>{ m.unitCost = Math.max(0, Number(ev.target.value)||0); commitEstimate(t); });
+      row.querySelector('.me-del').addEventListener('click', ()=>{
         t.manualEstimates = t.manualEstimates.filter(x=>x.id!==mid);
         t.updatedAt = Date.now();
-        logEvent('estimate-deleted', `Removed estimate "${m?m.name:''}" from ${t.name}`);
+        logEvent('estimate-deleted', `Removed estimate "${m.description}" from ${t.name}`);
         saveState(); renderTripView();
       });
     });
+    wireAutogrow(document, 'textarea.me-desc', { singleValue: true });
     document.getElementById('notesBox').addEventListener('change', (e)=>{ t.notes = e.target.value; t.updatedAt = Date.now(); saveState(); });
     tripView.querySelectorAll('.tab-btn').forEach(btn=> btn.addEventListener('click', ()=>{ activeTripTab = btn.dataset.tab; renderTripView(); }));
     renderExpenseRows(t);
@@ -1591,6 +1621,7 @@
     wireAutogrow(body, 'textarea.exp-desc', { singleValue: true });
   }
   function commitExpense(t){ t.updatedAt = Date.now(); saveState(); renderTripView(); }
+  function commitEstimate(t){ t.updatedAt = Date.now(); saveState(); renderTripView(); }
 
   /* ---------------- Plan tab (sheets + gantt) ---------------- */
   function formatWhen(t, item){
@@ -2592,9 +2623,12 @@
       <div class="modal-overlay">
         <div class="modal-box">
           <h3>Add Estimated Cost</h3>
-          <div class="field"><label>Item</label><textarea id="me-name" rows="1" class="autogrow" placeholder="e.g. Souvenir budget"></textarea></div>
-          <div class="field"><label>Category</label><select id="me-cat">${state.categories.map(c=>`<option value="${escapeHtml(c.name)}">${escapeHtml(c.name)}</option>`).join('')}</select></div>
-          <div class="field"><label>Estimated Cost (${CUR})</label><input id="me-cost" type="number" step="0.01" placeholder="0.00"></div>
+          <div class="field"><label>Description</label><textarea id="me-desc-new" rows="1" class="autogrow" placeholder="e.g. Souvenir budget"></textarea></div>
+          <div class="field"><label>Category</label><select id="me-cat-new">${state.categories.map(c=>`<option value="${escapeHtml(c.name)}">${escapeHtml(c.name)}</option>`).join('')}</select></div>
+          <div class="field-row">
+            <div class="field"><label>Quantity</label><input id="me-qty-new" type="number" value="1" min="0" step="1"></div>
+            <div class="field"><label>Unit Cost (${CUR})</label><input id="me-unit-new" type="number" step="0.01" placeholder="0.00"></div>
+          </div>
           <div class="modal-actions">
             <button class="btn-ghost" id="me-cancel">Cancel</button>
             <button class="btn-primary" id="me-save">Add</button>
@@ -2602,16 +2636,17 @@
         </div>
       </div>`;
     document.getElementById('me-cancel').addEventListener('click', closeModal);
-    document.getElementById('me-name').focus();
-    wireAutogrow(modalRoot, '#me-name', { singleValue: true });
+    document.getElementById('me-desc-new').focus();
+    wireAutogrow(modalRoot, '#me-desc-new', { singleValue: true });
     document.getElementById('me-save').addEventListener('click', ()=>{
-      const name = singleLine(document.getElementById('me-name').value);
-      if (!name){ showToast('Enter a name first'); return; }
-      const category = document.getElementById('me-cat').value;
-      const cost = Math.max(0, Number(document.getElementById('me-cost').value)||0);
-      t.manualEstimates.push({ id: uid('est'), name, category, cost });
+      const description = singleLine(document.getElementById('me-desc-new').value);
+      if (!description){ showToast('Enter a description first'); return; }
+      const category = document.getElementById('me-cat-new').value;
+      const quantity = Math.max(0, Number(document.getElementById('me-qty-new').value)||0);
+      const unitCost = Math.max(0, Number(document.getElementById('me-unit-new').value)||0);
+      t.manualEstimates.push({ id: uid('est'), description, category, quantity, unitCost });
       t.updatedAt = Date.now();
-      logEvent('estimate-added', `Added estimate "${name}" (${fmt(cost)}) to ${t.name}`);
+      logEvent('estimate-added', `Added estimate "${description}" (${fmt(quantity*unitCost)}) to ${t.name}`);
       saveState(); closeModal(); renderTripView();
     });
   }
