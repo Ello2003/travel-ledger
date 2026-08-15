@@ -191,6 +191,18 @@
 
   #travel-ledger-root .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 20px; }
   @media (max-width: 780px) { #travel-ledger-root .detail-grid { grid-template-columns: 1fr; } }
+  #travel-ledger-root .budget-layout {
+    display: grid; grid-template-columns: 1fr 1.3fr; grid-template-rows: 1fr 1fr; gap: 18px; margin-bottom: 20px;
+  }
+  #travel-ledger-root .budget-donut-card { grid-column: 1; grid-row: 1 / 3; display: flex; flex-direction: column; }
+  #travel-ledger-root .budget-fixed-card { grid-column: 2; display: flex; flex-direction: column; height: 420px; }
+  #travel-ledger-root .budget-fixed-card h3 { flex-shrink: 0; }
+  #travel-ledger-root .budget-fixed-scroll { flex: 1; overflow-y: auto; min-height: 0; }
+  @media (max-width: 900px) {
+    #travel-ledger-root .budget-layout { grid-template-columns: 1fr; grid-template-rows: auto; }
+    #travel-ledger-root .budget-donut-card { grid-column: 1; grid-row: auto; }
+    #travel-ledger-root .budget-fixed-card { grid-column: 1; height: 360px; }
+  }
 
   #travel-ledger-root .donut-wrap { display: flex; align-items: center; gap: 18px; }
   #travel-ledger-root .donut { width: 140px; height: 140px; border-radius: 50%; flex-shrink: 0; position: relative; }
@@ -511,8 +523,9 @@
 <script>
 (function(){
   const STORAGE_KEY = 'trips-data';
-  const APP_VERSION = '1.8.0';
+  const APP_VERSION = '1.8.1';
   const CHANGELOG = {
+    '1.8.1': 'Rebuilt the Budget tab layout: Category Breakdown sits on the left spanning full height, with Estimated Costs and Actual Expenses stacked on the right at the same fixed size (420px, scrolling internally if a list runs long) so the layout holds steady regardless of how many rows either has. An empty Estimated Costs now shows its full table with headers ready to fill in, matching how Actual Expenses already behaved, instead of collapsing to a plain message.',
     '1.8.0': 'Estimated Costs now has the same editable Description/Category/Qty/Unit Cost structure as Actual Expenses (manually-added estimates are fully inline-editable; items pulled from Plan stay read-only there since they\u2019re edited at the source). Budget tab layout tidied up: Category Breakdown is now full-width on top, with Estimated Costs and Actual Expenses sitting in equal-width columns below it.',
     '1.7.9': 'Fixed a readability bug in the Hour-by-Hour timeline where each item\u2019s category tag used that category\u2019s color as text color, so some categories (like Bars) were hard to read against the paper background \u2014 now uses a small colored dot plus fixed readable text, like everywhere else in the app. Estimated Costs now supports manually-added entries (not just ones pulled from Plan items) via "+ Add Estimate". Sections in Plan/Research can now be fully hidden per trip (not just collapsed) via a "Show" checkbox in Manage Categories, in addition to the reordering already there.',
     '1.7.8': 'Every section in Plan and Research (Hotels, Restaurants, etc.) is now individually collapsible via a chevron, not just hideable when empty. Added an "Estimated Costs" section to the Budget tab, pulling from Plan item costs, with a running "over/under estimate" comparison against actual spend \u2014 separate from the renamed "Actual Expenses" table below it. Browser tab title set to "Travel Dashboard".',
@@ -1452,24 +1465,24 @@
       </div>
 
       <div id="tabBudget" ${activeTripTab!=='budget'?'hidden':''}>
-        <div class="chart-card">
-          <h3>Category Breakdown</h3>
-          ${activeCats.length ? `
-          <div class="donut-wrap">
-            <div class="donut" style="background:${donutBg}"><div class="donut-center"><div class="amt">${fmt(spent)}</div><div class="lbl">spent</div></div></div>
-            <div class="donut-legend">${activeCats.map(c=>`<div><span class="swatch" style="background:${getCategoryColor(c)}"></span>${escapeHtml(c)} \u2014 ${fmt(catTotals[c])}</div>`).join('')}</div>
-          </div>` : '<div class="empty-state">No expenses logged yet.</div>'}
-        </div>
+        <div class="budget-layout">
+          <div class="chart-card budget-donut-card">
+            <h3>Category Breakdown</h3>
+            ${activeCats.length ? `
+            <div class="donut-wrap">
+              <div class="donut" style="background:${donutBg}"><div class="donut-center"><div class="amt">${fmt(spent)}</div><div class="lbl">spent</div></div></div>
+              <div class="donut-legend">${activeCats.map(c=>`<div><span class="swatch" style="background:${getCategoryColor(c)}"></span>${escapeHtml(c)} \u2014 ${fmt(catTotals[c])}</div>`).join('')}</div>
+            </div>` : '<div class="empty-state">No expenses logged yet.</div>'}
+          </div>
 
-        <div class="detail-grid">
-          <div class="chart-card">
+          <div class="chart-card budget-fixed-card">
             <h3>Estimated Costs</h3>
-            ${(estimatedItems.length || t.manualEstimates.length) ? `
-            <div class="table-scroll">
+            <div class="table-scroll budget-fixed-scroll">
             <table class="exp-table estimate-table">
               <colgroup><col class="col-desc"><col class="col-cat"><col class="col-qty"><col class="col-unit"><col class="col-actual"><col class="col-actions"></colgroup>
               <thead><tr><th>Description</th><th>Category</th><th>Qty</th><th>Unit Cost</th><th>Estimated</th><th></th></tr></thead>
               <tbody>
+                ${(estimatedItems.length || t.manualEstimates.length) ? `
                 ${estimatedItems.map(i=>`<tr><td>${escapeHtml(i.name)}<span style="color:var(--ink-soft);font-size:10px;"> (from Plan)</span></td><td>${escapeHtml(i.sheet)}</td><td class="num">1</td><td class="num">${fmt(i.cost)}</td><td class="num">${fmt(i.cost)}</td><td></td></tr>`).join('')}
                 ${t.manualEstimates.map(m=>`
                 <tr data-mid="${m.id}">
@@ -1480,18 +1493,18 @@
                   <td class="num">${fmt((Number(m.quantity)||0)*(Number(m.unitCost)||0))}</td>
                   <td><button class="exp-del me-del" aria-label="Delete estimate" title="Delete">\u2715</button></td>
                 </tr>`).join('')}
+                ` : `<tr><td colspan="6" class="empty-state">No estimated costs yet.</td></tr>`}
               </tbody>
               <tfoot><tr class="exp-foot"><td colspan="4">Total Estimated</td><td class="num">${fmt(totalEstimated)}</td><td></td></tr></tfoot>
             </table>
             </div>
-            <p style="font-size:12px;color:var(--ink-soft);margin:10px 0;">Actual spend so far: <strong style="color:var(--ink);">${fmt(spent)}</strong> \u2014 ${spent>totalEstimated ? `<span style="color:var(--red);">${fmt(spent-totalEstimated)} over estimate</span>` : `<span style="color:var(--green);">${fmt(totalEstimated-spent)} under estimate</span>`}</p>
-            ` : '<div class="empty-state">No estimated costs yet.</div>'}
-            <div class="toolbar" style="margin-top:12px;margin-bottom:0;"><button class="btn-primary" id="addEstimateBtn">+ Add Estimate</button></div>
+            <p style="font-size:11.5px;color:var(--ink-soft);margin:10px 0 0;">Actual spend so far: <strong style="color:var(--ink);">${fmt(spent)}</strong> \u2014 ${spent>totalEstimated ? `<span style="color:var(--red);">${fmt(spent-totalEstimated)} over estimate</span>` : `<span style="color:var(--green);">${fmt(totalEstimated-spent)} under estimate</span>`}</p>
+            <div class="toolbar" style="margin-top:10px;margin-bottom:0;"><button class="btn-primary" id="addEstimateBtn">+ Add Estimate</button></div>
           </div>
 
-          <div class="chart-card">
+          <div class="chart-card budget-fixed-card">
             <h3>Actual Expenses</h3>
-            <div class="table-scroll">
+            <div class="table-scroll budget-fixed-scroll">
             <table class="exp-table budget-exp-table">
               <colgroup><col class="col-desc"><col class="col-cat"><col class="col-qty"><col class="col-unit"><col class="col-planned"><col class="col-actual"><col class="col-actions"></colgroup>
               <thead><tr><th>Description</th><th>Category</th><th>Qty</th><th>Unit Cost</th><th>Planned</th><th>Actual</th><th></th></tr></thead>
@@ -1499,7 +1512,7 @@
               <tfoot><tr class="exp-foot"><td colspan="5">Total Expenses</td><td class="num">${fmt(spent)}</td><td></td></tr></tfoot>
             </table>
             </div>
-            <div class="toolbar" style="margin-top:12px;margin-bottom:0;"><button class="btn-primary" id="addExpBtn">+ Add Expense</button></div>
+            <div class="toolbar" style="margin-top:10px;margin-bottom:0;"><button class="btn-primary" id="addExpBtn">+ Add Expense</button></div>
           </div>
         </div>
 
