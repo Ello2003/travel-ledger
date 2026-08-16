@@ -50,6 +50,13 @@
     flex-wrap: wrap; gap: 10px;
   }
   #travel-ledger-root .masthead-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+  #travel-ledger-root .undo-redo-row { display: flex; gap: 4px; }
+  #travel-ledger-root .undo-redo-btn {
+    font-family: var(--font-mono); font-size: 10.5px; padding: 3px 8px; border: 1px solid var(--paper-edge);
+    background: var(--paper-raised); color: var(--ink-soft); border-radius: 4px; cursor: pointer;
+  }
+  #travel-ledger-root .undo-redo-btn:not(:disabled):hover { background: var(--paper); color: var(--ink); }
+  #travel-ledger-root .undo-redo-btn:disabled { opacity: .35; cursor: default; }
   #travel-ledger-root .wordmark { font-family: var(--font-display); font-weight: 900; font-size: 30px; letter-spacing: 0.5px; }
   #travel-ledger-root .wordmark small {
     display: block; font-family: var(--font-mono); font-weight: 400; font-size: 11px;
@@ -426,6 +433,10 @@
     <div class="masthead">
       <div class="wordmark">&#x2708; Travel Ledger<small>Budget &amp; Expense Log</small></div>
       <div class="masthead-meta">
+        <div class="undo-redo-row">
+          <button class="undo-redo-btn" id="undoBtn" disabled title="Undo (Ctrl+Z)">&#x21b6; Undo</button>
+          <button class="undo-redo-btn" id="redoBtn" disabled title="Redo (Ctrl+Shift+Z)">Redo &#x21b7;</button>
+        </div>
         <div class="version-badge" id="versionBadge"></div>
         <div class="save-flag" id="saveFlag">&#x25cf; saved</div>
         <div class="sync-flag" id="syncFlag" hidden></div>
@@ -512,6 +523,8 @@
       <button class="footer-link" id="activityLogBtn">Activity Log</button>
       <span class="footer-sep">&#xb7;</span>
       <button class="footer-link" id="githubSyncBtn">GitHub Sync</button>
+      <span class="footer-sep">&#xb7;</span>
+      <button class="footer-link" id="backupHistoryBtn">Backup History</button>
     </footer>
 
     <div id="modalRoot"></div>
@@ -523,8 +536,12 @@
 <script>
 (function(){
   const STORAGE_KEY = 'trips-data';
-  const APP_VERSION = '1.8.1';
+  const HISTORY_KEY = 'trips-data-history';
+  const MAX_HISTORY_DAYS = 14;
+  const APP_VERSION = '1.8.3';
   const CHANGELOG = {
+    '1.8.3': 'Added per-edit Undo/Redo (buttons in the header, or Ctrl+Z / Ctrl+Shift+Z) covering the last 40 changes this session \u2014 separate from the daily Backup History, this is for undoing your last few actions rather than rolling back to an earlier day. Doesn\u2019t interfere with normal text-field undo while typing.',
+    '1.8.2': 'Added automatic rolling backup history \u2014 a snapshot of your data is saved once per day (last 14 days kept), viewable and restorable from the new "Backup History" footer link, no file needed. Restoring moves your current data to Trash first so nothing is ever truly lost. Also fixed two things found while building this: manually-exported JSON backups were including your GitHub Sync token in plain text \u2014 they no longer include settings at all; and Plan/Research categories (sheets) weren\u2019t part of GitHub Sync or manual backups, so custom categories and their order could silently not travel between devices \u2014 now they do.',
     '1.8.1': 'Rebuilt the Budget tab layout: Category Breakdown sits on the left spanning full height, with Estimated Costs and Actual Expenses stacked on the right at the same fixed size (420px, scrolling internally if a list runs long) so the layout holds steady regardless of how many rows either has. An empty Estimated Costs now shows its full table with headers ready to fill in, matching how Actual Expenses already behaved, instead of collapsing to a plain message.',
     '1.8.0': 'Estimated Costs now has the same editable Description/Category/Qty/Unit Cost structure as Actual Expenses (manually-added estimates are fully inline-editable; items pulled from Plan stay read-only there since they\u2019re edited at the source). Budget tab layout tidied up: Category Breakdown is now full-width on top, with Estimated Costs and Actual Expenses sitting in equal-width columns below it.',
     '1.7.9': 'Fixed a readability bug in the Hour-by-Hour timeline where each item\u2019s category tag used that category\u2019s color as text color, so some categories (like Bars) were hard to read against the paper background \u2014 now uses a small colored dot plus fixed readable text, like everywhere else in the app. Estimated Costs now supports manually-added entries (not just ones pulled from Plan items) via "+ Add Estimate". Sections in Plan/Research can now be fully hidden per trip (not just collapsed) via a "Show" checkbox in Manage Categories, in addition to the reordering already there.',
@@ -576,6 +593,11 @@
   let timelineCollapsed = false;
   let mapEditMode = false;
   const collapsedSheets = new Set();
+  let undoStack = [];
+  let redoStack = [];
+  let lastSavedSnapshot = null;
+  let isApplyingUndoRedo = false;
+  const MAX_UNDO = 40;
   let uiFilter = { search: '', status: 'all', sort: 'year-desc' };
 
   function defaultSheets(){
@@ -974,7 +996,7 @@
     return `https://api.github.com/repos/${encodeURIComponent(s.githubOwner)}/${encodeURIComponent(s.githubRepo)}/contents/${pathParts}`;
   }
   function syncableData(){
-    return { categories: state.categories, trips: state.trips, trash: state.trash, activityLog: state.activityLog };
+    return { categories: state.categories, sheets: state.sheets, trips: state.trips, trash: state.trash, activityLog: state.activityLog };
   }
   function setSyncStatus(kind, text){
     if (!syncFlag) return;
@@ -1054,6 +1076,7 @@
       const remote = await githubFetchRemote();
       if (remote.exists && remote.json){
         state.categories = remote.json.categories || state.categories;
+        state.sheets = remote.json.sheets || state.sheets;
         state.trips = remote.json.trips || state.trips;
         state.trash = remote.json.trash || state.trash;
         state.activityLog = remote.json.activityLog || state.activityLog;
@@ -1178,11 +1201,78 @@
         showToast('Warning: save may not have persisted');
         return;
       }
+      if (!isApplyingUndoRedo){
+        const currentSnapshot = JSON.stringify(syncableData());
+        if (lastSavedSnapshot !== null && lastSavedSnapshot !== currentSnapshot){
+          undoStack.push(lastSavedSnapshot);
+          if (undoStack.length > MAX_UNDO) undoStack.shift();
+          redoStack = [];
+        }
+        lastSavedSnapshot = currentSnapshot;
+      }
+      updateUndoRedoUI();
       showStorageWarning(false);
       flashSaved();
       scheduleGithubSync();
+      snapshotHistory();
     }
     catch(e) { console.error('Storage error', e); showStorageWarning(true); showToast('Could not save \u2014 storage full or unavailable'); }
+  }
+  function applySnapshotData(snapJson){
+    const s = JSON.parse(snapJson);
+    state.categories = s.categories;
+    state.sheets = s.sheets;
+    state.trips = s.trips;
+    state.trash = s.trash;
+    state.activityLog = s.activityLog;
+  }
+  function performUndo(){
+    if (!undoStack.length){ showToast('Nothing to undo'); return; }
+    const current = JSON.stringify(syncableData());
+    redoStack.push(current);
+    const prev = undoStack.pop();
+    isApplyingUndoRedo = true;
+    applySnapshotData(prev);
+    migrate();
+    lastSavedSnapshot = JSON.stringify(syncableData());
+    saveState();
+    isApplyingUndoRedo = false;
+    if (activeTripId && !state.trips.some(t=>t.id===activeTripId)) closeTrip(); else if (activeTripId) renderTripView(); else renderAll();
+    showToast('Undone');
+  }
+  function performRedo(){
+    if (!redoStack.length){ showToast('Nothing to redo'); return; }
+    const current = JSON.stringify(syncableData());
+    undoStack.push(current);
+    const next = redoStack.pop();
+    isApplyingUndoRedo = true;
+    applySnapshotData(next);
+    migrate();
+    lastSavedSnapshot = JSON.stringify(syncableData());
+    saveState();
+    isApplyingUndoRedo = false;
+    if (activeTripId && !state.trips.some(t=>t.id===activeTripId)) closeTrip(); else if (activeTripId) renderTripView(); else renderAll();
+    showToast('Redone');
+  }
+  function updateUndoRedoUI(){
+    const undoBtn = document.getElementById('undoBtn');
+    const redoBtn = document.getElementById('redoBtn');
+    if (undoBtn) undoBtn.disabled = !undoStack.length;
+    if (redoBtn) redoBtn.disabled = !redoStack.length;
+  }
+  function snapshotHistory(){
+    try {
+      const dateKey = new Date().toISOString().slice(0,10);
+      let history = [];
+      try { history = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]'); } catch(e) { history = []; }
+      const snapshot = JSON.stringify(syncableData());
+      const idx = history.findIndex(h=> h.dateKey === dateKey);
+      if (idx >= 0) history[idx] = { dateKey, timestamp: Date.now(), snapshot };
+      else history.push({ dateKey, timestamp: Date.now(), snapshot });
+      history.sort((a,b)=> a.timestamp - b.timestamp);
+      if (history.length > MAX_HISTORY_DAYS) history = history.slice(history.length - MAX_HISTORY_DAYS);
+      localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+    } catch(e) { /* history is a nice-to-have; never let it block a real save */ }
   }
   let saveTimer = null;
   function flashSaved(){
@@ -2557,6 +2647,17 @@
   function closeModal(){ modalRoot.innerHTML = ''; }
   root.addEventListener('keydown', ()=>{});
   document.addEventListener('keydown', (e)=>{ if (e.key === 'Escape' && modalRoot.innerHTML) closeModal(); });
+  document.addEventListener('keydown', (e)=>{
+    const tag = (e.target.tagName || '').toLowerCase();
+    const isEditable = tag === 'input' || tag === 'textarea' || tag === 'select' || e.target.isContentEditable;
+    if (isEditable) return; // let the browser's native per-field undo handle this instead
+    if (!(e.ctrlKey || e.metaKey)) return;
+    const key = e.key.toLowerCase();
+    if (key === 'z' && !e.shiftKey){ e.preventDefault(); performUndo(); }
+    else if ((key === 'z' && e.shiftKey) || key === 'y'){ e.preventDefault(); performRedo(); }
+  });
+  document.getElementById('undoBtn').addEventListener('click', performUndo);
+  document.getElementById('redoBtn').addEventListener('click', performRedo);
 
   function openTripModal(existing){
     const isEdit = !!existing;
@@ -2948,6 +3049,61 @@
     document.getElementById('logDone').addEventListener('click', closeModal);
   }
 
+  function relativeDay(dateKey){
+    const today = new Date().toISOString().slice(0,10);
+    const yest = new Date(Date.now()-86400000).toISOString().slice(0,10);
+    if (dateKey === today) return 'Today';
+    if (dateKey === yest) return 'Yesterday';
+    return new Date(dateKey+'T00:00:00').toLocaleDateString('en-GB', {weekday:'short', day:'numeric', month:'short'});
+  }
+  function openBackupHistoryModal(){
+    let history = [];
+    try { history = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]'); } catch(e) { history = []; }
+    history.sort((a,b)=> b.timestamp - a.timestamp);
+    modalRoot.innerHTML = `
+      <div class="modal-overlay">
+        <div class="modal-box wide">
+          <h3>Backup History</h3>
+          <p style="font-size:12px;color:var(--ink-soft);margin-top:-6px;">A snapshot is kept automatically once per day, for the last ${MAX_HISTORY_DAYS} days. Restoring replaces your current trips, categories, and packing lists \u2014 your current data is moved to Trash first so you can recover it.</p>
+          ${history.length ? history.map(h=>{
+            let count = '?';
+            try { count = JSON.parse(h.snapshot).trips.length; } catch(e){}
+            return `
+            <div class="cat-row">
+              <div style="flex:1;">
+                <div style="font-weight:600;">${relativeDay(h.dateKey)}</div>
+                <div style="font-size:11px;color:var(--ink-soft);font-family:var(--font-mono);">${new Date(h.timestamp).toLocaleString([], {dateStyle:'medium', timeStyle:'short'})} \u00b7 ${count} trip(s)</div>
+              </div>
+              <button class="btn-ghost btn-sm history-restore" data-key="${h.dateKey}">Restore</button>
+            </div>`;
+          }).join('') : '<div class="empty-state">No snapshots yet \u2014 one is saved automatically the first time you make a change today.</div>'}
+          <div class="modal-actions">
+            <button class="btn-primary" id="historyDone">Close</button>
+          </div>
+        </div>
+      </div>`;
+    modalRoot.querySelectorAll('.history-restore').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const entry = history.find(h=>h.dateKey===btn.dataset.key);
+        if (!entry) return;
+        let snap;
+        try { snap = JSON.parse(entry.snapshot); } catch(e){ showToast('Could not read that snapshot'); return; }
+        if (!confirm(`Restore to ${relativeDay(entry.dateKey)} (${new Date(entry.timestamp).toLocaleString([], {dateStyle:'medium', timeStyle:'short'})})? Your current data will be moved to Trash first.`)) return;
+        state.trash.trips.push(...state.trips.map(t=>({ ...JSON.parse(JSON.stringify(t)), deletedAt: Date.now() })));
+        state.trips = snap.trips || state.trips;
+        state.categories = snap.categories || state.categories;
+        state.sheets = snap.sheets || state.sheets;
+        if (snap.trash) state.trash.expenses = snap.trash.expenses || state.trash.expenses;
+        if (snap.activityLog) state.activityLog = snap.activityLog;
+        migrate();
+        logEvent('history-restored', `Restored data from ${relativeDay(entry.dateKey)}'s backup`);
+        saveState(); closeModal(); renderAll();
+        showToast('Restored');
+      });
+    });
+    document.getElementById('historyDone').addEventListener('click', closeModal);
+  }
+
   function openTrashModal(){
     function draw(){
       const tripsHtml = state.trash.trips.map((t,i)=>`
@@ -3044,7 +3200,7 @@
     setTimeout(()=>{ window.print(); }, 50);
   }
   function exportBackup(){
-    const payload = Object.assign({}, state, { _exportedByVersion: APP_VERSION });
+    const payload = Object.assign({}, syncableData(), { _exportedByVersion: APP_VERSION });
     const blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json'});
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -3066,12 +3222,18 @@
         state.trips = parsed.trips;
         if (parsed.categories && Array.isArray(parsed.categories) && parsed.categories.length) state.categories = parsed.categories;
         if (!state.categories.some(c=>c.name==='Other')) state.categories.push({ name:'Other', color:'#5b6672' });
+        if (parsed.sheets && Array.isArray(parsed.sheets) && parsed.sheets.length) state.sheets = parsed.sheets;
         let reassigned = 0;
         state.trips.forEach(t=> t.expenses.forEach(e=>{
           const resolved = resolveExpenseCategory(e.category);
           if (resolved !== e.category){ e.category = resolved; reassigned += 1; }
         }));
-        logEvent('backup-imported', `Imported ${parsed.trips.length} trip(s) from backup${reassigned ? ` (${reassigned} expense(s) reassigned to Other \u2014 category missing from imported set)` : ''}`);
+        let sheetsReassigned = 0;
+        state.trips.forEach(t=>{
+          t.planItems.forEach(p=>{ if (!state.sheets.some(s=>s.key===p.sheet)){ p.sheet = state.sheets[state.sheets.length-1].key; sheetsReassigned++; } });
+          t.research.forEach(r=>{ if (!state.sheets.some(s=>s.key===r.sheet)){ r.sheet = state.sheets[state.sheets.length-1].key; sheetsReassigned++; } });
+        });
+        logEvent('backup-imported', `Imported ${parsed.trips.length} trip(s) from backup${reassigned ? ` (${reassigned} expense(s) reassigned \u2014 category missing from imported set)` : ''}${sheetsReassigned ? ` (${sheetsReassigned} Plan/Research item(s) reassigned \u2014 category missing)` : ''}`);
         saveState(); renderAll();
         showToast('Backup imported');
       } catch(err){ alert('Could not read that file \u2014 is it a Travel Ledger backup?'); }
@@ -3085,6 +3247,7 @@
   document.getElementById('activityLogBtn').addEventListener('click', openActivityLogModal);
   document.getElementById('trashBtn').addEventListener('click', openTrashModal);
   document.getElementById('githubSyncBtn').addEventListener('click', openGithubSyncModal);
+  document.getElementById('backupHistoryBtn').addEventListener('click', openBackupHistoryModal);
   document.getElementById('exportBtn').addEventListener('click', exportBackup);
   const storageWarningExportBtn = document.getElementById('storageWarningExport');
   if (storageWarningExportBtn) storageWarningExportBtn.addEventListener('click', exportBackup);
@@ -3129,6 +3292,10 @@
     versionBadgeEl.addEventListener('click', openChangelogModal);
   }
 
-  loadState().then(renderAll);
+  loadState().then(()=>{
+    lastSavedSnapshot = JSON.stringify(syncableData());
+    updateUndoRedoUI();
+    renderAll();
+  });
 })();
 </script>
