@@ -538,8 +538,9 @@
   const STORAGE_KEY = 'trips-data';
   const HISTORY_KEY = 'trips-data-history';
   const MAX_HISTORY_DAYS = 14;
-  const APP_VERSION = '1.8.3';
+  const APP_VERSION = '1.8.4';
   const CHANGELOG = {
+    '1.8.4': 'Added a "Map" toggle to every section in the Research tab (Hotels, Restaurants, etc.) \u2014 each can have its own embedded Google Map, independent of the others and independent of the trip-level My Maps on the Budget tab. Paste a share link or full embed code; a brass-highlighted toggle shows which sections already have one set.',
     '1.8.3': 'Added per-edit Undo/Redo (buttons in the header, or Ctrl+Z / Ctrl+Shift+Z) covering the last 40 changes this session \u2014 separate from the daily Backup History, this is for undoing your last few actions rather than rolling back to an earlier day. Doesn\u2019t interfere with normal text-field undo while typing.',
     '1.8.2': 'Added automatic rolling backup history \u2014 a snapshot of your data is saved once per day (last 14 days kept), viewable and restorable from the new "Backup History" footer link, no file needed. Restoring moves your current data to Trash first so nothing is ever truly lost. Also fixed two things found while building this: manually-exported JSON backups were including your GitHub Sync token in plain text \u2014 they no longer include settings at all; and Plan/Research categories (sheets) weren\u2019t part of GitHub Sync or manual backups, so custom categories and their order could silently not travel between devices \u2014 now they do.',
     '1.8.1': 'Rebuilt the Budget tab layout: Category Breakdown sits on the left spanning full height, with Estimated Costs and Actual Expenses stacked on the right at the same fixed size (420px, scrolling internally if a list runs long) so the layout holds steady regardless of how many rows either has. An empty Estimated Costs now shows its full table with headers ready to fill in, matching how Actual Expenses already behaved, instead of collapsing to a plain message.',
@@ -593,6 +594,8 @@
   let timelineCollapsed = false;
   let mapEditMode = false;
   const collapsedSheets = new Set();
+  const expandedSectionMaps = new Set();
+  const sectionMapEditMode = new Set();
   let undoStack = [];
   let redoStack = [];
   let lastSavedSnapshot = null;
@@ -830,6 +833,7 @@
       expenses, planItems: opts.planItems || [], timelineMode: opts.timelineMode || null,
       research: opts.research || [], packingList: opts.packingList || [], country: opts.country || '', countryGuessed: opts.countryGuessed || false,
       mapEmbedUrl: opts.mapEmbedUrl || '', manualEstimates: opts.manualEstimates || [], hiddenSheets: opts.hiddenSheets || [],
+      sectionMapUrls: opts.sectionMapUrls || {},
       createdAt: Date.now(), updatedAt: Date.now()
     };
   }
@@ -1157,6 +1161,7 @@
         }
       });
       if (!Array.isArray(t.hiddenSheets)) t.hiddenSheets = [];
+      if (!t.sectionMapUrls || typeof t.sectionMapUrls !== 'object') t.sectionMapUrls = {};
       if (!t.country){
         const guess = guessCountryFromName(t.name);
         if (guess){ t.country = guess; t.countryGuessed = true; guessedCount++; }
@@ -2296,13 +2301,33 @@
     content.innerHTML = state.sheets.filter(s=> !t.hiddenSheets.includes(s.key)).map(s=>{
       const items = t.research.filter(r=>r.sheet===s.key);
       const collapsed = collapsedSheets.has('research:'+s.key);
+      const hasMap = !!t.sectionMapUrls[s.key];
+      const mapExpanded = expandedSectionMaps.has(s.key);
+      const mapEditing = sectionMapEditMode.has(s.key);
       return `
       <div class="sheet-section">
         <div class="sheet-header">
           <div style="display:flex;align-items:center;gap:6px;cursor:pointer;" class="sheet-toggle" data-key="research:${escapeHtml(s.key)}"><span class="sheet-chevron">${collapsed?'\u25b8':'\u25be'}</span><span class="sheet-dot" style="background:${s.color}"></span>${s.key} <span style="color:var(--ink-soft);font-family:var(--font-mono);font-size:11px;">(${items.length})</span></div>
-          <button class="btn-ghost btn-sm res-add" data-sheet="${escapeHtml(s.key)}">+ Add</button>
+          <div style="display:flex;gap:6px;">
+            <button class="btn-ghost btn-sm sec-map-toggle" data-sheet="${escapeHtml(s.key)}" title="${hasMap?'Show/hide map':'Add a map for this section'}" style="${hasMap?'border-color:var(--brass);color:var(--brass);':''}">\u{1F5FA} Map</button>
+            <button class="btn-ghost btn-sm res-add" data-sheet="${escapeHtml(s.key)}">+ Add</button>
+          </div>
         </div>
         <div ${collapsed?'hidden':''}>
+        ${mapExpanded ? `
+        <div class="section-map-area" data-sheet="${escapeHtml(s.key)}">
+          ${(hasMap && !mapEditing) ? `
+          <div style="margin-bottom:10px;">
+            <iframe src="${escapeHtml(t.sectionMapUrls[s.key])}" width="100%" height="320" style="border:0;border-radius:6px;display:block;" loading="lazy"></iframe>
+            <button class="btn-ghost btn-sm sec-map-change" data-sheet="${escapeHtml(s.key)}" style="margin-top:6px;">Change</button>
+            <button class="btn-ghost btn-sm sec-map-remove" data-sheet="${escapeHtml(s.key)}" style="margin-top:6px;">Remove</button>
+          </div>` : `
+          <div style="margin-bottom:10px;display:flex;gap:8px;align-items:flex-start;">
+            <textarea rows="1" class="autogrow sec-map-input" data-sheet="${escapeHtml(s.key)}" placeholder="Paste a Google Maps/My Maps share or embed link (or the full embed code)" style="flex:1;">${mapEditing?escapeHtml(t.sectionMapUrls[s.key]):''}</textarea>
+            <button class="btn-primary btn-sm sec-map-save" data-sheet="${escapeHtml(s.key)}">${hasMap?'Save':'Add'}</button>
+            ${mapEditing ? `<button class="btn-ghost btn-sm sec-map-cancel" data-sheet="${escapeHtml(s.key)}">Cancel</button>` : ''}
+          </div>`}
+        </div>` : ''}
         ${items.length ? `
         <div class="table-scroll">
         <table class="exp-table research-table">
@@ -2333,6 +2358,42 @@
       if (collapsedSheets.has(key)) collapsedSheets.delete(key); else collapsedSheets.add(key);
       renderResearchList(t, content);
     }));
+    content.querySelectorAll('.sec-map-toggle').forEach(btn=> btn.addEventListener('click', ()=>{
+      const key = btn.dataset.sheet;
+      if (expandedSectionMaps.has(key)) expandedSectionMaps.delete(key); else expandedSectionMaps.add(key);
+      renderResearchList(t, content);
+    }));
+    content.querySelectorAll('.sec-map-change').forEach(btn=> btn.addEventListener('click', ()=>{
+      sectionMapEditMode.add(btn.dataset.sheet);
+      renderResearchList(t, content);
+    }));
+    content.querySelectorAll('.sec-map-cancel').forEach(btn=> btn.addEventListener('click', ()=>{
+      sectionMapEditMode.delete(btn.dataset.sheet);
+      renderResearchList(t, content);
+    }));
+    content.querySelectorAll('.sec-map-remove').forEach(btn=> btn.addEventListener('click', ()=>{
+      const key = btn.dataset.sheet;
+      delete t.sectionMapUrls[key];
+      t.updatedAt = Date.now();
+      logEvent('section-map-removed', `Removed the ${key} map for ${t.name}`);
+      saveState();
+      expandedSectionMaps.delete(key);
+      sectionMapEditMode.delete(key);
+      renderResearchList(t, content);
+    }));
+    content.querySelectorAll('.sec-map-save').forEach(btn=> btn.addEventListener('click', ()=>{
+      const key = btn.dataset.sheet;
+      const input = content.querySelector(`.sec-map-input[data-sheet="${CSS.escape(key)}"]`);
+      const url = extractMapEmbedUrl(input ? input.value : '');
+      if (!url){ showToast('Paste a map link or embed code first'); return; }
+      t.sectionMapUrls[key] = url;
+      t.updatedAt = Date.now();
+      logEvent('section-map-added', `Added a map for ${key} on ${t.name}`);
+      saveState();
+      sectionMapEditMode.delete(key);
+      renderResearchList(t, content);
+    }));
+    wireAutogrow(content, 'textarea.sec-map-input', { singleValue: true });
     content.querySelectorAll('.res-add').forEach(btn=> btn.addEventListener('click', ()=> openResearchItemModal(t, null, btn.dataset.sheet)));
     content.querySelectorAll('tr[data-id]').forEach(row=>{
       const id = row.dataset.id;
