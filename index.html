@@ -287,6 +287,8 @@
   #travel-ledger-root table.estimate-table .planned-estimate-row { background: rgba(213,203,172,.16); }
   #travel-ledger-root table.estimate-table .planned-estimate-row:hover { background: rgba(213,203,172,.30); }
   #travel-ledger-root .estimate-source { display: block; color: var(--ink-soft); font-family: var(--font-mono); font-size: 10px; letter-spacing: .3px; margin-top: 1px; }
+  #travel-ledger-root .estimate-reset { font-size: 11px; padding: 2px 5px; color: var(--ink-soft); border-color: var(--paper-edge); }
+  #travel-ledger-root .estimate-reset:hover { background: var(--paper); color: var(--ink); }
 
   #travel-ledger-root .notes-box { width: 100%; min-height: 70px; font-family: var(--font-body); font-size: 13px; padding: 10px; border: 1px solid var(--paper-edge); border-radius: 6px; background: var(--paper-raised); resize: vertical; }
 
@@ -553,8 +555,9 @@
   const STORAGE_KEY = 'trips-data';
   const HISTORY_KEY = 'trips-data-history';
   const MAX_HISTORY_DAYS = 14;
-  const APP_VERSION = '1.9.1';
+  const APP_VERSION = '1.10.0';
   const CHANGELOG = {
+    '1.10.0': 'Estimated Costs now uses the shared expense categories for planned and manual rows, supports Reset per planned row, updates row totals live while typing, and removes the stale duplicate Index.html entry point so index.html is canonical.',
     '1.9.1': 'Estimated Costs rows pulled from Plan are now fully editable inline (description, category, quantity, and unit cost), with quantity-aware totals. Normalized editable table hover/focus shading to the ledger paper palette and added a subtle source indicator for planned rows.',
     '1.9.0': 'GitHub Sync now has separate Push and Pull buttons in the header. Push writes the current browser data; Pull fetches the repository copy, asks before replacing local data, and keeps a local recovery point through Backup History. Automatic sync after edits remains available when enabled.',
     '1.8.4': 'Added a "Map" toggle to every section in the Research tab (Hotels, Restaurants, etc.) \u2014 each can have its own embedded Google Map, independent of the others and independent of the trip-level My Maps on the Budget tab. Paste a share link or full embed code; a brass-highlighted toggle shows which sections already have one set.',
@@ -881,7 +884,10 @@
       dayNumber: opts.dayNumber || null, dayNumberEnd: opts.dayNumberEnd || null,
       location: opts.location || '', links: opts.links || [], cost: opts.cost != null ? opts.cost : null,
       linkedExpenseId: opts.linkedExpenseId || null, notes: opts.notes || '',
-      visited: opts.visited || false, actualNotes: opts.actualNotes || '', actualRating: opts.actualRating || null
+      visited: opts.visited || false, actualNotes: opts.actualNotes || '', actualRating: opts.actualRating || null,
+      estimateQuantity: opts.estimateQuantity == null ? 1 : opts.estimateQuantity,
+      estimateCategory: opts.estimateCategory || null,
+      estimateOriginal: opts.estimateOriginal || null
     };
   }
   function packingItem(category, name, qty){
@@ -1234,6 +1240,8 @@
       t.planItems.forEach(i=>{
         if (i.estimateQuantity === undefined) i.estimateQuantity = 1;
         if (i.sheet === 'Activities / Sights') i.sheet = 'Activities';
+        if (!i.estimateCategory) i.estimateCategory = resolveExpenseCategory(SHEET_TO_CAT[i.sheet] || 'Other');
+        if (!i.estimateOriginal) i.estimateOriginal = { name: i.name, sheet: i.sheet, category: i.estimateCategory, quantity: i.estimateQuantity, cost: i.cost };
         if (!Array.isArray(i.links)){
           i.links = (i.link ? [mkLink('', i.link)] : []);
           delete i.link;
@@ -1647,12 +1655,12 @@
                 ${(estimatedItems.length || t.manualEstimates.length) ? `
                 ${estimatedItems.map(i=>`
                 <tr data-pid="${i.id}" class="planned-estimate-row">
-                  <td><textarea rows="1" class="pe-desc autogrow">${escapeHtml(i.name)}</textarea><span class="estimate-source">from Plan</span></td>
-                  <td><select class="pe-cat">${state.sheets.map(s=>`<option value="${escapeHtml(s.key)}" ${s.key===i.sheet?'selected':''}>${escapeHtml(s.key)}</option>`).join('')}</select></td>
+                  <td><textarea rows="1" class="pe-desc autogrow">${escapeHtml(i.name)}</textarea><span class="estimate-source">from Plan · ${escapeHtml(i.sheet)}</span></td>
+                  <td><select class="pe-cat">${state.categories.map(c=>`<option value="${escapeHtml(c.name)}" ${c.name===(i.estimateCategory||resolveExpenseCategory(SHEET_TO_CAT[i.sheet]||'Other'))?'selected':''}>${escapeHtml(c.name)}</option>`).join('')}</select></td>
                   <td class="num"><input type="number" class="pe-qty" value="${i.estimateQuantity == null ? 1 : i.estimateQuantity}" min="0" step="1" style="text-align:right"></td>
                   <td class="num"><input type="number" class="pe-unit" value="${Number(i.cost)||0}" min="0" step="0.01" style="text-align:right"></td>
-                  <td class="num">${fmt((Number(i.estimateQuantity == null ? 1 : i.estimateQuantity)||0)*(Number(i.cost)||0))}</td>
-                  <td></td>
+                  <td class="num estimate-row-total">${fmt((Number(i.estimateQuantity == null ? 1 : i.estimateQuantity)||0)*(Number(i.cost)||0))}</td>
+                  <td><button class="btn-ghost estimate-reset" data-reset-estimate="${i.id}" title="Reset this row to its Plan values">Reset</button></td>
                 </tr>`).join('')}
                 ${t.manualEstimates.map(m=>`
                 <tr data-mid="${m.id}">
@@ -1660,15 +1668,15 @@
                   <td><select class="me-cat">${state.categories.map(c=>`<option value="${escapeHtml(c.name)}" ${c.name===m.category?'selected':''}>${escapeHtml(c.name)}</option>`).join('')}</select></td>
                   <td class="num"><input type="number" class="me-qty" value="${m.quantity}" min="0" step="1" style="text-align:right"></td>
                   <td class="num"><input type="number" class="me-unit" value="${m.unitCost}" min="0" step="0.01" style="text-align:right"></td>
-                  <td class="num">${fmt((Number(m.quantity)||0)*(Number(m.unitCost)||0))}</td>
+                  <td class="num estimate-row-total">${fmt((Number(m.quantity)||0)*(Number(m.unitCost)||0))}</td>
                   <td><button class="exp-del me-del" aria-label="Delete estimate" title="Delete">\u2715</button></td>
                 </tr>`).join('')}
                 ` : `<tr><td colspan="6" class="empty-state">No estimated costs yet.</td></tr>`}
               </tbody>
-              <tfoot><tr class="exp-foot"><td colspan="4">Total Estimated</td><td class="num">${fmt(totalEstimated)}</td><td></td></tr></tfoot>
+              <tfoot><tr class="exp-foot"><td colspan="4">Total Estimated</td><td class="num" id="estimatedTotalValue">${fmt(totalEstimated)}</td><td></td></tr></tfoot>
             </table>
             </div>
-            <p style="font-size:11.5px;color:var(--ink-soft);margin:10px 0 0;">Actual spend so far: <strong style="color:var(--ink);">${fmt(spent)}</strong> \u2014 ${spent>totalEstimated ? `<span style="color:var(--red);">${fmt(spent-totalEstimated)} over estimate</span>` : `<span style="color:var(--green);">${fmt(totalEstimated-spent)} under estimate</span>`}</p>
+            <p id="estimateComparison" style="font-size:11.5px;color:var(--ink-soft);margin:10px 0 0;">Actual spend so far: <strong style="color:var(--ink);">${fmt(spent)}</strong> \u2014 ${spent>totalEstimated ? `<span style="color:var(--red);">${fmt(spent-totalEstimated)} over estimate</span>` : `<span style="color:var(--green);">${fmt(totalEstimated-spent)} under estimate</span>`}</p>
             <div class="toolbar" style="margin-top:10px;margin-bottom:0;"><button class="btn-primary" id="addEstimateBtn">+ Add Estimate</button></div>
           </div>
 
@@ -1748,9 +1756,12 @@
       const item = t.planItems.find(x=>x.id===pid);
       if (!item) return;
       row.querySelector('.pe-desc').addEventListener('change', ev=>{ item.name = singleLine(ev.target.value) || item.name; commitEstimate(t); });
-      row.querySelector('.pe-cat').addEventListener('change', ev=>{ item.sheet = ev.target.value; commitEstimate(t); });
+      row.querySelector('.pe-cat').addEventListener('change', ev=>{ item.estimateCategory = ev.target.value; commitEstimate(t); });
       row.querySelector('.pe-qty').addEventListener('change', ev=>{ item.estimateQuantity = Math.max(0, Number(ev.target.value)||0); commitEstimate(t); });
       row.querySelector('.pe-unit').addEventListener('change', ev=>{ item.cost = Math.max(0, Number(ev.target.value)||0); commitEstimate(t); });
+      row.querySelector('.pe-qty').addEventListener('input', ev=>{ item.estimateQuantity = Math.max(0, Number(ev.target.value)||0); refreshEstimateTotals(t); });
+      row.querySelector('.pe-unit').addEventListener('input', ev=>{ item.cost = Math.max(0, Number(ev.target.value)||0); refreshEstimateTotals(t); });
+      row.querySelector('.estimate-reset').addEventListener('click', ()=> resetPlannedEstimate(t, item));
     });
     document.querySelectorAll('tr[data-mid]').forEach(row=>{
       const mid = row.dataset.mid;
@@ -1760,6 +1771,8 @@
       row.querySelector('.me-cat').addEventListener('change', ev=>{ m.category = ev.target.value; commitEstimate(t); });
       row.querySelector('.me-qty').addEventListener('change', ev=>{ m.quantity = Math.max(0, Number(ev.target.value)||0); commitEstimate(t); });
       row.querySelector('.me-unit').addEventListener('change', ev=>{ m.unitCost = Math.max(0, Number(ev.target.value)||0); commitEstimate(t); });
+      row.querySelector('.me-qty').addEventListener('input', ev=>{ m.quantity = Math.max(0, Number(ev.target.value)||0); refreshEstimateTotals(t); });
+      row.querySelector('.me-unit').addEventListener('input', ev=>{ m.unitCost = Math.max(0, Number(ev.target.value)||0); refreshEstimateTotals(t); });
       row.querySelector('.me-del').addEventListener('click', ()=>{
         t.manualEstimates = t.manualEstimates.filter(x=>x.id!==mid);
         t.updatedAt = Date.now();
@@ -1815,6 +1828,34 @@
   }
   function commitExpense(t){ t.updatedAt = Date.now(); saveState(); renderTripView(); }
   function commitEstimate(t){ t.updatedAt = Date.now(); saveState(); renderTripView(); }
+  function calculateEstimatedTotal(t){
+    return t.planItems.filter(i=>i.cost!=null).reduce((sum,i)=> sum + (Number(i.estimateQuantity == null ? 1 : i.estimateQuantity)||0)*(Number(i.cost)||0), 0)
+      + t.manualEstimates.reduce((sum,m)=> sum + (Number(m.quantity)||0)*(Number(m.unitCost)||0), 0);
+  }
+  function refreshEstimateTotals(t){
+    const total = calculateEstimatedTotal(t);
+    const totalEl = document.getElementById('estimatedTotalValue');
+    const comparisonEl = document.getElementById('estimateComparison');
+    if (totalEl) totalEl.textContent = fmt(total);
+    if (comparisonEl){
+      const spent = tripTotal(t);
+      comparisonEl.innerHTML = `Actual spend so far: <strong style="color:var(--ink);">${fmt(spent)}</strong> \u2014 ${spent>total ? `<span style="color:var(--red);">${fmt(spent-total)} over estimate</span>` : `<span style="color:var(--green);">${fmt(total-spent)} under estimate</span>`}`;
+    }
+    document.querySelectorAll('tr[data-pid], tr[data-mid]').forEach(row=>{
+      const totalCell = row.querySelector('.estimate-row-total');
+      if (!totalCell) return;
+      const qty = row.dataset.pid ? row.querySelector('.pe-qty') : row.querySelector('.me-qty');
+      const unit = row.dataset.pid ? row.querySelector('.pe-unit') : row.querySelector('.me-unit');
+      totalCell.textContent = fmt((Number(qty&&qty.value)||0)*(Number(unit&&unit.value)||0));
+    });
+  }
+  function resetPlannedEstimate(t, item){
+    const original = item.estimateOriginal || { name: item.name, sheet: item.sheet, category: resolveExpenseCategory(SHEET_TO_CAT[item.sheet]||'Other'), quantity: 1, cost: item.cost };
+    item.name = original.name; item.sheet = original.sheet; item.estimateCategory = original.category || resolveExpenseCategory(SHEET_TO_CAT[item.sheet]||'Other');
+    item.estimateQuantity = original.quantity == null ? 1 : original.quantity; item.cost = original.cost;
+    logEvent('estimate-reset', `Reset estimated cost "${item.name}" on ${t.name}`);
+    commitEstimate(t);
+  }
 
   /* ---------------- Plan tab (sheets + gantt) ---------------- */
   function formatWhen(t, item){
@@ -2285,6 +2326,9 @@
 
       const item = isEdit ? existing : planItem(sheet, name, {});
       Object.assign(item, { sheet, status, name, date, endDate, time, dayNumber, dayNumberEnd, location, links, cost, notes });
+      item.estimateCategory = item.estimateCategory || resolveExpenseCategory(SHEET_TO_CAT[sheet] || 'Other');
+      item.estimateQuantity = item.estimateQuantity == null ? 1 : item.estimateQuantity;
+      item.estimateOriginal = { name, sheet, category: item.estimateCategory, quantity: item.estimateQuantity, cost };
 
       // sync linked expense
       if (wantLink && cost != null && cost > 0){
