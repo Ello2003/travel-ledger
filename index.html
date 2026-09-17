@@ -72,6 +72,13 @@
   }
   #travel-ledger-root .sync-flag.error { color: var(--red); }
   #travel-ledger-root .sync-flag.syncing { color: var(--brass); }
+  #travel-ledger-root .sync-actions { display: inline-flex; gap: 6px; margin-top: 4px; }
+  #travel-ledger-root .sync-action-btn {
+    font-family: var(--font-mono); font-size: 10px; letter-spacing: .35px; padding: 4px 8px;
+    border: 1px solid var(--paper-edge); background: var(--paper-raised); color: var(--ink-soft); border-radius: 4px; cursor: pointer;
+  }
+  #travel-ledger-root .sync-action-btn:hover:not(:disabled) { background: var(--paper); color: var(--ink); border-color: var(--ink-soft); }
+  #travel-ledger-root .sync-action-btn:disabled { opacity: .45; cursor: wait; }
   #travel-ledger-root .storage-warning {
     display: none; align-items: center; gap: 10px; background: #f3e0b8; border: 1px solid var(--brass);
     color: var(--ink); border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12.5px; line-height: 1.5;
@@ -438,8 +445,12 @@
           <button class="undo-redo-btn" id="redoBtn" disabled title="Redo (Ctrl+Shift+Z)">Redo &#x21b7;</button>
         </div>
         <div class="version-badge" id="versionBadge"></div>
-        <div class="save-flag" id="saveFlag">&#x25cf; saved</div>
-        <div class="sync-flag" id="syncFlag" hidden></div>
+            <div class="save-flag" id="saveFlag">&#x25cf; saved</div>
+            <div class="sync-flag" id="syncFlag" hidden></div>
+            <div class="sync-actions" id="syncActions" hidden>
+              <button class="sync-action-btn" id="githubPushBtn" title="Write this browser's ledger to GitHub">&#x2191; Push</button>
+              <button class="sync-action-btn" id="githubPullBtn" title="Replace this browser's ledger with the GitHub copy">&#x2193; Pull</button>
+            </div>
       </div>
     </div>
 
@@ -538,8 +549,9 @@
   const STORAGE_KEY = 'trips-data';
   const HISTORY_KEY = 'trips-data-history';
   const MAX_HISTORY_DAYS = 14;
-  const APP_VERSION = '1.8.4';
+  const APP_VERSION = '1.9.0';
   const CHANGELOG = {
+    '1.9.0': 'GitHub Sync now has separate Push and Pull buttons in the header. Push writes the current browser data; Pull fetches the repository copy, asks before replacing local data, and keeps a local recovery point through Backup History. Automatic sync after edits remains available when enabled.',
     '1.8.4': 'Added a "Map" toggle to every section in the Research tab (Hotels, Restaurants, etc.) \u2014 each can have its own embedded Google Map, independent of the others and independent of the trip-level My Maps on the Budget tab. Paste a share link or full embed code; a brass-highlighted toggle shows which sections already have one set.',
     '1.8.3': 'Added per-edit Undo/Redo (buttons in the header, or Ctrl+Z / Ctrl+Shift+Z) covering the last 40 changes this session \u2014 separate from the daily Backup History, this is for undoing your last few actions rather than rolling back to an earlier day. Doesn\u2019t interfere with normal text-field undo while typing.',
     '1.8.2': 'Added automatic rolling backup history \u2014 a snapshot of your data is saved once per day (last 14 days kept), viewable and restorable from the new "Backup History" footer link, no file needed. Restoring moves your current data to Trash first so nothing is ever truly lost. Also fixed two things found while building this: manually-exported JSON backups were including your GitHub Sync token in plain text \u2014 they no longer include settings at all; and Plan/Research categories (sheets) weren\u2019t part of GitHub Sync or manual backups, so custom categories and their order could silently not travel between devices \u2014 now they do.',
@@ -584,6 +596,9 @@
   const modalRoot = document.getElementById('modalRoot');
   const saveFlag = document.getElementById('saveFlag');
   const syncFlag = document.getElementById('syncFlag');
+  const syncActions = document.getElementById('syncActions');
+  const githubPushBtn = document.getElementById('githubPushBtn');
+  const githubPullBtn = document.getElementById('githubPullBtn');
   const toastEl = document.getElementById('toast');
 
   let state = { categories: [], sheets: [], trips: [], trash: { trips: [], expenses: [] }, activityLog: [], settings: defaultSettings() };
@@ -755,6 +770,7 @@
   function tripTimelineMode(t){ return t.timelineMode || (t.startDate ? 'dates' : 'days'); }
 
   let uidCounter = 0;
+  let suppressGithubSyncOnce = false;
   function uid(prefix){ uidCounter += 1; return prefix + '_' + Date.now().toString(36) + '_' + uidCounter.toString(36) + '_' + Math.random().toString(36).slice(2,7); }
 
   function defaultCategories(){
@@ -1008,6 +1024,9 @@
     syncFlag.textContent = text;
     syncFlag.className = 'sync-flag' + (kind ? ' ' + kind : '');
   }
+  function updateGithubControls(){
+    if (syncActions) syncActions.hidden = !githubConfigured();
+  }
   function formatSyncTime(ts){
     if (!ts) return 'never';
     return new Date(ts).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
@@ -1098,6 +1117,47 @@
         : '\u2601 pull failed \u2014 using local data';
       setSyncStatus('error', msg);
     }
+  }
+  async function githubPushNow(statusEl){
+    if (!githubConfigured()) throw new Error('github-not-configured');
+    setSyncStatus('syncing', '\u2601 pushing\u2026');
+    if (statusEl) statusEl.textContent = 'Pushing this browser\'s data\u2026';
+    await githubPushRemote(false);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    setSyncStatus('', `\u2601 pushed ${formatSyncTime(state.settings.githubLastSyncAt)}`);
+    if (statusEl) statusEl.textContent = `Pushed just now (${formatSyncTime(state.settings.githubLastSyncAt)})`;
+  }
+  async function githubPullNow(statusEl){
+    if (!githubConfigured()) throw new Error('github-not-configured');
+    setSyncStatus('syncing', '\u2601 checking GitHub\u2026');
+    if (statusEl) statusEl.textContent = 'Checking GitHub for the latest copy\u2026';
+    const remote = await githubFetchRemote();
+    if (!remote.exists || !remote.json) throw new Error('github-no-remote');
+    if (!Array.isArray(remote.json.trips)) throw new Error('github-bad-content');
+    const tripCount = remote.json.trips.length;
+    if (!confirm(`Pull ${tripCount} trip(s) from GitHub? Your current browser data will be saved in Backup History first, then replaced.`)){
+      setSyncStatus('', '\u2601 pull cancelled');
+      if (statusEl) statusEl.textContent = 'Pull cancelled.';
+      return false;
+    }
+    snapshotHistory();
+    state.categories = remote.json.categories || state.categories;
+    state.sheets = remote.json.sheets || state.sheets;
+    state.trips = remote.json.trips;
+    state.trash = remote.json.trash || state.trash;
+    state.activityLog = remote.json.activityLog || state.activityLog;
+    state.settings.githubSha = remote.sha;
+    state.settings.githubLastSyncAt = Date.now();
+    migrate();
+    suppressGithubSyncOnce = true;
+    await saveState();
+    lastSavedSnapshot = JSON.stringify(syncableData());
+    if (activeTripId && !state.trips.some(t=>t.id===activeTripId)) closeTrip();
+    renderAll();
+    if (activeTripId) renderTripView();
+    setSyncStatus('', `\u2601 pulled ${formatSyncTime(state.settings.githubLastSyncAt)}`);
+    if (statusEl) statusEl.textContent = `Pulled ${tripCount} trip(s) just now.`;
+    return true;
   }
   async function loadState(){
     showStorageWarning(!storageWritesReliably());
@@ -1218,7 +1278,8 @@
       updateUndoRedoUI();
       showStorageWarning(false);
       flashSaved();
-      scheduleGithubSync();
+      if (suppressGithubSyncOnce) suppressGithubSyncOnce = false;
+      else scheduleGithubSync();
       snapshotHistory();
     }
     catch(e) { console.error('Storage error', e); showStorageWarning(true); showToast('Could not save \u2014 storage full or unavailable'); }
@@ -2500,23 +2561,30 @@
           </p>
           <div class="modal-actions">
             <button class="btn-ghost" id="gh-cancel">Cancel</button>
-            <button class="btn-ghost" id="gh-sync-now">Sync Now</button>
+            <button class="btn-ghost" id="gh-push-now">Push Now</button>
+            <button class="btn-ghost" id="gh-pull-now">Pull Now</button>
             <button class="btn-primary" id="gh-save">Save</button>
           </div>
         </div>
       </div>`;
     document.getElementById('gh-cancel').addEventListener('click', closeModal);
-    document.getElementById('gh-sync-now').addEventListener('click', async ()=>{
+    document.getElementById('gh-push-now').addEventListener('click', async ()=>{
       const statusEl = document.getElementById('gh-status');
-      statusEl.textContent = 'Syncing\u2026';
+      statusEl.textContent = 'Pushing\u2026';
       try {
         if (!githubConfigured()){ statusEl.textContent = 'Fill in and save the fields above first.'; return; }
-        await githubPushRemote(false);
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-        statusEl.textContent = `Synced just now (${formatSyncTime(state.settings.githubLastSyncAt)})`;
-        setSyncStatus('', `\u2601 synced ${formatSyncTime(state.settings.githubLastSyncAt)}`);
+        await githubPushNow(statusEl);
       } catch(err){
-        statusEl.textContent = err.message === 'github-auth-failed' ? 'Sync failed: check your token and permissions.' : 'Sync failed \u2014 check repo/path/branch are correct.';
+        statusEl.textContent = err.message === 'github-auth-failed' ? 'Push failed: check your token and permissions.' : 'Push failed \u2014 check repo/path/branch are correct.';
+      }
+    });
+    document.getElementById('gh-pull-now').addEventListener('click', async ()=>{
+      const statusEl = document.getElementById('gh-status');
+      try {
+        if (!githubConfigured()){ statusEl.textContent = 'Fill in and save the fields above first.'; return; }
+        await githubPullNow(statusEl);
+      } catch(err){
+        statusEl.textContent = err.message === 'github-auth-failed' ? 'Pull failed: check your token and permissions.' : err.message === 'github-no-remote' ? 'No data file exists in that GitHub path yet.' : 'Pull failed \u2014 check repo/path/branch are correct.';
       }
     });
     document.getElementById('gh-save').addEventListener('click', async ()=>{
@@ -2538,6 +2606,7 @@
         showToast('Saved');
         syncFlag.hidden = true;
       }
+      updateGithubControls();
     });
   }
 
@@ -3308,6 +3377,26 @@
   document.getElementById('activityLogBtn').addEventListener('click', openActivityLogModal);
   document.getElementById('trashBtn').addEventListener('click', openTrashModal);
   document.getElementById('githubSyncBtn').addEventListener('click', openGithubSyncModal);
+  if (githubPushBtn) githubPushBtn.addEventListener('click', async ()=>{
+    githubPushBtn.disabled = true; githubPullBtn.disabled = true;
+    try { await githubPushNow(); showToast('Pushed to GitHub'); }
+    catch(err){
+      setSyncStatus('error', err.message === 'github-auth-failed' ? '\u2601 push failed: check token' : '\u2601 push failed: check repo/path/branch');
+      showToast('Push failed');
+    }
+    finally { githubPushBtn.disabled = false; githubPullBtn.disabled = false; }
+  });
+  if (githubPullBtn) githubPullBtn.addEventListener('click', async ()=>{
+    githubPushBtn.disabled = true; githubPullBtn.disabled = true;
+    try {
+      const pulled = await githubPullNow();
+      if (pulled) showToast('Pulled from GitHub');
+    } catch(err){
+      const text = err.message === 'github-auth-failed' ? '\u2601 pull failed: check token' : err.message === 'github-no-remote' ? '\u2601 no remote data file' : '\u2601 pull failed: check repo/path/branch';
+      setSyncStatus('error', text); showToast('Pull failed');
+    }
+    finally { githubPushBtn.disabled = false; githubPullBtn.disabled = false; }
+  });
   document.getElementById('backupHistoryBtn').addEventListener('click', openBackupHistoryModal);
   document.getElementById('exportBtn').addEventListener('click', exportBackup);
   const storageWarningExportBtn = document.getElementById('storageWarningExport');
@@ -3355,6 +3444,7 @@
 
   loadState().then(()=>{
     lastSavedSnapshot = JSON.stringify(syncableData());
+    updateGithubControls();
     updateUndoRedoUI();
     renderAll();
   });
