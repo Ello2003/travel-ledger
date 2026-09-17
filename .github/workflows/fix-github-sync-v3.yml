@@ -1,0 +1,59 @@
+name: Fix Travel Ledger GitHub sync v3
+on: push
+permissions:
+  contents: write
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch index
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          p = Path('index.html')
+          t = p.read_text(encoding='utf-8')
+          t = re.sub(r'<script id="travel-ledger-sync-transport-fix">.*?</script>\s*', '', t, count=1, flags=re.S)
+          start = t.find('  async function githubPushRemote(retrying){')
+          end = t.find('  let githubSyncTimer = null;', start)
+          if start < 0 or end < 0:
+              raise SystemExit('githubPushRemote block not found')
+          new = '''  async function githubPushRemote(retrying){
+    const s = state.settings;
+    const payload = JSON.stringify(syncableData());
+    const remote = await githubFetchRemote();
+    const body = {
+      message: `Travel Ledger sync — ${new Date().toISOString()}`,
+      content: utf8ToBase64(payload),
+      branch: s.githubBranch || 'main'
+    };
+    if (remote.exists && remote.sha) body.sha = remote.sha;
+    const res = await fetch(githubApiUrl(), {
+      method: 'PUT',
+      headers: { 'Authorization': `token ${s.githubToken}`, 'Accept': 'application/vnd.github+json', 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    if (res.status === 409 && !retrying) return githubPushRemote(true);
+    if (res.status === 401 || res.status === 403) throw new Error('github-auth-failed');
+    if (!res.ok){
+      const errBody = await res.json().catch(()=>({}));
+      throw new Error('github-push-failed:'+res.status+(errBody.message?':'+errBody.message:''));
+    }
+    const data = await res.json();
+    if (!data || !data.content || !data.content.sha) throw new Error('github-push-invalid-response');
+    s.githubSha = data.content.sha;
+    s.githubLastSyncAt = Date.now();
+  }
+'''
+          p.write_text(t[:start] + new + t[end:], encoding='utf-8')
+          PY
+      - name: Commit and remove patch workflow
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add index.html
+          git rm .github/workflows/fix-github-sync-v2.yml .github/workflows/fix-github-sync-v3.yml
+          git commit -m "fix: make Travel Ledger GitHub pushes SHA-safe"
+          git push origin main
