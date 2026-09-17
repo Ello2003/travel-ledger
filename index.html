@@ -284,6 +284,9 @@
   #travel-ledger-root table.estimate-table col.col-actual { width: 16%; }
   #travel-ledger-root table.estimate-table col.col-actions { width: 6%; }
   #travel-ledger-root table.budget-exp-table select.exp-cat { width: 100%; max-width: 100%; font-size: 12px; }
+  #travel-ledger-root table.estimate-table .planned-estimate-row { background: rgba(213,203,172,.16); }
+  #travel-ledger-root table.estimate-table .planned-estimate-row:hover { background: rgba(213,203,172,.30); }
+  #travel-ledger-root .estimate-source { display: block; color: var(--ink-soft); font-family: var(--font-mono); font-size: 10px; letter-spacing: .3px; margin-top: 1px; }
 
   #travel-ledger-root .notes-box { width: 100%; min-height: 70px; font-family: var(--font-body); font-size: 13px; padding: 10px; border: 1px solid var(--paper-edge); border-radius: 6px; background: var(--paper-raised); resize: vertical; }
 
@@ -305,11 +308,12 @@
     width: 100%; border: 1px solid transparent; background: transparent; font: inherit; padding: 4px 2px;
     resize: vertical; overflow: hidden; min-height: 20px; line-height: 1.4;
   }
+  #travel-ledger-root table.exp-table textarea.autogrow:hover,
   #travel-ledger-root table.exp-table textarea.autogrow:focus,
   #travel-ledger-root table.plan-table textarea.autogrow:focus,
   #travel-ledger-root table.packing-table textarea.autogrow:focus,
   #travel-ledger-root .cat-row textarea.autogrow:focus {
-    border-color: var(--paper-edge); background: #fff; outline: none;
+    border-color: var(--paper-edge); background: var(--paper-raised); outline: none;
   }
   #travel-ledger-root .modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; }
   #travel-ledger-root .link-row { display: flex; gap: 6px; align-items: flex-start; margin-bottom: 6px; }
@@ -549,8 +553,9 @@
   const STORAGE_KEY = 'trips-data';
   const HISTORY_KEY = 'trips-data-history';
   const MAX_HISTORY_DAYS = 14;
-  const APP_VERSION = '1.9.0';
+  const APP_VERSION = '1.9.1';
   const CHANGELOG = {
+    '1.9.1': 'Estimated Costs rows pulled from Plan are now fully editable inline (description, category, quantity, and unit cost), with quantity-aware totals. Normalized editable table hover/focus shading to the ledger paper palette and added a subtle source indicator for planned rows.',
     '1.9.0': 'GitHub Sync now has separate Push and Pull buttons in the header. Push writes the current browser data; Pull fetches the repository copy, asks before replacing local data, and keeps a local recovery point through Backup History. Automatic sync after edits remains available when enabled.',
     '1.8.4': 'Added a "Map" toggle to every section in the Research tab (Hotels, Restaurants, etc.) \u2014 each can have its own embedded Google Map, independent of the others and independent of the trip-level My Maps on the Budget tab. Paste a share link or full embed code; a brass-highlighted toggle shows which sections already have one set.',
     '1.8.3': 'Added per-edit Undo/Redo (buttons in the header, or Ctrl+Z / Ctrl+Shift+Z) covering the last 40 changes this session \u2014 separate from the daily Backup History, this is for undoing your last few actions rather than rolling back to an earlier day. Doesn\u2019t interfere with normal text-field undo while typing.',
@@ -1227,6 +1232,7 @@
         if (guess){ t.country = guess; t.countryGuessed = true; guessedCount++; }
       }
       t.planItems.forEach(i=>{
+        if (i.estimateQuantity === undefined) i.estimateQuantity = 1;
         if (i.sheet === 'Activities / Sights') i.sheet = 'Activities';
         if (!Array.isArray(i.links)){
           i.links = (i.link ? [mkLink('', i.link)] : []);
@@ -1573,7 +1579,7 @@
     if (!t) { closeTrip(); return; }
     const spent = tripTotal(t), budgetSpent = budgetCountedTotal(t), budget = Number(t.budget||0), diff = budget - budgetSpent;
     const estimatedItems = t.planItems.filter(i=>i.cost!=null).sort((a,b)=> state.sheets.findIndex(s=>s.key===a.sheet) - state.sheets.findIndex(s=>s.key===b.sheet));
-    const totalEstimated = estimatedItems.reduce((s,i)=> s + (Number(i.cost)||0), 0) + t.manualEstimates.reduce((s,m)=> s + (Number(m.quantity)||0)*(Number(m.unitCost)||0), 0);
+    const totalEstimated = estimatedItems.reduce((s,i)=> s + (Number(i.estimateQuantity == null ? 1 : i.estimateQuantity)||0)*(Number(i.cost)||0), 0) + t.manualEstimates.reduce((s,m)=> s + (Number(m.quantity)||0)*(Number(m.unitCost)||0), 0);
     const catTotals = tripCategoryTotals(t);
     const activeCats = state.categories.map(c=>c.name).filter(c=>catTotals[c]>0);
     let cumPct = 0; const stops = [];
@@ -1639,7 +1645,15 @@
               <thead><tr><th>Description</th><th>Category</th><th>Qty</th><th>Unit Cost</th><th>Estimated</th><th></th></tr></thead>
               <tbody>
                 ${(estimatedItems.length || t.manualEstimates.length) ? `
-                ${estimatedItems.map(i=>`<tr><td>${escapeHtml(i.name)}<span style="color:var(--ink-soft);font-size:10px;"> (from Plan)</span></td><td>${escapeHtml(i.sheet)}</td><td class="num">1</td><td class="num">${fmt(i.cost)}</td><td class="num">${fmt(i.cost)}</td><td></td></tr>`).join('')}
+                ${estimatedItems.map(i=>`
+                <tr data-pid="${i.id}" class="planned-estimate-row">
+                  <td><textarea rows="1" class="pe-desc autogrow">${escapeHtml(i.name)}</textarea><span class="estimate-source">from Plan</span></td>
+                  <td><select class="pe-cat">${state.sheets.map(s=>`<option value="${escapeHtml(s.key)}" ${s.key===i.sheet?'selected':''}>${escapeHtml(s.key)}</option>`).join('')}</select></td>
+                  <td class="num"><input type="number" class="pe-qty" value="${i.estimateQuantity == null ? 1 : i.estimateQuantity}" min="0" step="1" style="text-align:right"></td>
+                  <td class="num"><input type="number" class="pe-unit" value="${Number(i.cost)||0}" min="0" step="0.01" style="text-align:right"></td>
+                  <td class="num">${fmt((Number(i.estimateQuantity == null ? 1 : i.estimateQuantity)||0)*(Number(i.cost)||0))}</td>
+                  <td></td>
+                </tr>`).join('')}
                 ${t.manualEstimates.map(m=>`
                 <tr data-mid="${m.id}">
                   <td><textarea rows="1" class="me-desc autogrow">${escapeHtml(m.description)}</textarea></td>
@@ -1729,6 +1743,15 @@
     document.getElementById('deleteTripBtn').addEventListener('click', ()=> deleteTrip(t));
     document.getElementById('addExpBtn').addEventListener('click', ()=> openExpenseModal(t));
     document.getElementById('addEstimateBtn').addEventListener('click', ()=> openAddEstimateModal(t));
+    document.querySelectorAll('tr[data-pid]').forEach(row=>{
+      const pid = row.dataset.pid;
+      const item = t.planItems.find(x=>x.id===pid);
+      if (!item) return;
+      row.querySelector('.pe-desc').addEventListener('change', ev=>{ item.name = singleLine(ev.target.value) || item.name; commitEstimate(t); });
+      row.querySelector('.pe-cat').addEventListener('change', ev=>{ item.sheet = ev.target.value; commitEstimate(t); });
+      row.querySelector('.pe-qty').addEventListener('change', ev=>{ item.estimateQuantity = Math.max(0, Number(ev.target.value)||0); commitEstimate(t); });
+      row.querySelector('.pe-unit').addEventListener('change', ev=>{ item.cost = Math.max(0, Number(ev.target.value)||0); commitEstimate(t); });
+    });
     document.querySelectorAll('tr[data-mid]').forEach(row=>{
       const mid = row.dataset.mid;
       const m = t.manualEstimates.find(x=>x.id===mid);
@@ -1744,6 +1767,7 @@
         saveState(); renderTripView();
       });
     });
+    wireAutogrow(document, 'textarea.pe-desc', { singleValue: true });
     wireAutogrow(document, 'textarea.me-desc', { singleValue: true });
     document.getElementById('notesBox').addEventListener('change', (e)=>{ t.notes = e.target.value; t.updatedAt = Date.now(); saveState(); });
     tripView.querySelectorAll('.tab-btn').forEach(btn=> btn.addEventListener('click', ()=>{ activeTripTab = btn.dataset.tab; renderTripView(); }));
