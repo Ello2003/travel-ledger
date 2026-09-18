@@ -1,94 +1,5 @@
 <meta charset="UTF-8">
-<script id="travel-ledger-sync-transport-fix">
-(() => {
-  // The UI stores a GitHub Contents API blob SHA locally. A fresh browser/device
-  // can have no cached SHA even though data.json already exists remotely; GitHub
-  // then rejects the PUT. This transport layer resolves that race transparently.
-  const originalFetch = window.fetch.bind(window);
-  let pushQueue = Promise.resolve();
 
-  const isDataFilePut = (input, init) => {
-    const method = String((init && init.method) || (input && input.method) || 'GET').toUpperCase();
-    if (method !== 'PUT') return false;
-    const url = typeof input === 'string' ? input : (input && input.url) || '';
-    return /\/contents\/data\.json(?:[?#]|$)/i.test(url) && /api\.github\.com/i.test(url);
-  };
-
-  const cloneHeaders = (input, init) => {
-    const source = (init && init.headers) || (input && input.headers) || {};
-    return new Headers(source);
-  };
-
-  const readBody = async (input, init) => {
-    if (init && Object.prototype.hasOwnProperty.call(init, 'body')) return init.body;
-    if (input && typeof input.clone === 'function') return input.clone().text();
-    return undefined;
-  };
-
-  const parseJsonBody = async (body) => {
-    if (body == null || body === '') return null;
-    if (typeof body !== 'string') return null;
-    try { return JSON.parse(body); } catch (_) { return null; }
-  };
-
-  const buildRequest = (input, init, body) => {
-    const next = Object.assign({}, init || {});
-    next.method = 'PUT';
-    next.body = JSON.stringify(body);
-    next.headers = cloneHeaders(input, init);
-    return [typeof input === 'string' ? input : input.url, next];
-  };
-
-  const getRemoteSha = async (url, headers) => {
-    const response = await originalFetch(url, { method: 'GET', headers });
-    if (!response.ok) {
-      let detail = '';
-      try { detail = await response.text(); } catch (_) {}
-      throw new Error(`GitHub sync metadata failed (${response.status})${detail ? `: ${detail.slice(0, 180)}` : ''}`);
-    }
-    const meta = await response.json();
-    if (!meta || !meta.sha) throw new Error('GitHub sync metadata did not contain a file SHA.');
-    return meta.sha;
-  };
-
-  const doPut = async (input, init) => {
-    const url = typeof input === 'string' ? input : input.url;
-    const originalBody = await readBody(input, init);
-    const payload = await parseJsonBody(originalBody);
-    if (!payload || typeof payload !== 'object') {
-      return originalFetch(input, init);
-    }
-
-    const headers = cloneHeaders(input, init);
-    headers.set('Accept', 'application/vnd.github+json');
-
-    // Always obtain a current SHA when the caller does not have one.
-    if (!payload.sha) {
-      payload.sha = await getRemoteSha(url, headers);
-    }
-
-    let [requestInput, requestInit] = buildRequest(input, Object.assign({}, init, { headers }), payload);
-    let response = await originalFetch(requestInput, requestInit);
-
-    // A cached SHA can become stale if another browser/device pushes first.
-    // Refresh once and retry so a normal concurrent edit does not become a hard error.
-    if (response.status === 409) {
-      const freshSha = await getRemoteSha(url, headers);
-      payload.sha = freshSha;
-      [requestInput, requestInit] = buildRequest(input, Object.assign({}, init, { headers }), payload);
-      response = await originalFetch(requestInput, requestInit);
-    }
-
-    return response;
-  };
-
-  window.fetch = function(input, init) {
-    if (!isDataFilePut(input, init)) return originalFetch(input, init);
-    pushQueue = pushQueue.catch(() => {}).then(() => doPut(input, init));
-    return pushQueue;
-  };
-})();
-</script>
 
 <title>Travel Dashboard</title>
 <style>
@@ -1139,39 +1050,60 @@
       headers: { 'Authorization': `token ${s.githubToken}`, 'Accept': 'application/vnd.github+json' }
     });
     if (res.status === 404) return { exists:false, json:null, sha:null };
-    if (res.status === 401 || res.status === 403) throw new Error('github-auth-failed');
-    if (!res.ok) throw new Error('github-fetch-failed:'+res.status);
+    if (res.status === 401) throw new Error('github-auth-failed');
+    if (res.status === 403) {
+      const remaining = res.headers.get('x-ratelimit-remaining');
+      throw new Error(remaining === '0' ? 'github-rate-limited' : 'github-permission-denied');
+    }
+    if (!res.ok) throw await githubApiError('pull', res);
     const data = await res.json();
     let json = null;
     try { json = JSON.parse(base64ToUtf8(data.content)); } catch(e) { throw new Error('github-bad-content'); }
     return { exists:true, json, sha: data.sha };
   }
+  async function githubApiError(action, res){
+    let message = '';
+    try { const body = await res.json(); message = body && body.message ? body.message : ''; } catch(e) {}
+    const detail = message ? `: ${message}` : '';
+    if (res.status === 404) return new Error(`github-not-found:${action}`);
+    if (res.status === 409) return new Error('github-conflict');
+    if (res.status === 422) return new Error(`github-validation${detail}`);
+    if (res.status === 429) return new Error('github-rate-limited');
+    if (res.status >= 500) return new Error(`github-server-error:${res.status}`);
+    return new Error(`github-request-failed:${res.status}${detail}`);
+  }
   async function githubPushRemote(retrying){
     const s = state.settings;
     const payload = JSON.stringify(syncableData());
     const body = {
-      message: `Travel Ledger sync \u2014 ${new Date().toISOString()}`,
+      message: `Travel Ledger sync — ${new Date().toISOString()}`,
       content: utf8ToBase64(payload),
       branch: s.githubBranch || 'main'
     };
     if (s.githubSha) body.sha = s.githubSha;
+    else {
+      const remote = await githubFetchRemote();
+      if (remote.exists) body.sha = remote.sha;
+    }
     const res = await fetch(githubApiUrl(), {
       method: 'PUT',
       headers: { 'Authorization': `token ${s.githubToken}`, 'Accept': 'application/vnd.github+json', 'Content-Type': 'application/json' },
       body: JSON.stringify(body)
     });
     if (res.status === 409 && !retrying){
-      // Stale sha (edited elsewhere) — refresh sha once and retry.
       const remote = await githubFetchRemote();
+      if (!remote.exists || !remote.sha) throw new Error('github-no-remote');
       s.githubSha = remote.sha;
       return githubPushRemote(true);
     }
-    if (res.status === 401 || res.status === 403) throw new Error('github-auth-failed');
-    if (!res.ok){
-      const errBody = await res.json().catch(()=>({}));
-      throw new Error('github-push-failed:'+res.status+(errBody.message?':'+errBody.message:''));
+    if (res.status === 401) throw new Error('github-auth-failed');
+    if (res.status === 403) {
+      const remaining = res.headers.get('x-ratelimit-remaining');
+      throw new Error(remaining === '0' ? 'github-rate-limited' : 'github-permission-denied');
     }
+    if (!res.ok) throw await githubApiError('push', res);
     const data = await res.json();
+    if (!data.content || !data.content.sha) throw new Error('github-invalid-response');
     s.githubSha = data.content.sha;
     s.githubLastSyncAt = Date.now();
   }
@@ -1219,6 +1151,23 @@
         : '\u2601 pull failed \u2014 using local data';
       setSyncStatus('error', msg);
     }
+  }
+  function githubUserError(action, err){
+    const prefix = action === 'push' ? 'Push' : 'Pull';
+    switch(err && err.message){
+      case 'github-auth-failed': return `${prefix} failed: GitHub rejected the token (401). Check the token.`;
+      case 'github-permission-denied': return `${prefix} failed: GitHub denied access (403). Check repository Contents permissions.`;
+      case 'github-rate-limited': return `${prefix} failed: GitHub API rate limit reached. Try again later.`;
+      case 'github-no-remote': return action === 'pull' ? 'No data file exists in that GitHub path yet.' : 'Push failed: the remote data file no longer exists.';
+      case 'github-conflict': return 'Push failed: GitHub changed the data file during the push. Try Push Now again.';
+      case 'github-bad-content': return 'Pull failed: data.json is not valid Travel Ledger data.';
+      case 'github-invalid-response': return `${prefix} failed: GitHub returned an unexpected response.`;
+    }
+    if (err && /^github-not-found:/.test(err.message)) return `${prefix} failed: repository or data path was not found on GitHub (404).`;
+    if (err && /^github-validation/.test(err.message)) return `${prefix} failed: GitHub rejected the request (422).`;
+    if (err && /^github-server-error/.test(err.message)) return `${prefix} failed: GitHub server error. Try again shortly.`;
+    if (err && /^github-request-failed:/.test(err.message)) return `${prefix} failed: GitHub returned an error.`;
+    return `${prefix} failed: ${err && err.message ? err.message : 'unexpected error'}`;
   }
   async function githubPushNow(statusEl){
     if (!githubConfigured()) throw new Error('github-not-configured');
@@ -2736,7 +2685,7 @@
         if (!githubConfigured()){ statusEl.textContent = 'Fill in and save the fields above first.'; return; }
         await githubPushNow(statusEl);
       } catch(err){
-        statusEl.textContent = err.message === 'github-auth-failed' ? 'Push failed: check your token and permissions.' : 'Push failed \u2014 check repo/path/branch are correct.';
+        statusEl.textContent = githubUserError('pull', err);
       }
     });
     document.getElementById('gh-pull-now').addEventListener('click', async ()=>{
