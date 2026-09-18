@@ -2229,12 +2229,12 @@
     if (value == null) return Number.POSITIVE_INFINITY;
     const raw = String(value).trim().toUpperCase();
     if (!raw) return Number.POSITIVE_INFINITY;
-    const parts = raw.match(/^(\\d{1,2}):(\\d{2})$/);
+    const parts = raw.match(/^(\d{1,2}):(\d{2})$/);
     if (parts){
       const h = Number(parts[1]), m = Number(parts[2]);
       return h >= 0 && h <= 23 && m >= 0 && m <= 59 ? h * 60 + m : Number.POSITIVE_INFINITY;
     }
-    const twelve = raw.match(/^(\\d{1,2}):(\\d{2})\\s*(AM|PM)$/);
+    const twelve = raw.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/);
     if (twelve){
       let h = Number(twelve[1]), m = Number(twelve[2]);
       if (h < 1 || h > 12 || m > 59) return Number.POSITIVE_INFINITY;
