@@ -2225,6 +2225,32 @@
     </div>`;
   }
 
+  function timelineTimeMinutes(value){
+    if (value == null) return Number.POSITIVE_INFINITY;
+    const raw = String(value).trim().toUpperCase();
+    if (!raw) return Number.POSITIVE_INFINITY;
+    const parts = raw.match(/^(\\d{1,2}):(\\d{2})$/);
+    if (parts){
+      const h = Number(parts[1]), m = Number(parts[2]);
+      return h >= 0 && h <= 23 && m >= 0 && m <= 59 ? h * 60 + m : Number.POSITIVE_INFINITY;
+    }
+    const twelve = raw.match(/^(\\d{1,2}):(\\d{2})\\s*(AM|PM)$/);
+    if (twelve){
+      let h = Number(twelve[1]), m = Number(twelve[2]);
+      if (h < 1 || h > 12 || m > 59) return Number.POSITIVE_INFINITY;
+      if (h === 12) h = 0;
+      if (twelve[3] === 'PM') h += 12;
+      return h * 60 + m;
+    }
+    return Number.POSITIVE_INFINITY;
+  }
+
+  function compareTimelineItems(a,b){
+    const at = timelineTimeMinutes(a.time), bt = timelineTimeMinutes(b.time);
+    if (at !== bt) return at - bt;
+    return (a._timelineOrder || 0) - (b._timelineOrder || 0);
+  }
+
   function renderHourByHour(t){
     const holder = document.getElementById('hbhHolder');
     if (!holder) return;
@@ -2254,7 +2280,8 @@
     });
     holder.innerHTML = order.map(key=>{
       const g = groups[key];
-      g.items.sort((a,b)=> (a.time||'99:99').localeCompare(b.time||'99:99'));
+      g.items.forEach((item, index)=>{ if (item._timelineOrder == null) item._timelineOrder = index; });
+      g.items.sort(compareTimelineItems);
       return `
       <div class="day-block">
         <div class="day-label"><span class="day-date-num">${escapeHtml(g.label)}</span><span class="rule"></span></div>
