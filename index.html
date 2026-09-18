@@ -2284,9 +2284,25 @@
       holder.innerHTML = '<div class="empty-state">Add items with a date/day to build the hour-by-hour view.</div>';
       return;
     }
+    // A time is useful even when an older/local item has lost its date/day.
+    // Keep dated/day-grouped items chronological, but put timed unscheduled
+    // items into the correct position rather than blindly forcing all
+    // unscheduled rows to the bottom.
+    const groupTime = key=>{
+      const g = groups[key];
+      const timed = g.items.map(i=>timelineTimeMinutes(i.time)).filter(Number.isFinite);
+      return timed.length ? Math.min(...timed) : Number.POSITIVE_INFINITY;
+    };
     order.sort((a,b)=>{
-      if (a===UNSCHEDULED) return 1;
-      if (b===UNSCHEDULED) return -1;
+      if (a===UNSCHEDULED && b!==UNSCHEDULED){
+        const at=groupTime(a), bt=groupTime(b);
+        return Number.isFinite(at) && at<bt ? -1 : 1;
+      }
+      if (b===UNSCHEDULED && a!==UNSCHEDULED){
+        const at=groupTime(a), bt=groupTime(b);
+        return Number.isFinite(bt) && bt<at ? 1 : -1;
+      }
+      if (a===UNSCHEDULED && b===UNSCHEDULED) return groupTime(a)-groupTime(b);
       return mode==='dates' ? a.localeCompare(b) : Number(a)-Number(b);
     });
     holder.innerHTML = order.map(key=>{
