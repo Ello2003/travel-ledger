@@ -369,9 +369,21 @@
   }
   #travel-ledger-root .day-label .rule { flex: 1; height: 1px; background: linear-gradient(90deg, var(--paper-edge), transparent); }
   #travel-ledger-root .day-card { background: var(--paper-raised); border: 1px solid var(--paper-edge); border-radius: 8px; overflow: hidden; }
-  #travel-ledger-root .tl-row { display: grid; grid-template-columns: 80px 1fr 34px; gap: 0; align-items: stretch; border-bottom: 1px solid var(--line); }
+  #travel-ledger-root .tl-row { display: grid; grid-template-columns: 80px 1fr 86px; gap: 0; align-items: stretch; border-bottom: 1px solid var(--line); cursor: grab; }
   #travel-ledger-root .tl-row:last-child { border-bottom: none; }
   #travel-ledger-root .tl-row.is-cancelled { opacity: .45; }
+  #travel-ledger-root .tl-row.dragging { opacity: .35; cursor: grabbing; }
+  #travel-ledger-root .tl-row.drop-before { box-shadow: inset 0 3px 0 var(--brass); }
+  #travel-ledger-root .tl-row.drop-after { box-shadow: inset 0 -3px 0 var(--brass); }
+  #travel-ledger-root .tl-row.drop-target { background: rgba(184,135,79,.10); }
+  #travel-ledger-root .tl-reorder-cell { display: flex; align-items: center; justify-content: center; gap: 2px; padding: 0 4px; }
+  #travel-ledger-root .tl-move, #travel-ledger-root .tl-drag {
+    border: 1px solid transparent; background: transparent; color: var(--ink-soft); cursor: pointer;
+    font-family: var(--font-mono); font-size: 12px; line-height: 1; padding: 5px 5px; border-radius: 4px;
+  }
+  #travel-ledger-root .tl-move:hover, #travel-ledger-root .tl-drag:hover { border-color: var(--paper-edge); background: var(--paper); color: var(--ink); }
+  #travel-ledger-root .tl-drag { cursor: grab; font-size: 14px; }
+  #travel-ledger-root .tl-drag:active { cursor: grabbing; }
   #travel-ledger-root .tl-time-cell {
     display: flex; align-items: flex-start; justify-content: flex-end; padding: 14px 14px 14px 12px;
     background: var(--paper); border-right: 1px solid var(--paper-edge);
@@ -1255,6 +1267,7 @@
       if (t.notes === undefined) t.notes = '';
       if (!Array.isArray(t.planItems)) t.planItems = [];
       if (t.timelineMode === undefined) t.timelineMode = null;
+      if (t.timelineManualOrder === undefined) t.timelineManualOrder = false;
       if (!Array.isArray(t.research)) t.research = [];
       if (!Array.isArray(t.packingList)) t.packingList = [];
       if (t.country === undefined) t.country = '';
@@ -1963,9 +1976,12 @@
         <button class="btn-ghost" id="exportPlanPdfBtn">Export PDF</button>
       </div>
       <div class="chart-card" style="margin-bottom:18px;" id="timelineCard">
-        <div style="display:flex;align-items:center;justify-content:space-between;">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
           <h3 style="margin:0;">Hour by Hour</h3>
-          <button class="btn-ghost btn-sm" id="toggleTimeline">${timelineCollapsed?'Show':'Hide'}</button>
+          <div style="display:flex;align-items:center;gap:6px;">
+            <button class="btn-ghost btn-sm" id="toggleManualOrder">${t.timelineManualOrder?'Manual order':'Arrange manually'}</button>
+            <button class="btn-ghost btn-sm" id="toggleTimeline">${timelineCollapsed?'Show':'Hide'}</button>
+          </div>
         </div>
         <div id="hbhHolder" style="margin-top:12px;" ${timelineCollapsed?'hidden':''}></div>
       </div>
@@ -1976,6 +1992,24 @@
     document.getElementById('modeDays').addEventListener('click', ()=>{ t.timelineMode='days'; t.updatedAt=Date.now(); saveState(); renderPlanTab(t); });
     document.getElementById('exportPlanPdfBtn').addEventListener('click', ()=> exportPlanPDF(t));
     document.getElementById('manageSheetsBtn').addEventListener('click', ()=> openManageSheetsModal(t));
+    document.getElementById('toggleManualOrder').addEventListener('click', ()=>{
+      t.timelineManualOrder = !t.timelineManualOrder;
+      if (t.timelineManualOrder){
+        const groups = {};
+        const modeNow = tripTimelineMode(t);
+        t.planItems.forEach(i=>{
+          const key = modeNow==='dates' ? (i.date || '\\u0000unscheduled') : (i.dayNumber != null ? String(i.dayNumber) : '\\u0000unscheduled');
+          if (!groups[key]) groups[key] = [];
+          groups[key].push(i);
+        });
+        Object.values(groups).forEach(items=>{
+          sortTimelineItems(items).forEach((item,index)=>{ item.timelineOrder = index; });
+        });
+      }
+      t.updatedAt = Date.now();
+      saveState();
+      renderPlanTab(t);
+    });
     document.getElementById('toggleTimeline').addEventListener('click', ()=>{
       timelineCollapsed = !timelineCollapsed;
       renderPlanTab(t);
@@ -2249,14 +2283,19 @@
   }
 
   function hbhRowHtml(item){
-    return `<div class="tl-row ${item.status==='cancelled'?'is-cancelled':''}" data-id="${item.id}">
+    return `<div class="tl-row ${item.status==='cancelled'?'is-cancelled':''}" data-id="${item.id}" draggable="true">
       <div class="tl-time-cell"><input class="tl-time" type="time" value="${escapeHtml(item.time||'')}" data-f="time"></div>
       <div class="tl-main">
         <div class="tl-sheet-tag"><span class="sheet-dot" style="background:${sheetColor(item.sheet)}"></span>${escapeHtml(item.sheet)}</div>
         <input class="tl-name" value="${escapeHtml(item.name)}" data-f="name" placeholder="What's happening">
-        <textarea class="tl-notes" data-f="notes" rows="1" placeholder="Notes\u2026">${escapeHtml(item.notes||'')}</textarea>
+        <textarea class="tl-notes" data-f="notes" rows="1" placeholder="Notes…">${escapeHtml(item.notes||'')}</textarea>
       </div>
-      <div class="tl-del-cell"><button class="exp-del tl-del" aria-label="Delete" title="Delete">\u2715</button></div>
+      <div class="tl-reorder-cell">
+        <button class="tl-drag" type="button" draggable="true" aria-label="Drag to move" title="Drag to move">↕</button>
+        <button class="tl-move tl-up" type="button" aria-label="Move up" title="Move up">↑</button>
+        <button class="tl-move tl-down" type="button" aria-label="Move down" title="Move down">↓</button>
+        <button class="exp-del tl-del" aria-label="Delete" title="Delete">✕</button>
+      </div>
     </div>`;
   }
 
@@ -2302,6 +2341,7 @@
     if (!holder) return;
     const mode = tripTimelineMode(t);
     const groups = {}; const order = [];
+    if (t.timelineManualOrder === undefined) t.timelineManualOrder = false;
     const UNSCHEDULED = '\u0000unscheduled';
     t.planItems.forEach(item=>{
       let key, label;
@@ -2359,17 +2399,73 @@
     });
     holder.innerHTML = order.map(key=>{
       const g = groups[key];
-      const sortedItems = sortTimelineItems(g.items);
+      const sortedItems = t.timelineManualOrder
+        ? g.items.slice().sort((a,b)=>{
+            const ao = Number.isFinite(Number(a.timelineOrder)) ? Number(a.timelineOrder) : Number.POSITIVE_INFINITY;
+            const bo = Number.isFinite(Number(b.timelineOrder)) ? Number(b.timelineOrder) : Number.POSITIVE_INFINITY;
+            return ao - bo || compareTimelineItems(a,b);
+          })
+        : sortTimelineItems(g.items);
       return `
       <div class="day-block">
         <div class="day-label"><span class="day-date-num">${escapeHtml(g.label)}</span><span class="rule"></span></div>
-        <div class="day-card">
+        <div class="day-card" data-key="${escapeHtml(key)}">
           ${sortedItems.map(hbhRowHtml).join('')}
           <div class="tl-add-row"><button class="btn-ghost btn-sm hbh-add" data-key="${escapeHtml(key)}">+ Add stop</button></div>
         </div>
-      </div>`;
+      </div>`;`;
     }).join('');
 
+    const clearDropState = ()=>{
+      holder.querySelectorAll('.tl-row.drop-before,.tl-row.drop-after,.tl-row.drop-target').forEach(el=> el.classList.remove('drop-before','drop-after','drop-target'));
+      holder.querySelectorAll('.day-card.drop-target').forEach(el=> el.classList.remove('drop-target'));
+    };
+    const persistManualLayout = ()=>{
+      holder.querySelectorAll('.day-card').forEach(card=>{
+        const key = card.dataset.key;
+        [...card.querySelectorAll('.tl-row')].forEach((row,index)=>{
+          const item = t.planItems.find(i=>i.id===row.dataset.id);
+          if (!item) return;
+          item.timelineOrder = index;
+          if (key !== UNSCHEDULED){
+            if (mode === 'dates'){
+              item.date = key;
+              if (t.startDate){
+                const start = new Date(t.startDate+'T00:00:00');
+                const current = new Date(key+'T00:00:00');
+                const diff = Math.round((current - start) / 86400000);
+                if (Number.isFinite(diff) && diff >= 0) item.dayNumber = diff + 1;
+              }
+            } else {
+              item.dayNumber = Number(key);
+              if (t.startDate && item.dayNumber > 0){
+                const d = new Date(t.startDate+'T00:00:00');
+                d.setDate(d.getDate() + item.dayNumber - 1);
+                item.date = d.toISOString().slice(0,10);
+              }
+            }
+          }
+        });
+      });
+      t.timelineManualOrder = true;
+      t.updatedAt = Date.now();
+      saveState();
+      renderHourByHour(t);
+      refreshSheetSections(t);
+    };
+    const moveRow = (id, direction)=>{
+      const row = holder.querySelector('.tl-row[data-id="'+CSS.escape(id)+'"]');
+      if (!row) return;
+      const card = row.closest('.day-card');
+      if (!card) return;
+      const rows = [...card.querySelectorAll('.tl-row')];
+      const index = rows.indexOf(row);
+      const next = index + direction;
+      if (next < 0 || next >= rows.length) return;
+      if (direction < 0) card.insertBefore(row, rows[next]);
+      else card.insertBefore(row, rows[next].nextSibling);
+      persistManualLayout();
+    };
     holder.querySelectorAll('.tl-row').forEach(row=>{
       const id = row.dataset.id;
       const item = t.planItems.find(i=>i.id===id);
@@ -2378,7 +2474,61 @@
       row.querySelector('.tl-name').addEventListener('change', ev=>{ item.name = ev.target.value.trim() || item.name; t.updatedAt=Date.now(); saveState(); renderHourByHour(t); refreshSheetSections(t); });
       row.querySelector('.tl-notes').addEventListener('change', ev=>{ item.notes = ev.target.value; t.updatedAt=Date.now(); saveState(); });
       row.querySelector('.tl-del').addEventListener('click', ()=> deletePlanItem(t, id));
+      row.querySelector('.tl-up').addEventListener('click', ()=> moveRow(id, -1));
+      row.querySelector('.tl-down').addEventListener('click', ()=> moveRow(id, 1));
+      row.addEventListener('dragstart', ev=>{
+        if (ev.target.closest('input,textarea,button')) return;
+        row.classList.add('dragging');
+        ev.dataTransfer.effectAllowed = 'move';
+        ev.dataTransfer.setData('text/plain', id);
+      });
+      row.querySelector('.tl-drag').addEventListener('dragstart', ev=>{
+        ev.stopPropagation();
+        row.classList.add('dragging');
+        ev.dataTransfer.effectAllowed = 'move';
+        ev.dataTransfer.setData('text/plain', id);
+      });
+      row.addEventListener('dragend', ()=>{ row.classList.remove('dragging'); clearDropState(); });
+      row.addEventListener('dragover', ev=>{
+        ev.preventDefault();
+        const draggedId = ev.dataTransfer.getData('text/plain');
+        if (!draggedId || draggedId===id) return;
+        clearDropState();
+        row.classList.add(ev.clientY < row.getBoundingClientRect().top + row.offsetHeight/2 ? 'drop-before' : 'drop-after');
+      });
+      row.addEventListener('drop', ev=>{
+        ev.preventDefault();
+        const draggedId = ev.dataTransfer.getData('text/plain');
+        const dragged = holder.querySelector('.tl-row[data-id="'+CSS.escape(draggedId)+'"]');
+        if (!dragged || dragged===row) return;
+        const before = ev.clientY < row.getBoundingClientRect().top + row.offsetHeight/2;
+        if (before) row.parentNode.insertBefore(dragged,row);
+        else row.parentNode.insertBefore(dragged,row.nextSibling);
+        clearDropState();
+        persistManualLayout();
+      });
     });
+    holder.querySelectorAll('.day-card').forEach(card=>{
+      card.addEventListener('dragover', ev=>{
+        ev.preventDefault();
+        if (ev.target.closest('.tl-row')) return;
+        if (!ev.dataTransfer.getData('text/plain')) return;
+        clearDropState();
+        card.classList.add('drop-target');
+      });
+      card.addEventListener('drop', ev=>{
+        if (ev.target.closest('.tl-row')) return;
+        ev.preventDefault();
+        const draggedId = ev.dataTransfer.getData('text/plain');
+        const dragged = holder.querySelector('.tl-row[data-id="'+CSS.escape(draggedId)+'"]');
+        if (!dragged) return;
+        const addRow = card.querySelector('.tl-add-row');
+        card.insertBefore(dragged, addRow);
+        clearDropState();
+        persistManualLayout();
+      });
+    });
+
     holder.querySelectorAll('.hbh-add').forEach(btn=>{
       btn.addEventListener('click', ()=>{
         const key = btn.dataset.key;
