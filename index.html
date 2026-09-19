@@ -2271,11 +2271,28 @@
     t.planItems.forEach(item=>{
       let key, label;
       if (mode === 'dates'){
-        key = item.date || UNSCHEDULED;
-        label = item.date ? new Date(item.date+'T00:00:00').toLocaleDateString('en-GB', {weekday:'short', day:'numeric', month:'short'}) : 'Unscheduled';
+        // Items can carry either a date or a day number because the timeline
+        // mode can be switched after they were created. Derive the missing
+        // representation from the trip start date instead of treating the
+        // item as unscheduled.
+        let itemDate = item.date || null;
+        if (!itemDate && item.dayNumber != null && t.startDate){
+          const d = new Date(t.startDate+'T00:00:00');
+          d.setDate(d.getDate() + Number(item.dayNumber) - 1);
+          itemDate = d.toISOString().slice(0,10);
+        }
+        key = itemDate || UNSCHEDULED;
+        label = itemDate ? new Date(itemDate+'T00:00:00').toLocaleDateString('en-GB', {weekday:'short', day:'numeric', month:'short'}) : 'Unscheduled';
       } else {
-        key = item.dayNumber != null ? String(item.dayNumber) : UNSCHEDULED;
-        label = item.dayNumber != null ? 'Day '+item.dayNumber : 'Unscheduled';
+        let itemDay = item.dayNumber != null ? Number(item.dayNumber) : null;
+        if (itemDay == null && item.date && t.startDate){
+          const start = new Date(t.startDate+'T00:00:00');
+          const current = new Date(item.date+'T00:00:00');
+          const diff = Math.round((current - start) / 86400000);
+          if (Number.isFinite(diff)) itemDay = diff + 1;
+        }
+        key = itemDay != null && itemDay > 0 ? String(itemDay) : UNSCHEDULED;
+        label = itemDay != null && itemDay > 0 ? 'Day '+itemDay : 'Unscheduled';
       }
       if (!groups[key]){ groups[key] = { label, items: [] }; order.push(key); }
       groups[key].items.push(item);
