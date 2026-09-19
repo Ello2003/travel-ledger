@@ -1998,7 +1998,7 @@
         const groups = {};
         const modeNow = tripTimelineMode(t);
         t.planItems.forEach(i=>{
-          const key = modeNow==='dates' ? (i.date || '\\u0000unscheduled') : (i.dayNumber != null ? String(i.dayNumber) : '\\u0000unscheduled');
+          const key = modeNow==='dates' ? (i.date || '\\u0000unscheduled') : (i.dayNumber != null ? String(i.dayNumber) : '\u0000unscheduled');
           if (!groups[key]) groups[key] = [];
           groups[key].push(i);
         });
