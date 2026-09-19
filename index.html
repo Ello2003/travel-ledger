@@ -1278,6 +1278,41 @@
         if (guess){ t.country = guess; t.countryGuessed = true; guessedCount++; }
       }
       t.planItems.forEach(i=>{
+        // Keep legacy itinerary records internally consistent. Older London
+        // data can contain either a date or a day number (and some locally
+        // created timed items have neither). The Hour-by-Hour view needs one
+        // canonical day/date anchor so the same item cannot jump between
+        // groups or fall into Unscheduled simply because timeline mode changed.
+        if (t.startDate){
+          if (i.dayNumber == null && i.date){
+            const start = new Date(t.startDate+'T00:00:00');
+            const current = new Date(i.date+'T00:00:00');
+            const diff = Math.round((current - start) / 86400000);
+            if (Number.isFinite(diff) && diff >= 0) i.dayNumber = diff + 1;
+          }
+          if (!i.date && i.dayNumber != null){
+            const d = new Date(t.startDate+'T00:00:00');
+            d.setDate(d.getDate() + Number(i.dayNumber) - 1);
+            i.date = d.toISOString().slice(0,10);
+          }
+          // A timed item with neither anchor is malformed legacy/local data;
+          // treat it as Day 1 rather than allowing it to reorder unpredictably.
+          if (i.time && i.dayNumber == null && !i.date) {
+            i.dayNumber = 1;
+            i.date = t.startDate;
+          }
+          if (i.dayNumberEnd != null && !i.endDate){
+            const d = new Date(t.startDate+'T00:00:00');
+            d.setDate(d.getDate() + Number(i.dayNumberEnd) - 1);
+            i.endDate = d.toISOString().slice(0,10);
+          }
+          if (i.endDate && i.dayNumberEnd == null){
+            const start = new Date(t.startDate+'T00:00:00');
+            const end = new Date(i.endDate+'T00:00:00');
+            const diff = Math.round((end - start) / 86400000);
+            if (Number.isFinite(diff) && diff >= 0) i.dayNumberEnd = diff + 1;
+          }
+        }
         if (i.estimateQuantity === undefined) i.estimateQuantity = 1;
         if (i.sheet === 'Activities / Sights') i.sheet = 'Activities';
         if (!i.estimateCategory) i.estimateCategory = resolveExpenseCategory(SHEET_TO_CAT[i.sheet] || 'Other');
