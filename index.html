@@ -583,7 +583,7 @@
   const STORAGE_KEY = 'trips-data';
   const HISTORY_KEY = 'trips-data-history';
   const MAX_HISTORY_DAYS = 14;
-  const APP_VERSION = '1.10.12';
+  const APP_VERSION = '1.10.13';
   const CHANGELOG = {
     '1.10.10': 'Restored the original Budget table formatting and Actual Expenses column proportions while retaining editable expense fields.',
     '1.10.8': 'Standardized Budget Estimated Costs, Actual Expenses and Visited table formatting and column proportions.',
@@ -2003,7 +2003,7 @@
         <td class="num"><input type="number" class="exp-qty" value="${e.quantity}" min="0" step="1" style="text-align:right"></td>
         <td class="num"><input type="number" class="exp-cost" value="${e.unitCost}" min="0" step="0.01" style="text-align:right"></td>
         <td class="num" style="color:var(--ink-soft);">${planned!=null ? fmt(planned) : '—'}</td>
-        <td class="num" style="${overPlan?'color:var(--red);font-weight:700;':''}">${fmt(actual)}</td>
+        <td class="num"><input type="number" class="exp-actual" value="${actual.toFixed(2)}" min="0" step="0.01" style="text-align:right;${overPlan?'color:var(--red);font-weight:700;':''}" aria-label="Actual cost"></td>
         <td><button class="exp-del" aria-label="Delete expense row" title="Delete row">✕</button></td>
       </tr>`;
     }).join('');
@@ -2014,6 +2014,13 @@
       row.querySelector('.exp-cat').addEventListener('change', ev=>{ e.category = ev.target.value; commitExpense(t); });
       row.querySelector('.exp-qty').addEventListener('change', ev=>{ e.quantity = Math.max(0, Number(ev.target.value)||0); commitExpense(t); });
       row.querySelector('.exp-cost').addEventListener('change', ev=>{ e.unitCost = Math.max(0, Number(ev.target.value)||0); commitExpense(t); });
+      row.querySelector('.exp-actual').addEventListener('change', ev=>{
+        const actualValue = Math.max(0, Number(ev.target.value)||0);
+        const qty = Math.max(0, Number(e.quantity)||0);
+        if (qty > 0) e.unitCost = actualValue / qty;
+        else { e.quantity = 1; e.unitCost = actualValue; }
+        commitExpense(t);
+      });
       row.querySelector('.exp-del').addEventListener('click', ()=>{
         state.trash.expenses.unshift({ id: uid('trash'), tripId: t.id, tripName: t.name, expense: e, deletedAt: Date.now() });
         t.expenses = t.expenses.filter(x=>x.id!==id); t.updatedAt = Date.now();
