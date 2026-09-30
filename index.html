@@ -583,8 +583,9 @@
   const STORAGE_KEY = 'trips-data';
   const HISTORY_KEY = 'trips-data-history';
   const MAX_HISTORY_DAYS = 14;
-  const APP_VERSION = '1.10.14';
+  const APP_VERSION = '1.10.15';
   const CHANGELOG = {
+    '1.10.15': 'Fixed Visited quantity and unit-cost editing for items without an existing estimated cost by creating a zero-cost Actual Expense on first edit.',
     '1.10.10': 'Restored the original Budget table formatting and Actual Expenses column proportions while retaining editable expense fields.',
     '1.10.8': 'Standardized Budget Estimated Costs, Actual Expenses and Visited table formatting and column proportions.',
     '1.10.7': 'Improved table resizing so widening a column expands the table instead of compressing unrelated columns; equivalent table structures now share width profiles.',
@@ -2203,8 +2204,9 @@
     });
   }
 
-  function ensureActualExpense(t, item){
-    if (!item || item.cost == null || Number(item.cost) <= 0) return null;
+  function ensureActualExpense(t, item, allowZeroCost){
+    if (!item) return null;
+    if (!allowZeroCost && (item.cost == null || Number(item.cost) <= 0)) return null;
     const category = item.estimateCategory || resolveExpenseCategory(SHEET_TO_CAT[item.sheet] || 'Other');
     const quantity = Math.max(0, Number(item.estimateQuantity == null ? 1 : item.estimateQuantity) || 0);
     let expense = item.actualExpenseId ? t.expenses.find(e=>e.id===item.actualExpenseId) : null;
@@ -2290,7 +2292,7 @@
       if (!item) return;
       const getOrCreateExpense = ()=>{
         let expense = item.actualExpenseId ? t.expenses.find(e=>e.id===item.actualExpenseId) : null;
-        if (!expense) expense = ensureActualExpense(t, item);
+        if (!expense) expense = ensureActualExpense(t, item, true);
         return expense;
       };
       const saveVisited = (mutateExpense)=>{
