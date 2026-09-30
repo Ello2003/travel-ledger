@@ -233,7 +233,7 @@
 
   #travel-ledger-root table.exp-table { width: 100%; border-collapse: collapse; font-size: 13px; }
   #travel-ledger-root .table-scroll { overflow-x: auto; }
-  #travel-ledger-root table.resizable-table { table-layout: fixed; width: max-content; }
+  #travel-ledger-root table.resizable-table { table-layout: fixed; width: 100%; }
   #travel-ledger-root table.resizable-table.is-resizing { user-select: none; }
   #travel-ledger-root table.resizable-table th { position: relative; overflow: visible; }
   #travel-ledger-root table.resizable-table th,
@@ -307,7 +307,8 @@
   #travel-ledger-root table.visited-table col.col-actual { width: 10%; }
   #travel-ledger-root table.estimate-table col.col-actual { width: 20%; }
   #travel-ledger-root table.budget-exp-table col.col-actions,
-  #travel-ledger-root table.estimate-table col.col-actions { width: 4%; }
+  #travel-ledger-root table.estimate-table col.col-actions,
+  #travel-ledger-root table.visited-table col.col-actions { width: 4%; }
 
   #travel-ledger-root table.budget-exp-table select.exp-cat { width: 100%; max-width: 100%; font-size: 12px; }
   #travel-ledger-root table.estimate-table .planned-estimate-row { background: rgba(213,203,172,.16); }
@@ -593,8 +594,9 @@
   const STORAGE_KEY = 'trips-data';
   const HISTORY_KEY = 'trips-data-history';
   const MAX_HISTORY_DAYS = 14;
-  const APP_VERSION = '1.10.8';
+  const APP_VERSION = '1.10.9';
   const CHANGELOG = {
+    '1.10.9': 'Restored the original table layout until a column is resized, preventing the resizer from distorting table formatting on load.',
     '1.10.8': 'Standardized Budget Estimated Costs, Actual Expenses and Visited table formatting and column proportions.',
     '1.10.7': 'Improved table resizing so widening a column expands the table instead of compressing unrelated columns; equivalent table structures now share width profiles.',
     '1.10.6': 'Improved table column sizing so widths are consistent by table type, text is less likely to be clipped, and resized columns retain sensible minimums.',
@@ -1940,24 +1942,27 @@
       // Equivalent tables share one width profile, so Visited / Actual / other
       // tables with the same column structure stay visually consistent.
       const signature = colEls.map(col=>{ const cls=Array.from(col.classList).filter(x=>x!=='col-name'&&x!=='col-desc'); cls.push(col.classList.contains('col-name')||col.classList.contains('col-desc')?'col-description':''); return cls.sort().join('.'); }).join('|');
-      const storageKey = 'travel-ledger-col-widths-v2:' + signature;
+      // Keep the existing CSS/table geometry untouched until the user actually drags a column.
+      const storageKey = 'travel-ledger-col-widths-v3:' + signature;
       let saved = {};
       try { saved = JSON.parse(localStorage.getItem(storageKey) || '{}'); } catch (_) {}
 
       const minWidths = ths.map((_,i)=> i===0 ? 180 : (i===ths.length-1 ? 48 : 78));
-      const current = colEls.map((col,i)=>{
-        if (saved[i]) return Math.max(minWidths[i], Number(saved[i]));
-        const rect = ths[i].getBoundingClientRect();
-        return Math.max(minWidths[i], Math.round(rect.width));
-      });
 
       const applyWidths = widths=>{
         widths.forEach((w,i)=>{ colEls[i].style.width = Math.round(w) + 'px'; });
         const total = widths.reduce((sum,w)=>sum+w,0);
-        table.style.width = Math.max(total, table.parentElement ? table.parentElement.clientWidth : total) + 'px';
+        const available = table.parentElement ? table.parentElement.clientWidth : total;
+        table.style.width = Math.max(total, available) + 'px';
         table.style.minWidth = total + 'px';
       };
-      applyWidths(current);
+
+      // Only apply a saved profile after a previous resize. Otherwise preserve
+      // the table's original percentage-based formatting.
+      if (Object.keys(saved).length === colEls.length) {
+        const savedWidths = colEls.map((_,i)=>Math.max(minWidths[i], Number(saved[i]) || 0));
+        if (savedWidths.every(w=>w>0)) applyWidths(savedWidths);
+      }
 
       ths.forEach((th,idx)=>{
         const grip = document.createElement('span');
