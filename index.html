@@ -233,7 +233,7 @@
 
   #travel-ledger-root table.exp-table { width: 100%; border-collapse: collapse; font-size: 13px; }
   #travel-ledger-root .table-scroll { overflow-x: auto; }
-  #travel-ledger-root table.resizable-table { table-layout: fixed; width: 100%; }
+  #travel-ledger-root table.resizable-table { table-layout: fixed; width: max-content; }
   #travel-ledger-root table.resizable-table.is-resizing { user-select: none; }
   #travel-ledger-root table.resizable-table th { position: relative; overflow: visible; }
   #travel-ledger-root table.resizable-table th,
@@ -284,32 +284,22 @@
   #travel-ledger-root table.packing-table input[type="checkbox"] { width: 16px; height: 16px; cursor: pointer; }
   #travel-ledger-root table.packing-table tr.packed-row .pack-name { text-decoration: line-through; opacity: .5; }
   #travel-ledger-root table.packing-table tr.packed-row td { opacity: .75; }
-  /* Budget expense tables use one shared seven-column geometry so Estimated, Actual and Visited align. */
-  #travel-ledger-root table.budget-exp-table,
-  #travel-ledger-root table.estimate-table,
-  #travel-ledger-root table.visited-table { table-layout: fixed; }
-  #travel-ledger-root table.budget-exp-table col.col-desc,
-  #travel-ledger-root table.estimate-table col.col-desc,
-  #travel-ledger-root table.visited-table col.col-name { width: 38%; }
-  #travel-ledger-root table.budget-exp-table col.col-cat,
-  #travel-ledger-root table.estimate-table col.col-cat,
-  #travel-ledger-root table.visited-table col.col-cat { width: 18%; }
-  #travel-ledger-root table.budget-exp-table col.col-qty,
-  #travel-ledger-root table.estimate-table col.col-qty,
-  #travel-ledger-root table.visited-table col.col-qty { width: 8%; }
-  #travel-ledger-root table.budget-exp-table col.col-unit,
-  #travel-ledger-root table.estimate-table col.col-unit,
-  #travel-ledger-root table.visited-table col.col-unit { width: 12%; }
-  #travel-ledger-root table.budget-exp-table col.col-planned,
-  #travel-ledger-root table.estimate-table col.col-actual,
-  #travel-ledger-root table.visited-table col.col-planned { width: 10%; }
-  #travel-ledger-root table.budget-exp-table col.col-actual,
-  #travel-ledger-root table.visited-table col.col-actual { width: 10%; }
-  #travel-ledger-root table.estimate-table col.col-actual { width: 20%; }
-  #travel-ledger-root table.budget-exp-table col.col-actions,
-  #travel-ledger-root table.estimate-table col.col-actions,
-  #travel-ledger-root table.visited-table col.col-actions { width: 4%; }
-
+  #travel-ledger-root table.budget-exp-table { table-layout: fixed; }
+  #travel-ledger-root table.budget-exp-table col.col-desc { width: 17%; }
+  #travel-ledger-root table.budget-exp-table col.col-cat { width: 15%; }
+  #travel-ledger-root table.budget-exp-table col.col-qty { width: 6%; }
+  #travel-ledger-root table.budget-exp-table col.col-unit { width: 10%; }
+  #travel-ledger-root table.budget-exp-table col.col-notes { width: 18%; }
+  #travel-ledger-root table.budget-exp-table col.col-rating { width: 10%; }
+  #travel-ledger-root table.budget-exp-table col.col-planned { width: 9%; }
+  #travel-ledger-root table.budget-exp-table col.col-actual { width: 9%; }
+  #travel-ledger-root table.budget-exp-table col.col-actions { width: 6%; }
+  #travel-ledger-root table.estimate-table col.col-desc { width: 28%; }
+  #travel-ledger-root table.estimate-table col.col-cat { width: 22%; }
+  #travel-ledger-root table.estimate-table col.col-qty { width: 12%; }
+  #travel-ledger-root table.estimate-table col.col-unit { width: 16%; }
+  #travel-ledger-root table.estimate-table col.col-actual { width: 16%; }
+  #travel-ledger-root table.estimate-table col.col-actions { width: 6%; }
   #travel-ledger-root table.budget-exp-table select.exp-cat { width: 100%; max-width: 100%; font-size: 12px; }
   #travel-ledger-root table.estimate-table .planned-estimate-row { background: rgba(213,203,172,.16); }
   #travel-ledger-root table.estimate-table .planned-estimate-row:hover { background: rgba(213,203,172,.30); }
@@ -594,9 +584,9 @@
   const STORAGE_KEY = 'trips-data';
   const HISTORY_KEY = 'trips-data-history';
   const MAX_HISTORY_DAYS = 14;
-  const APP_VERSION = '1.10.9';
+  const APP_VERSION = '1.10.10';
   const CHANGELOG = {
-    '1.10.9': 'Restored the original table layout until a column is resized, preventing the resizer from distorting table formatting on load.',
+    '1.10.10': 'Restored the original Budget table formatting and Actual Expenses column proportions while retaining editable expense fields.',
     '1.10.8': 'Standardized Budget Estimated Costs, Actual Expenses and Visited table formatting and column proportions.',
     '1.10.7': 'Improved table resizing so widening a column expands the table instead of compressing unrelated columns; equivalent table structures now share width profiles.',
     '1.10.6': 'Improved table column sizing so widths are consistent by table type, text is less likely to be clipped, and resized columns retain sensible minimums.',
