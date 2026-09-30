@@ -571,8 +571,9 @@
   const STORAGE_KEY = 'trips-data';
   const HISTORY_KEY = 'trips-data-history';
   const MAX_HISTORY_DAYS = 14;
-  const APP_VERSION = '1.10.4';
+  const APP_VERSION = '1.10.5';
   const CHANGELOG = {
+    '1.10.5': 'Added drag-to-resize column headings across all tables with saved widths; Visited rows now also allow inline Location editing alongside the expense fields.',
     '1.10.4': 'Fixed Actual Expenses and Visited table column alignment after removing notes and ratings: both tables now render exactly seven columns (Description, Category, Qty, Unit Cost, Planned, Actual, action).',
     '1.10.3': 'Actual Expenses and Visited now mirror the planned expense fields: Description, Category, Qty and Unit Cost, with Planned and Actual totals shown for comparison; notes and ratings are no longer part of expense rows.',
     '1.10.2': 'Visited is now the editable bridge from Plan to Actual Expenses: planned values remain the comparison baseline, while description, actual category, quantity, unit cost, notes and rating can be edited inline and update the linked actual expense automatically.',
@@ -1896,6 +1897,53 @@
     if (activeTripTab === 'packing') renderPackingTab(t);
   }
 
+  function initTableColumnResizers(root){
+    const tables = (root || document).querySelectorAll('table');
+    tables.forEach(table=>{
+      if (table.dataset.resizersReady === '1') return;
+      const head = table.querySelector('thead tr');
+      const cols = table.querySelector('colgroup');
+      if (!head || !cols) return;
+      const ths = Array.from(head.children);
+      const colEls = Array.from(cols.children);
+      if (ths.length !== colEls.length || ths.length < 2) return;
+      table.classList.add('resizable-table');
+      table.dataset.resizersReady = '1';
+      const tableKey = table.className.split(/\s+/).filter(Boolean).join('.');
+      const storageKey = 'travel-ledger-col-widths:' + tableKey;
+      let saved = {};
+      try { saved = JSON.parse(localStorage.getItem(storageKey) || '{}'); } catch (_) {}
+      colEls.forEach((col, idx)=>{ if (saved[idx]) col.style.width = saved[idx]; });
+      ths.forEach((th, idx)=>{
+        const grip = document.createElement('span');
+        grip.className = 'col-resizer';
+        grip.setAttribute('aria-hidden','true');
+        th.appendChild(grip);
+        grip.addEventListener('pointerdown', ev=>{
+          ev.preventDefault(); ev.stopPropagation();
+          const startX = ev.clientX;
+          const startWidth = th.getBoundingClientRect().width;
+          const minWidth = idx === ths.length - 1 ? 38 : 70;
+          grip.classList.add('active');
+          if (grip.setPointerCapture) grip.setPointerCapture(ev.pointerId);
+          const move = e=>{ colEls[idx].style.width = Math.max(minWidth, startWidth + e.clientX - startX) + 'px'; };
+          const stop = ()=>{
+            grip.classList.remove('active');
+            const widths = {};
+            colEls.forEach((col,i)=>{ if (col.style.width) widths[i]=col.style.width; });
+            try { localStorage.setItem(storageKey, JSON.stringify(widths)); } catch (_) {}
+            grip.removeEventListener('pointermove',move);
+            grip.removeEventListener('pointerup',stop);
+            grip.removeEventListener('pointercancel',stop);
+          };
+          grip.addEventListener('pointermove',move);
+          grip.addEventListener('pointerup',stop);
+          grip.addEventListener('pointercancel',stop);
+        });
+      });
+    });
+  }
+
   function renderExpenseRows(t){
     const body = document.getElementById('expBody');
     if (!t.expenses.length){ body.innerHTML = `<tr><td colspan="7" class="empty-state">No expenses yet.</td></tr>`; return; }
@@ -1931,6 +1979,7 @@
       });
     });
     wireAutogrow(body, 'textarea.exp-desc', { singleValue: true });
+    initTableColumnResizers(body.closest('.chart-card') || body.parentElement);
   }
   function syncExpenseVisitMeta(t, expense){
     const item = t.planItems.find(p=>p.actualExpenseId===expense.id || p.linkedExpenseId===expense.id);
@@ -2168,7 +2217,7 @@
               <tr data-id="${i.id}">
                 <td>
                   <textarea rows="1" class="pt-desc autogrow">${escapeHtml(i.name)}</textarea>
-                  ${i.location?`<span style="color:var(--ink-soft);font-size:11px;display:block;">${escapeHtml(i.location)}</span>`:''}
+                  <input type="text" class="pt-location" value="${escapeHtml(i.location||'')}" placeholder="Location" style="margin-top:3px;width:100%;border:1px solid transparent;background:transparent;font-size:11px;padding:2px 4px;color:var(--ink-soft);border-radius:3px;">
                   ${renderLinksInline(i.links)}
                 </td>
                 <td><select class="pt-cat">${state.categories.map(c=>`<option value="${escapeHtml(c.name)}" ${c.name===actualCategory?'selected':''}>${escapeHtml(c.name)}</option>`).join('')}</select></td>
@@ -2214,6 +2263,7 @@
       row.querySelector('.pt-cat').addEventListener('change', ev=>{ saveVisited(e=>{ e.category = ev.target.value; }); });
       row.querySelector('.pt-qty').addEventListener('change', ev=>{ saveVisited(e=>{ e.quantity = Math.max(0, Number(ev.target.value)||0); }); });
       row.querySelector('.pt-unit').addEventListener('change', ev=>{ saveVisited(e=>{ e.unitCost = Math.max(0, Number(ev.target.value)||0); }); });
+      row.querySelector('.pt-location').addEventListener('change', ev=>{ item.location = singleLine(ev.target.value); t.updatedAt = Date.now(); saveState(); renderTripView(); });
     });
 
     sections.querySelectorAll('.pt-unmark').forEach(btn=>{
@@ -2229,6 +2279,7 @@
       });
     });
     wireAutogrow(sections, 'textarea.pt-desc', { singleValue: true });
+    initTableColumnResizers(sections);
   }
 
   /* ---------------- Packing list ---------------- */
