@@ -2109,6 +2109,9 @@
     const panel = document.getElementById('tabPostTrip');
     if (!panel) return;
     const visited = t.planItems.filter(i=>i.visited);
+    let actualsCreated = false;
+    visited.forEach(i=>{ if (i.cost != null && !i.actualExpenseId && ensureActualExpense(t, i)) actualsCreated = true; });
+    if (actualsCreated){ t.updatedAt = Date.now(); saveState(); }
     panel.innerHTML = `
       <div class="toolbar">
         <p style="font-size:12px;color:var(--ink-soft);margin:0;">Places marked "visited" from your Plan tab show up here \u2014 add notes or a rating on how it actually went.</p>
