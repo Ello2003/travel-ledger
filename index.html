@@ -583,8 +583,9 @@
   const STORAGE_KEY = 'trips-data';
   const HISTORY_KEY = 'trips-data-history';
   const MAX_HISTORY_DAYS = 14;
-  const APP_VERSION = '1.10.16';
+  const APP_VERSION = '1.10.17';
   const CHANGELOG = {
+    '1.10.17': 'Restored the intended Budget/Spent rule: Shopping expenses remain visible in Actual Expenses and category totals but are excluded from the trip budget variance.',
     '1.10.16': 'Fixed Budget and Spent calculations so all Actual Expenses, including Shopping, are counted consistently.',
     '1.10.15': 'Fixed Visited quantity and unit-cost editing for items without an existing estimated cost by creating a zero-cost Actual Expense on first edit.',
     '1.10.10': 'Restored the original Budget table formatting and Actual Expenses column proportions while retaining editable expense fields.',
@@ -935,7 +936,7 @@
   }
 
   function tripTotal(trip){ return trip.expenses.reduce((s,e)=> s + (Number(e.quantity)||0) * (Number(e.unitCost)||0), 0); }
-  function budgetCountedTotal(trip){ return tripTotal(trip); }
+  function budgetCountedTotal(trip){ return trip.expenses.reduce((s,e)=> e.category==='Shopping' ? s : s + (Number(e.quantity)||0) * (Number(e.unitCost)||0), 0); }
   function tripCategoryTotals(trip){
     const totals = {}; state.categories.forEach(c => totals[c.name] = 0);
     trip.expenses.forEach(e => { totals[e.category] = (totals[e.category]||0) + (Number(e.quantity)||0)*(Number(e.unitCost)||0); });
