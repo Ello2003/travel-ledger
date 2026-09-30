@@ -569,8 +569,9 @@
   const STORAGE_KEY = 'trips-data';
   const HISTORY_KEY = 'trips-data-history';
   const MAX_HISTORY_DAYS = 14;
-  const APP_VERSION = '1.10.0';
+  const APP_VERSION = '1.10.1';
   const CHANGELOG = {
+    '1.10.1': 'Visited items now create an editable actual expense from their estimate automatically; Visited editing supports actual quantity, category, cost, notes and rating, while keeping actuals independent from the original estimate.',
     '1.10.0': 'Estimated Costs now uses the shared expense categories for planned and manual rows, supports Reset per planned row, updates row totals live while typing, and removes the stale duplicate Index.html entry point so index.html is canonical.',
     '1.9.1': 'Estimated Costs rows pulled from Plan are now fully editable inline (description, category, quantity, and unit cost), with quantity-aware totals. Normalized editable table hover/focus shading to the ledger paper palette and added a subtle source indicator for planned rows.',
     '1.9.0': 'GitHub Sync now has separate Push and Pull buttons in the header. Push writes the current browser data; Pull fetches the repository copy, asks before replacing local data, and keeps a local recovery point through Backup History. Automatic sync after edits remains available when enabled.',
@@ -897,7 +898,7 @@
       date: opts.date || null, endDate: opts.endDate || null, time: opts.time || null,
       dayNumber: opts.dayNumber || null, dayNumberEnd: opts.dayNumberEnd || null,
       location: opts.location || '', links: opts.links || [], cost: opts.cost != null ? opts.cost : null,
-      linkedExpenseId: opts.linkedExpenseId || null, notes: opts.notes || '',
+      linkedExpenseId: opts.linkedExpenseId || null, actualExpenseId: opts.actualExpenseId || null, notes: opts.notes || '',
       visited: opts.visited || false, actualNotes: opts.actualNotes || '', actualRating: opts.actualRating || null,
       estimateQuantity: opts.estimateQuantity == null ? 1 : opts.estimateQuantity,
       estimateCategory: opts.estimateCategory || null,
@@ -1335,6 +1336,7 @@
           delete i.link;
         }
         if (i.visited === undefined) i.visited = false;
+        if (i.actualExpenseId === undefined) i.actualExpenseId = null;
         if (i.actualNotes === undefined) i.actualNotes = '';
         if (i.actualRating === undefined) i.actualRating = null;
       });
@@ -1884,7 +1886,7 @@
     if (!t.expenses.length){ body.innerHTML = `<tr><td colspan="7" class="empty-state">No expenses yet.</td></tr>`; return; }
     body.innerHTML = t.expenses.map(e=>{
       const actual = (Number(e.quantity)||0)*(Number(e.unitCost)||0);
-      const linkedPlan = t.planItems.find(p=>p.linkedExpenseId===e.id);
+      const linkedPlan = t.planItems.find(p=>p.linkedExpenseId===e.id || p.actualExpenseId===e.id);
       const planned = linkedPlan && linkedPlan.cost!=null
         ? (Number(linkedPlan.estimateQuantity == null ? 1 : linkedPlan.estimateQuantity)||0) * (Number(linkedPlan.cost)||0)
         : null;
@@ -2069,10 +2071,11 @@
         const item = t.planItems.find(i=>i.id===id);
         if (!item) return;
         item.visited = !item.visited;
+        if (item.visited) ensureActualExpense(t, item);
         t.updatedAt = Date.now();
         logEvent(item.visited?'plan-marked-visited':'plan-unmarked-visited', `${item.visited?'Marked':'Unmarked'} "${item.name}" as visited on ${t.name}`);
         saveState(); renderTripView();
-        showToast(item.visited ? 'Added to Visited' : 'Removed from Visited');
+        showToast(item.visited ? (item.cost != null ? 'Added to Visited & copied estimate to Actual' : 'Added to Visited') : 'Removed from Visited');
       });
     });
     sections.querySelectorAll('.plan-del').forEach(btn=>{
@@ -2081,12 +2084,34 @@
     });
   }
 
+  function ensureActualExpense(t, item){
+    if (!item || item.cost == null || Number(item.cost) <= 0) return null;
+    const category = item.estimateCategory || resolveExpenseCategory(SHEET_TO_CAT[item.sheet] || 'Other');
+    const quantity = Math.max(0, Number(item.estimateQuantity == null ? 1 : item.estimateQuantity) || 0);
+    let expense = item.actualExpenseId ? t.expenses.find(e=>e.id===item.actualExpenseId) : null;
+    if (!expense){
+      expense = exp(item.name, category, quantity, Math.max(0, Number(item.cost) || 0));
+      t.expenses.push(expense);
+      item.actualExpenseId = expense.id;
+      logEvent('visited-actual-created', 'Copied estimated cost for "' + item.name + '" into Actual Expenses on ' + t.name);
+    }
+    return expense;
+  }
+  function actualVisitedCost(t, item){
+    const e = item.actualExpenseId ? t.expenses.find(x=>x.id===item.actualExpenseId) : null;
+    if (e) return fmt((Number(e.quantity)||0)*(Number(e.unitCost)||0));
+    return item.cost != null ? fmt(item.cost) + ' est.' : '—';
+  }
+
   /* ---------------- Post Trip (actual places visited) ---------------- */
   const ACTUAL_RATING_LABELS = { 1:'\u2605', 2:'\u2605\u2605', 3:'\u2605\u2605\u2605', 4:'\u2605\u2605\u2605\u2605', 5:'\u2605\u2605\u2605\u2605\u2605' };
   function renderPostTripTab(t){
     const panel = document.getElementById('tabPostTrip');
     if (!panel) return;
     const visited = t.planItems.filter(i=>i.visited);
+    let actualsCreated = false;
+    visited.forEach(i=>{ if (i.cost != null && !i.actualExpenseId && ensureActualExpense(t, i)) actualsCreated = true; });
+    if (actualsCreated){ t.updatedAt = Date.now(); saveState(); }
     panel.innerHTML = `
       <div class="toolbar">
         <p style="font-size:12px;color:var(--ink-soft);margin:0;">Places marked "visited" from your Plan tab show up here \u2014 add notes or a rating on how it actually went.</p>
@@ -2116,7 +2141,7 @@
                 <td>${escapeHtml(i.name)}${i.location?`<br><span style="color:var(--ink-soft);font-size:11px;">${escapeHtml(i.location)}</span>`:''}${renderLinksInline(i.links)}${i.actualNotes?`<br><span style="color:var(--ink-soft);font-size:11px;font-style:italic;">${escapeHtml(i.actualNotes)}</span>`:''}</td>
                 <td>${i.actualRating?ACTUAL_RATING_LABELS[i.actualRating]:'\u2014'}</td>
                 <td class="when-cell">${formatWhen(t,i)}</td>
-                <td class="num">${i.cost!=null ? fmt(i.cost) : '\u2014'}</td>
+                <td class="num">${actualVisitedCost(t,i)}</td>
                 <td><button class="exp-del pt-edit" aria-label="Edit visit" title="Add notes/rating">\u270e</button><button class="exp-del pt-unmark" aria-label="Remove from Visited" title="Remove from Visited">\u2715</button></td>
               </tr>`).join('')}
           </tbody>
@@ -2145,6 +2170,7 @@
 
   function openPostTripEditModal(t, item){
     if (!item) return;
+    const expense = ensureActualExpense(t, item);
     modalRoot.innerHTML = `
       <div class="modal-overlay">
         <div class="modal-box">
@@ -2154,18 +2180,37 @@
             ${[1,2,3,4,5].map(r=>`<option value="${r}" ${item.actualRating===r?'selected':''}>${ACTUAL_RATING_LABELS[r]}</option>`).join('')}
           </select></div>
           <div class="field"><label>Notes (optional)</label><textarea id="pt-notes" rows="3">${escapeHtml(item.actualNotes||'')}</textarea></div>
+          <div class="field"><label>Actual category</label><select id="pt-category"></select></div>
+          <div class="field-row"><div class="field"><label>Actual quantity</label><input id="pt-qty" type="number" min="0" step="1"></div><div class="field"><label>Actual unit cost (£)</label><input id="pt-cost" type="number" min="0" step="0.01"></div></div>
           <div class="modal-actions">
             <button class="btn-ghost" id="pt-cancel">Cancel</button>
             <button class="btn-primary" id="pt-save">Save</button>
           </div>
         </div>
       </div>`;
+    document.getElementById('pt-category').innerHTML = state.categories.map(c=>`<option value="${escapeHtml(c.name)}">${escapeHtml(c.name)}</option>`).join('');
+    document.getElementById('pt-category').value = expense ? expense.category : (item.estimateCategory || resolveExpenseCategory(SHEET_TO_CAT[item.sheet] || 'Other'));
+    document.getElementById('pt-qty').value = expense ? expense.quantity : (item.estimateQuantity == null ? 1 : item.estimateQuantity);
+    document.getElementById('pt-cost').value = expense ? expense.unitCost : (item.cost == null ? '' : item.cost);
     document.getElementById('pt-cancel').addEventListener('click', closeModal);
     document.getElementById('pt-notes').focus();
     document.getElementById('pt-save').addEventListener('click', ()=>{
       const ratingRaw = document.getElementById('pt-rating').value;
       item.actualRating = ratingRaw ? Number(ratingRaw) : null;
       item.actualNotes = document.getElementById('pt-notes').value.trim();
+      const actualQty = Math.max(0, Number(document.getElementById('pt-qty').value) || 0);
+      const actualCost = Math.max(0, Number(document.getElementById('pt-cost').value) || 0);
+      const actualCategory = document.getElementById('pt-category').value;
+      if (expense){
+        expense.description = item.name;
+        expense.quantity = actualQty;
+        expense.unitCost = actualCost;
+        expense.category = actualCategory;
+      } else if (actualCost > 0 || actualQty > 0){
+        const ne = exp(item.name, actualCategory, actualQty, actualCost);
+        t.expenses.push(ne);
+        item.actualExpenseId = ne.id;
+      }
       t.updatedAt = Date.now();
       logEvent('post-trip-updated', `Updated post-trip notes for "${item.name}" on ${t.name}`);
       saveState(); closeModal(); renderTripView();
