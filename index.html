@@ -1929,7 +1929,7 @@
 
       // Equivalent tables share one width profile, so Visited / Actual / other
       // tables with the same column structure stay visually consistent.
-      const signature = colEls.map(col=>Array.from(col.classList).sort().join('.')).join('|');
+      const signature = colEls.map(col=>{ const cls=Array.from(col.classList).filter(x=>x!=='col-name'&&x!=='col-desc'); cls.push(col.classList.contains('col-name')||col.classList.contains('col-desc')?'col-description':''); return cls.sort().join('.'); }).join('|');
       const storageKey = 'travel-ledger-col-widths-v2:' + signature;
       let saved = {};
       try { saved = JSON.parse(localStorage.getItem(storageKey) || '{}'); } catch (_) {}
@@ -1982,7 +1982,7 @@
             // Push the same profile to equivalent tables currently on screen.
             document.querySelectorAll('table.resizable-table').forEach(other=>{
               const otherCols = other.querySelectorAll('colgroup > col');
-              const otherSig = Array.from(otherCols).map(col=>Array.from(col.classList).sort().join('.')).join('|');
+              const otherSig = Array.from(otherCols).map(col=>{ const cls=Array.from(col.classList).filter(x=>x!=='col-name'&&x!=='col-desc'); cls.push(col.classList.contains('col-name')||col.classList.contains('col-desc')?'col-description':''); return cls.sort().join('.'); }).join('|');
               if (otherSig !== signature) return;
               widths.forEach((w,i)=>{ if(otherCols[i]) otherCols[i].style.width=Math.round(w)+'px'; });
               const total=widths.reduce((s,w)=>s+w,0);
