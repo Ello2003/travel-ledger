@@ -233,7 +233,7 @@
 
   #travel-ledger-root table.exp-table { width: 100%; border-collapse: collapse; font-size: 13px; }
   #travel-ledger-root .table-scroll { overflow-x: auto; }
-  #travel-ledger-root table.resizable-table { table-layout: fixed; width: max-content; }
+  #travel-ledger-root table.resizable-table { table-layout: fixed; width: 100%; }
   #travel-ledger-root table.resizable-table.is-resizing { user-select: none; }
   #travel-ledger-root table.resizable-table th { position: relative; overflow: visible; }
   #travel-ledger-root table.resizable-table th,
@@ -284,21 +284,20 @@
   #travel-ledger-root table.packing-table input[type="checkbox"] { width: 16px; height: 16px; cursor: pointer; }
   #travel-ledger-root table.packing-table tr.packed-row .pack-name { text-decoration: line-through; opacity: .5; }
   #travel-ledger-root table.packing-table tr.packed-row td { opacity: .75; }
-  #travel-ledger-root table.budget-exp-table { table-layout: fixed; }
-  #travel-ledger-root table.budget-exp-table col.col-desc { width: 17%; }
-  #travel-ledger-root table.budget-exp-table col.col-cat { width: 15%; }
-  #travel-ledger-root table.budget-exp-table col.col-qty { width: 6%; }
-  #travel-ledger-root table.budget-exp-table col.col-unit { width: 10%; }
-  #travel-ledger-root table.budget-exp-table col.col-notes { width: 18%; }
-  #travel-ledger-root table.budget-exp-table col.col-rating { width: 10%; }
-  #travel-ledger-root table.budget-exp-table col.col-planned { width: 9%; }
-  #travel-ledger-root table.budget-exp-table col.col-actual { width: 9%; }
-  #travel-ledger-root table.budget-exp-table col.col-actions { width: 6%; }
-  #travel-ledger-root table.estimate-table col.col-desc { width: 28%; }
-  #travel-ledger-root table.estimate-table col.col-cat { width: 22%; }
+  #travel-ledger-root table.budget-exp-table { table-layout: fixed; width: 100%; }
+  #travel-ledger-root table.budget-exp-table col.col-desc { width: 24%; }
+  #travel-ledger-root table.budget-exp-table col.col-cat { width: 20%; }
+  #travel-ledger-root table.budget-exp-table col.col-qty { width: 8%; }
+  #travel-ledger-root table.budget-exp-table col.col-unit { width: 14%; }
+  #travel-ledger-root table.budget-exp-table col.col-planned { width: 12%; }
+  #travel-ledger-root table.budget-exp-table col.col-actual { width: 14%; }
+  #travel-ledger-root table.budget-exp-table col.col-actions { width: 8%; }
+  #travel-ledger-root table.estimate-table { table-layout: fixed; width: 100%; }
+  #travel-ledger-root table.estimate-table col.col-desc { width: 30%; }
+  #travel-ledger-root table.estimate-table col.col-cat { width: 23%; }
   #travel-ledger-root table.estimate-table col.col-qty { width: 12%; }
-  #travel-ledger-root table.estimate-table col.col-unit { width: 16%; }
-  #travel-ledger-root table.estimate-table col.col-actual { width: 16%; }
+  #travel-ledger-root table.estimate-table col.col-unit { width: 17%; }
+  #travel-ledger-root table.estimate-table col.col-actual { width: 12%; }
   #travel-ledger-root table.estimate-table col.col-actions { width: 6%; }
   #travel-ledger-root table.budget-exp-table select.exp-cat { width: 100%; max-width: 100%; font-size: 12px; }
   #travel-ledger-root table.estimate-table .planned-estimate-row { background: rgba(213,203,172,.16); }
@@ -584,7 +583,7 @@
   const STORAGE_KEY = 'trips-data';
   const HISTORY_KEY = 'trips-data-history';
   const MAX_HISTORY_DAYS = 14;
-  const APP_VERSION = '1.10.10';
+  const APP_VERSION = '1.10.11';
   const CHANGELOG = {
     '1.10.10': 'Restored the original Budget table formatting and Actual Expenses column proportions while retaining editable expense fields.',
     '1.10.8': 'Standardized Budget Estimated Costs, Actual Expenses and Visited table formatting and column proportions.',
@@ -1929,29 +1928,23 @@
       table.classList.add('resizable-table');
       table.dataset.resizersReady = '1';
 
-      // Equivalent tables share one width profile, so Visited / Actual / other
-      // tables with the same column structure stay visually consistent.
-      const signature = colEls.map(col=>{ const cls=Array.from(col.classList).filter(x=>x!=='col-name'&&x!=='col-desc'); cls.push(col.classList.contains('col-name')||col.classList.contains('col-desc')?'col-description':''); return cls.sort().join('.'); }).join('|');
-      // Keep the existing CSS/table geometry untouched until the user actually drags a column.
-      const storageKey = 'travel-ledger-col-widths-v3:' + signature;
-      let saved = {};
-      try { saved = JSON.parse(localStorage.getItem(storageKey) || '{}'); } catch (_) {}
+      // Persist only user-created widths. Never let an old/global profile
+      // rewrite the table's carefully defined initial layout.
+      const tableKey = table.className.replace(/\s+/g,'.');
+      const storageKey = 'travel-ledger-col-widths-v4:' + tableKey;
+      let saved = null;
+      try { saved = JSON.parse(localStorage.getItem(storageKey) || 'null'); } catch (_) {}
 
       const minWidths = ths.map((_,i)=> i===0 ? 180 : (i===ths.length-1 ? 48 : 78));
 
       const applyWidths = widths=>{
         widths.forEach((w,i)=>{ colEls[i].style.width = Math.round(w) + 'px'; });
-        const total = widths.reduce((sum,w)=>sum+w,0);
-        const available = table.parentElement ? table.parentElement.clientWidth : total;
-        table.style.width = Math.max(total, available) + 'px';
-        table.style.minWidth = total + 'px';
+        table.style.width = 'max-content';
+        table.style.minWidth = widths.reduce((sum,w)=>sum+w,0) + 'px';
       };
 
-      // Only apply a saved profile after a previous resize. Otherwise preserve
-      // the table's original percentage-based formatting.
-      if (Object.keys(saved).length === colEls.length) {
-        const savedWidths = colEls.map((_,i)=>Math.max(minWidths[i], Number(saved[i]) || 0));
-        if (savedWidths.every(w=>w>0)) applyWidths(savedWidths);
+      if (Array.isArray(saved) && saved.length === colEls.length && saved.every(w=>Number(w)>0)) {
+        applyWidths(saved.map(w=>Math.max(48,Number(w))));
       }
 
       ths.forEach((th,idx)=>{
@@ -1964,40 +1957,28 @@
           ev.preventDefault();
           ev.stopPropagation();
           const startX = ev.clientX;
-          const startWidths = colEls.map(col=>parseFloat(col.style.width)||col.getBoundingClientRect().width);
-          const startTableWidth = Math.max(table.getBoundingClientRect().width, startWidths.reduce((s,w)=>s+w,0));
+          const startWidths = colEls.map(col=>col.getBoundingClientRect().width);
           const min = minWidths[idx];
           grip.classList.add('active');
           table.classList.add('is-resizing');
           if (grip.setPointerCapture) grip.setPointerCapture(ev.pointerId);
 
           const move = e=>{
-            const delta = e.clientX - startX;
             const next = startWidths.slice();
-            // Grow/shrink the dragged column while leaving every other column alone.
-            // The table itself grows/shrinks, so the browser does not crush unrelated fields.
-            next[idx] = Math.max(min, startWidths[idx] + delta);
+            next[idx] = Math.max(min, startWidths[idx] + (e.clientX - startX));
             applyWidths(next);
           };
+
           const stop = ()=>{
-            const widths = colEls.map(col=>parseFloat(col.style.width)||col.getBoundingClientRect().width);
+            const widths = colEls.map(col=>col.getBoundingClientRect().width);
+            try { localStorage.setItem(storageKey, JSON.stringify(widths)); } catch (_) {}
             grip.classList.remove('active');
             table.classList.remove('is-resizing');
-            try { localStorage.setItem(storageKey, JSON.stringify(widths)); } catch (_) {}
-            // Push the same profile to equivalent tables currently on screen.
-            document.querySelectorAll('table.resizable-table').forEach(other=>{
-              const otherCols = other.querySelectorAll('colgroup > col');
-              const otherSig = Array.from(otherCols).map(col=>{ const cls=Array.from(col.classList).filter(x=>x!=='col-name'&&x!=='col-desc'); cls.push(col.classList.contains('col-name')||col.classList.contains('col-desc')?'col-description':''); return cls.sort().join('.'); }).join('|');
-              if (otherSig !== signature) return;
-              widths.forEach((w,i)=>{ if(otherCols[i]) otherCols[i].style.width=Math.round(w)+'px'; });
-              const total=widths.reduce((s,w)=>s+w,0);
-              other.style.width=Math.max(total, other.parentElement ? other.parentElement.clientWidth : total)+'px';
-              other.style.minWidth=total+'px';
-            });
             grip.removeEventListener('pointermove',move);
             grip.removeEventListener('pointerup',stop);
             grip.removeEventListener('pointercancel',stop);
           };
+
           grip.addEventListener('pointermove',move);
           grip.addEventListener('pointerup',stop);
           grip.addEventListener('pointercancel',stop);
