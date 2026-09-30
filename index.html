@@ -571,8 +571,9 @@
   const STORAGE_KEY = 'trips-data';
   const HISTORY_KEY = 'trips-data-history';
   const MAX_HISTORY_DAYS = 14;
-  const APP_VERSION = '1.10.1';
+  const APP_VERSION = '1.10.2';
   const CHANGELOG = {
+    '1.10.2': 'Visited is now the editable bridge from Plan to Actual Expenses: planned values remain the comparison baseline, while description, actual category, quantity, unit cost, notes and rating can be edited inline and update the linked actual expense automatically.',
     '1.10.1': 'Visited items now create an editable actual expense from their estimate automatically; Visited editing supports actual quantity, category, cost, notes and rating, while keeping actuals independent from the original estimate.',
     '1.10.0': 'Estimated Costs now uses the shared expense categories for planned and manual rows, supports Reset per planned row, updates row totals live while typing, and removes the stale duplicate Index.html entry point so index.html is canonical.',
     '1.9.1': 'Estimated Costs rows pulled from Plan are now fully editable inline (description, category, quantity, and unit cost), with quantity-aware totals. Normalized editable table hover/focus shading to the ledger paper palette and added a subtle source indicator for planned rows.',
@@ -2134,15 +2135,16 @@
     let actualsCreated = false;
     visited.forEach(i=>{ if (i.cost != null && !i.actualExpenseId && ensureActualExpense(t, i)) actualsCreated = true; });
     if (actualsCreated){ t.updatedAt = Date.now(); saveState(); }
+
     panel.innerHTML = `
       <div class="toolbar">
-        <p style="font-size:12px;color:var(--ink-soft);margin:0;">Places marked "visited" from your Plan tab show up here \u2014 add notes or a rating on how it actually went.</p>
+        <p style="font-size:12px;color:var(--ink-soft);margin:0;">Visited items are the bridge from Plan to Actual Expenses. Planned values stay visible for comparison; edit the actual fields here and the same actual expense is updated in Budget.</p>
       </div>
       <div id="postTripSections"></div>
     `;
     const sections = document.getElementById('postTripSections');
     if (!visited.length){
-      sections.innerHTML = '<div class="empty-state">Nothing marked as visited yet. In the Plan tab, click the \u2713 button on an item to add it here.</div>';
+      sections.innerHTML = '<div class="empty-state">Nothing marked as visited yet. In the Plan tab, click the ✓ button on an item to add it here.</div>';
       return;
     }
     sections.innerHTML = state.sheets.map(s=>{
@@ -2154,28 +2156,75 @@
           <div><span class="sheet-dot" style="background:${s.color}"></span>${escapeHtml(s.key)} <span style="color:var(--ink-soft);font-family:var(--font-mono);font-size:11px;">(${items.length})</span></div>
         </div>
         <div class="table-scroll">
-        <table class="exp-table plan-table">
-          <colgroup><col class="col-name"><col class="col-status"><col class="col-when"><col class="col-cost"><col class="col-actions"></colgroup>
-          <thead><tr><th>Name</th><th>Rating</th><th>Planned For</th><th>Cost</th><th></th></tr></thead>
+        <table class="exp-table plan-table visited-table">
+          <colgroup><col class="col-name"><col class="col-cat"><col class="col-qty"><col class="col-unit"><col class="col-notes"><col class="col-rating"><col class="col-planned"><col class="col-actual"><col class="col-actions"></colgroup>
+          <thead><tr><th>Description</th><th>Actual Category</th><th>Qty</th><th>Unit Cost</th><th>Notes</th><th>Rating</th><th>Planned</th><th>Actual</th><th></th></tr></thead>
           <tbody>
-            ${items.map(i=>`
+            ${items.map(i=>{
+              const expense = i.actualExpenseId ? t.expenses.find(e=>e.id===i.actualExpenseId) : null;
+              const planned = i.cost!=null ? (Number(i.estimateQuantity == null ? 1 : i.estimateQuantity)||0) * (Number(i.cost)||0) : null;
+              const actualQty = expense ? expense.quantity : (i.estimateQuantity == null ? 1 : i.estimateQuantity);
+              const actualUnit = expense ? expense.unitCost : (i.cost == null ? '' : i.cost);
+              const actualCategory = expense ? expense.category : (i.estimateCategory || resolveExpenseCategory(SHEET_TO_CAT[i.sheet] || 'Other'));
+              const actualNotes = expense ? (expense.notes||'') : (i.actualNotes||'');
+              const actualRating = expense ? expense.rating : i.actualRating;
+              const actual = expense ? (Number(expense.quantity)||0)*(Number(expense.unitCost)||0) : null;
+              return `
               <tr data-id="${i.id}">
-                <td>${escapeHtml(i.name)}${i.location?`<br><span style="color:var(--ink-soft);font-size:11px;">${escapeHtml(i.location)}</span>`:''}${renderLinksInline(i.links)}${i.actualNotes?`<br><span style="color:var(--ink-soft);font-size:11px;font-style:italic;">${escapeHtml(i.actualNotes)}</span>`:''}</td>
-                <td>${i.actualRating?ACTUAL_RATING_LABELS[i.actualRating]:'\u2014'}</td>
-                <td class="when-cell">${formatWhen(t,i)}</td>
-                <td class="num">${actualVisitedCost(t,i)}</td>
-                <td><button class="exp-del pt-edit" aria-label="Edit visit" title="Add notes/rating">\u270e</button><button class="exp-del pt-unmark" aria-label="Remove from Visited" title="Remove from Visited">\u2715</button></td>
-              </tr>`).join('')}
+                <td>
+                  <textarea rows="1" class="pt-desc autogrow">${escapeHtml(i.name)}</textarea>
+                  ${i.location?`<span style="color:var(--ink-soft);font-size:11px;display:block;">${escapeHtml(i.location)}</span>`:''}
+                  ${renderLinksInline(i.links)}
+                </td>
+                <td><select class="pt-cat">${state.categories.map(c=>`<option value="${escapeHtml(c.name)}" ${c.name===actualCategory?'selected':''}>${escapeHtml(c.name)}</option>`).join('')}</select></td>
+                <td class="num"><input type="number" class="pt-qty" value="${actualQty}" min="0" step="1" style="text-align:right"></td>
+                <td class="num"><input type="number" class="pt-unit" value="${actualUnit}" min="0" step="0.01" style="text-align:right"></td>
+                <td><textarea rows="1" class="pt-notes autogrow">${escapeHtml(actualNotes)}</textarea></td>
+                <td><select class="pt-rating"><option value="">—</option>${[1,2,3,4,5].map(r=>`<option value="${r}" ${Number(actualRating)===r?'selected':''}>${ACTUAL_RATING_LABELS[r]}</option>`).join('')}</select></td>
+                <td class="num" style="color:var(--ink-soft);">${planned!=null ? fmt(planned) : '—'}</td>
+                <td class="num pt-actual">${actual!=null ? fmt(actual) : '—'}</td>
+                <td><button class="exp-del pt-unmark" aria-label="Remove from Visited" title="Remove from Visited">✕</button></td>
+              </tr>`;
+            }).join('')}
           </tbody>
         </table>
         </div>
       </div>`;
     }).filter(Boolean).join('');
 
-    sections.querySelectorAll('.pt-edit').forEach(btn=>{
-      const id = btn.closest('tr').dataset.id;
-      btn.addEventListener('click', ()=> openPostTripEditModal(t, t.planItems.find(i=>i.id===id)));
+    sections.querySelectorAll('tr[data-id]').forEach(row=>{
+      const id = row.dataset.id;
+      const item = t.planItems.find(i=>i.id===id);
+      if (!item) return;
+      const getOrCreateExpense = ()=>{
+        let expense = item.actualExpenseId ? t.expenses.find(e=>e.id===item.actualExpenseId) : null;
+        if (!expense) expense = ensureActualExpense(t, item);
+        return expense;
+      };
+      const saveVisited = (mutateExpense)=>{
+        const expense = getOrCreateExpense();
+        if (expense) mutateExpense(expense);
+        t.updatedAt = Date.now();
+        saveState();
+        renderTripView();
+      };
+      row.querySelector('.pt-desc').addEventListener('change', ev=>{
+        const value = singleLine(ev.target.value);
+        if (!value) return;
+        item.name = value;
+        const expense = getOrCreateExpense();
+        if (expense) expense.description = value;
+        t.updatedAt = Date.now();
+        saveState();
+        renderTripView();
+      });
+      row.querySelector('.pt-cat').addEventListener('change', ev=>{ saveVisited(e=>{ e.category = ev.target.value; }); });
+      row.querySelector('.pt-qty').addEventListener('change', ev=>{ saveVisited(e=>{ e.quantity = Math.max(0, Number(ev.target.value)||0); }); });
+      row.querySelector('.pt-unit').addEventListener('change', ev=>{ saveVisited(e=>{ e.unitCost = Math.max(0, Number(ev.target.value)||0); }); });
+      row.querySelector('.pt-notes').addEventListener('change', ev=>{ saveVisited(e=>{ e.notes = ev.target.value.trim(); syncExpenseVisitMeta(t, e); }); });
+      row.querySelector('.pt-rating').addEventListener('change', ev=>{ saveVisited(e=>{ e.rating = ev.target.value ? Number(ev.target.value) : null; syncExpenseVisitMeta(t, e); }); });
     });
+
     sections.querySelectorAll('.pt-unmark').forEach(btn=>{
       const id = btn.closest('tr').dataset.id;
       btn.addEventListener('click', ()=>{
@@ -2188,57 +2237,8 @@
         showToast('Removed from Visited');
       });
     });
-  }
-
-  function openPostTripEditModal(t, item){
-    if (!item) return;
-    const expense = ensureActualExpense(t, item);
-    modalRoot.innerHTML = `
-      <div class="modal-overlay">
-        <div class="modal-box">
-          <h3>${escapeHtml(item.name)}</h3>
-          <div class="field"><label>How was it?</label><select id="pt-rating">
-            <option value="">Not rated</option>
-            ${[1,2,3,4,5].map(r=>`<option value="${r}" ${item.actualRating===r?'selected':''}>${ACTUAL_RATING_LABELS[r]}</option>`).join('')}
-          </select></div>
-          <div class="field"><label>Notes (optional)</label><textarea id="pt-notes" rows="3">${escapeHtml(item.actualNotes||'')}</textarea></div>
-          <div class="field"><label>Actual category</label><select id="pt-category"></select></div>
-          <div class="field-row"><div class="field"><label>Actual quantity</label><input id="pt-qty" type="number" min="0" step="1"></div><div class="field"><label>Actual unit cost (£)</label><input id="pt-cost" type="number" min="0" step="0.01"></div></div>
-          <div class="modal-actions">
-            <button class="btn-ghost" id="pt-cancel">Cancel</button>
-            <button class="btn-primary" id="pt-save">Save</button>
-          </div>
-        </div>
-      </div>`;
-    document.getElementById('pt-category').innerHTML = state.categories.map(c=>`<option value="${escapeHtml(c.name)}">${escapeHtml(c.name)}</option>`).join('');
-    document.getElementById('pt-category').value = expense ? expense.category : (item.estimateCategory || resolveExpenseCategory(SHEET_TO_CAT[item.sheet] || 'Other'));
-    document.getElementById('pt-qty').value = expense ? expense.quantity : (item.estimateQuantity == null ? 1 : item.estimateQuantity);
-    document.getElementById('pt-cost').value = expense ? expense.unitCost : (item.cost == null ? '' : item.cost);
-    document.getElementById('pt-cancel').addEventListener('click', closeModal);
-    document.getElementById('pt-notes').focus();
-    document.getElementById('pt-save').addEventListener('click', ()=>{
-      const ratingRaw = document.getElementById('pt-rating').value;
-      item.actualRating = ratingRaw ? Number(ratingRaw) : null;
-      item.actualNotes = document.getElementById('pt-notes').value.trim();
-      const actualQty = Math.max(0, Number(document.getElementById('pt-qty').value) || 0);
-      const actualCost = Math.max(0, Number(document.getElementById('pt-cost').value) || 0);
-      const actualCategory = document.getElementById('pt-category').value;
-      if (expense){
-        expense.description = item.name;
-        expense.quantity = actualQty;
-        expense.unitCost = actualCost;
-        expense.category = actualCategory;
-        expense.notes = item.actualNotes;
-        expense.rating = item.actualRating;
-      } else if (actualCost > 0 || actualQty > 0){
-        const ne = exp(item.name, actualCategory, actualQty, actualCost, { notes: item.actualNotes, rating: item.actualRating });
-        t.expenses.push(ne);
-        item.actualExpenseId = ne.id;
-      }
-      t.updatedAt = Date.now();
-      logEvent('post-trip-updated', `Updated post-trip notes for "${item.name}" on ${t.name}`);
-      saveState(); closeModal(); renderTripView();
-    });
+    wireAutogrow(sections, 'textarea.pt-desc', { singleValue: true });
+    wireAutogrow(sections, 'textarea.pt-notes');
   }
 
   /* ---------------- Packing list ---------------- */
