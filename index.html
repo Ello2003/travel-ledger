@@ -272,12 +272,14 @@
   #travel-ledger-root table.packing-table tr.packed-row .pack-name { text-decoration: line-through; opacity: .5; }
   #travel-ledger-root table.packing-table tr.packed-row td { opacity: .75; }
   #travel-ledger-root table.budget-exp-table { table-layout: fixed; }
-  #travel-ledger-root table.budget-exp-table col.col-desc { width: 22%; }
-  #travel-ledger-root table.budget-exp-table col.col-cat { width: 20%; }
-  #travel-ledger-root table.budget-exp-table col.col-qty { width: 7%; }
-  #travel-ledger-root table.budget-exp-table col.col-unit { width: 12%; }
-  #travel-ledger-root table.budget-exp-table col.col-planned { width: 12%; }
-  #travel-ledger-root table.budget-exp-table col.col-actual { width: 13%; }
+  #travel-ledger-root table.budget-exp-table col.col-desc { width: 17%; }
+  #travel-ledger-root table.budget-exp-table col.col-cat { width: 15%; }
+  #travel-ledger-root table.budget-exp-table col.col-qty { width: 6%; }
+  #travel-ledger-root table.budget-exp-table col.col-unit { width: 10%; }
+  #travel-ledger-root table.budget-exp-table col.col-notes { width: 18%; }
+  #travel-ledger-root table.budget-exp-table col.col-rating { width: 10%; }
+  #travel-ledger-root table.budget-exp-table col.col-planned { width: 9%; }
+  #travel-ledger-root table.budget-exp-table col.col-actual { width: 9%; }
   #travel-ledger-root table.budget-exp-table col.col-actions { width: 6%; }
   #travel-ledger-root table.estimate-table col.col-desc { width: 28%; }
   #travel-ledger-root table.estimate-table col.col-cat { width: 22%; }
@@ -876,8 +878,9 @@
       createdAt: Date.now(), updatedAt: Date.now()
     };
   }
-  function exp(description, category, quantity, unitCost){
-    return { id: uid('exp'), description, category, quantity, unitCost };
+  function exp(description, category, quantity, unitCost, opts){
+    opts = opts || {};
+    return { id: uid('exp'), description, category, quantity, unitCost, notes: opts.notes || '', rating: opts.rating != null ? opts.rating : null };
   }
   function mkLink(label, url){ return { id: uid('link'), label: label||'', url: url||'' }; }
   function researchItem(sheet, name, opts){
@@ -1340,6 +1343,15 @@
         if (i.actualNotes === undefined) i.actualNotes = '';
         if (i.actualRating === undefined) i.actualRating = null;
       });
+      t.expenses.forEach(e=>{
+        if (e.notes === undefined) e.notes = '';
+        if (e.rating === undefined) e.rating = null;
+        const item = t.planItems.find(p=>p.actualExpenseId===e.id || p.linkedExpenseId===e.id);
+        if (item){
+          if (e.notes === '' && item.actualNotes) e.notes = item.actualNotes;
+          if (e.rating == null && item.actualRating != null) e.rating = item.actualRating;
+        }
+      });
       t.research.forEach(i=>{
         if (i.sheet === 'Activities / Sights') i.sheet = 'Activities';
         if (!Array.isArray(i.links)){
@@ -1774,10 +1786,10 @@
             <h3>Actual Expenses</h3>
             <div class="table-scroll budget-fixed-scroll">
             <table class="exp-table budget-exp-table">
-              <colgroup><col class="col-desc"><col class="col-cat"><col class="col-qty"><col class="col-unit"><col class="col-planned"><col class="col-actual"><col class="col-actions"></colgroup>
-              <thead><tr><th>Description</th><th>Category</th><th>Qty</th><th>Unit Cost</th><th>Planned</th><th>Actual</th><th></th></tr></thead>
+              <colgroup><col class="col-desc"><col class="col-cat"><col class="col-qty"><col class="col-unit"><col class="col-notes"><col class="col-rating"><col class="col-planned"><col class="col-actual"><col class="col-actions"></colgroup>
+              <thead><tr><th>Description</th><th>Category</th><th>Qty</th><th>Unit Cost</th><th>Notes</th><th>Rating</th><th>Planned</th><th>Actual</th><th></th></tr></thead>
               <tbody id="expBody"></tbody>
-              <tfoot><tr class="exp-foot"><td colspan="5">Total Expenses</td><td class="num">${fmt(spent)}</td><td></td></tr></tfoot>
+              <tfoot><tr class="exp-foot"><td colspan="7">Total Expenses</td><td class="num">${fmt(spent)}</td><td></td></tr></tfoot>
             </table>
             </div>
             <div class="toolbar" style="margin-top:10px;margin-bottom:0;"><button class="btn-primary" id="addExpBtn">+ Add Expense</button></div>
@@ -1883,7 +1895,7 @@
 
   function renderExpenseRows(t){
     const body = document.getElementById('expBody');
-    if (!t.expenses.length){ body.innerHTML = `<tr><td colspan="7" class="empty-state">No expenses yet.</td></tr>`; return; }
+    if (!t.expenses.length){ body.innerHTML = `<tr><td colspan="9" class="empty-state">No expenses yet.</td></tr>`; return; }
     body.innerHTML = t.expenses.map(e=>{
       const actual = (Number(e.quantity)||0)*(Number(e.unitCost)||0);
       const linkedPlan = t.planItems.find(p=>p.linkedExpenseId===e.id || p.actualExpenseId===e.id);
@@ -1896,12 +1908,13 @@
         <td><select class="exp-cat">${state.categories.map(c=>`<option value="${escapeHtml(c.name)}" ${c.name===e.category?'selected':''}>${escapeHtml(c.name)}</option>`).join('')}</select></td>
         <td class="num"><input type="number" class="exp-qty" value="${e.quantity}" min="0" step="1" style="text-align:right"></td>
         <td class="num"><input type="number" class="exp-cost" value="${e.unitCost}" min="0" step="0.01" style="text-align:right"></td>
-        <td class="num" style="color:var(--ink-soft);">${planned!=null ? fmt(planned) : '\u2014'}</td>
+        <td><textarea rows="1" class="exp-notes autogrow">${escapeHtml(e.notes||'')}</textarea></td>
+        <td><select class="exp-rating"><option value="">—</option>${[1,2,3,4,5].map(r=>`<option value="${r}" ${Number(e.rating)===r?'selected':''}>${ACTUAL_RATING_LABELS[r]}</option>`).join('')}</select></td>
+        <td class="num" style="color:var(--ink-soft);">${planned!=null ? fmt(planned) : '—'}</td>
         <td class="num" style="${overPlan?'color:var(--red);font-weight:700;':''}">${fmt(actual)}</td>
-        <td><button class="exp-del" aria-label="Delete expense row" title="Delete row">\u2715</button></td>
+        <td><button class="exp-del" aria-label="Delete expense row" title="Delete row">✕</button></td>
       </tr>`;
     }).join('');
-
     body.querySelectorAll('tr').forEach(row=>{
       const id = row.dataset.id;
       const e = t.expenses.find(x=>x.id===id);
@@ -1909,6 +1922,8 @@
       row.querySelector('.exp-cat').addEventListener('change', ev=>{ e.category = ev.target.value; commitExpense(t); });
       row.querySelector('.exp-qty').addEventListener('change', ev=>{ e.quantity = Math.max(0, Number(ev.target.value)||0); commitExpense(t); });
       row.querySelector('.exp-cost').addEventListener('change', ev=>{ e.unitCost = Math.max(0, Number(ev.target.value)||0); commitExpense(t); });
+      row.querySelector('.exp-notes').addEventListener('change', ev=>{ e.notes = ev.target.value.trim(); syncExpenseVisitMeta(t, e); commitExpense(t); });
+      row.querySelector('.exp-rating').addEventListener('change', ev=>{ e.rating = ev.target.value ? Number(ev.target.value) : null; syncExpenseVisitMeta(t, e); commitExpense(t); });
       row.querySelector('.exp-del').addEventListener('click', ()=>{
         state.trash.expenses.unshift({ id: uid('trash'), tripId: t.id, tripName: t.name, expense: e, deletedAt: Date.now() });
         t.expenses = t.expenses.filter(x=>x.id!==id); t.updatedAt = Date.now();
@@ -1917,6 +1932,13 @@
       });
     });
     wireAutogrow(body, 'textarea.exp-desc', { singleValue: true });
+    wireAutogrow(body, 'textarea.exp-notes');
+  }
+  function syncExpenseVisitMeta(t, expense){
+    const item = t.planItems.find(p=>p.actualExpenseId===expense.id || p.linkedExpenseId===expense.id);
+    if (!item) return;
+    item.actualNotes = expense.notes || '';
+    item.actualRating = expense.rating != null ? expense.rating : null;
   }
   function commitExpense(t){ t.updatedAt = Date.now(); saveState(); renderTripView(); }
   function commitEstimate(t){ t.updatedAt = Date.now(); saveState(); renderTripView(); }
@@ -2206,8 +2228,10 @@
         expense.quantity = actualQty;
         expense.unitCost = actualCost;
         expense.category = actualCategory;
+        expense.notes = item.actualNotes;
+        expense.rating = item.actualRating;
       } else if (actualCost > 0 || actualQty > 0){
-        const ne = exp(item.name, actualCategory, actualQty, actualCost);
+        const ne = exp(item.name, actualCategory, actualQty, actualCost, { notes: item.actualNotes, rating: item.actualRating });
         t.expenses.push(ne);
         item.actualExpenseId = ne.id;
       }
