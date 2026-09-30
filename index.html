@@ -583,7 +583,7 @@
   const STORAGE_KEY = 'trips-data';
   const HISTORY_KEY = 'trips-data-history';
   const MAX_HISTORY_DAYS = 14;
-  const APP_VERSION = '1.10.13';
+  const APP_VERSION = '1.10.14';
   const CHANGELOG = {
     '1.10.10': 'Restored the original Budget table formatting and Actual Expenses column proportions while retaining editable expense fields.',
     '1.10.8': 'Standardized Budget Estimated Costs, Actual Expenses and Visited table formatting and column proportions.',
@@ -678,7 +678,7 @@
   }
   const SHEET_TO_CAT = {
     'Hotels': 'Hotels', 'Restaurants': 'Food & Drink', 'Cheap Eats': 'Food & Drink', 'Bars': 'Food & Drink', 'Coffee Shops': 'Food & Drink',
-    'Activities': 'Excursions', 'Sights': 'Excursions', 'Things To Do': 'Excursions', 'Transport / Transfers': 'Transportation'
+    'Activities': 'Excursions', 'Sights': 'Excursions', 'Things To Do': 'Excursions', 'Transport / Transfers': 'Transportation', 'Suit Supply': 'Shopping'
   };
   const PACKING_CATEGORIES = [
     { key: 'Clothing', color: '#35597a' },
@@ -1878,7 +1878,7 @@
       const item = t.planItems.find(x=>x.id===pid);
       if (!item) return;
       row.querySelector('.pe-desc').addEventListener('change', ev=>{ item.name = singleLine(ev.target.value) || item.name; commitEstimate(t); });
-      row.querySelector('.pe-cat').addEventListener('change', ev=>{ item.estimateCategory = ev.target.value; commitEstimate(t); });
+      row.querySelector('.pe-cat').addEventListener('change', ev=>{ item.estimateCategory = ev.target.value; const expense = item.actualExpenseId ? t.expenses.find(e=>e.id===item.actualExpenseId) : null; if (expense) expense.category = ev.target.value; commitEstimate(t); });
       row.querySelector('.pe-qty').addEventListener('change', ev=>{ item.estimateQuantity = Math.max(0, Number(ev.target.value)||0); commitEstimate(t); });
       row.querySelector('.pe-unit').addEventListener('change', ev=>{ item.cost = Math.max(0, Number(ev.target.value)||0); commitEstimate(t); });
       row.querySelector('.pe-qty').addEventListener('input', ev=>{ item.estimateQuantity = Math.max(0, Number(ev.target.value)||0); refreshEstimateTotals(t); });
@@ -1931,7 +1931,7 @@
       // Persist only user-created widths. Never let an old/global profile
       // rewrite the table's carefully defined initial layout.
       const tableKey = table.className.replace(/\s+/g,'.');
-      const storageKey = 'travel-ledger-col-widths-v4:' + tableKey;
+      const storageKey = 'travel-ledger-col-widths-v5:' + tableKey;
       let saved = null;
       try { saved = JSON.parse(localStorage.getItem(storageKey) || 'null'); } catch (_) {}
 
@@ -2310,7 +2310,7 @@
         saveState();
         renderTripView();
       });
-      row.querySelector('.pt-cat').addEventListener('change', ev=>{ saveVisited(e=>{ e.category = ev.target.value; }); });
+      row.querySelector('.pt-cat').addEventListener('change', ev=>{ item.estimateCategory = ev.target.value; saveVisited(e=>{ e.category = ev.target.value; }); });
       row.querySelector('.pt-qty').addEventListener('change', ev=>{ saveVisited(e=>{ e.quantity = Math.max(0, Number(ev.target.value)||0); }); });
       row.querySelector('.pt-unit').addEventListener('change', ev=>{ saveVisited(e=>{ e.unitCost = Math.max(0, Number(ev.target.value)||0); }); });
       row.querySelector('.pt-location').addEventListener('change', ev=>{ item.location = singleLine(ev.target.value); t.updatedAt = Date.now(); saveState(); renderTripView(); });
