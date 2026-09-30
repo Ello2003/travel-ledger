@@ -233,7 +233,13 @@
 
   #travel-ledger-root table.exp-table { width: 100%; border-collapse: collapse; font-size: 13px; }
   #travel-ledger-root table.resizable-table { table-layout: fixed; }
-  #travel-ledger-root table.resizable-table th { position: relative; }
+  #travel-ledger-root table.resizable-table th { position: relative; overflow: visible; }
+  #travel-ledger-root table.resizable-table th,
+  #travel-ledger-root table.resizable-table td { min-width: 0; }
+  #travel-ledger-root table.resizable-table td { overflow-wrap: anywhere; word-break: normal; }
+  #travel-ledger-root table.resizable-table td textarea,
+  #travel-ledger-root table.resizable-table td input,
+  #travel-ledger-root table.resizable-table td select { box-sizing: border-box; min-width: 0; }
   #travel-ledger-root table.resizable-table th .col-resizer { position:absolute; top:0; right:-4px; width:9px; height:100%; cursor:col-resize; z-index:10; user-select:none; touch-action:none; }
   #travel-ledger-root table.resizable-table th .col-resizer::after { content:''; position:absolute; top:15%; right:3px; width:2px; height:70%; background:var(--paper-edge); opacity:.7; }
   #travel-ledger-root table.resizable-table th:hover .col-resizer::after, #travel-ledger-root table.resizable-table th .col-resizer.active::after { background:var(--brass); opacity:1; }
@@ -576,8 +582,9 @@
   const STORAGE_KEY = 'trips-data';
   const HISTORY_KEY = 'trips-data-history';
   const MAX_HISTORY_DAYS = 14;
-  const APP_VERSION = '1.10.5';
+  const APP_VERSION = '1.10.6';
   const CHANGELOG = {
+    '1.10.6': 'Improved table column sizing so widths are consistent by table type, text is less likely to be clipped, and resized columns retain sensible minimums.',
     '1.10.5': 'Added drag-to-resize column headings across all tables with saved widths; Visited rows now also allow inline Location editing alongside the expense fields.',
     '1.10.4': 'Fixed Actual Expenses and Visited table column alignment after removing notes and ratings: both tables now render exactly seven columns (Description, Category, Qty, Unit Cost, Planned, Actual, action).',
     '1.10.3': 'Actual Expenses and Visited now mirror the planned expense fields: Description, Category, Qty and Unit Cost, with Planned and Actual totals shown for comparison; notes and ratings are no longer part of expense rows.',
@@ -1913,26 +1920,41 @@
       const ths = Array.from(head.children);
       const colEls = Array.from(cols.children);
       if (ths.length !== colEls.length || ths.length < 2) return;
+
       table.classList.add('resizable-table');
       table.dataset.resizersReady = '1';
-      const tableKey = table.className.split(/\s+/).filter(Boolean).join('.');
-      const storageKey = 'travel-ledger-col-widths:' + tableKey;
+
+      const classes = Array.from(table.classList).filter(x=>x!=='resizable-table').join('.');
+      const storageKey = 'travel-ledger-col-widths:' + classes;
+      const defaults = Array.from(colEls).map(col=>col.style.width || '');
       let saved = {};
       try { saved = JSON.parse(localStorage.getItem(storageKey) || '{}'); } catch (_) {}
-      colEls.forEach((col, idx)=>{ if (saved[idx]) col.style.width = saved[idx]; });
+
+      colEls.forEach((col, idx)=>{
+        if (saved[idx]) col.style.width = saved[idx];
+      });
+
       ths.forEach((th, idx)=>{
         const grip = document.createElement('span');
         grip.className = 'col-resizer';
         grip.setAttribute('aria-hidden','true');
         th.appendChild(grip);
+
         grip.addEventListener('pointerdown', ev=>{
-          ev.preventDefault(); ev.stopPropagation();
+          ev.preventDefault();
+          ev.stopPropagation();
+
           const startX = ev.clientX;
           const startWidth = th.getBoundingClientRect().width;
-          const minWidth = idx === ths.length - 1 ? 38 : 70;
+          const minWidth = idx === ths.length - 1 ? 42 : (idx === 0 ? 150 : 78);
+          const maxWidth = Math.max(minWidth, table.getBoundingClientRect().width - 120);
           grip.classList.add('active');
           if (grip.setPointerCapture) grip.setPointerCapture(ev.pointerId);
-          const move = e=>{ colEls[idx].style.width = Math.max(minWidth, startWidth + e.clientX - startX) + 'px'; };
+
+          const move = e=>{
+            const width = Math.min(maxWidth, Math.max(minWidth, startWidth + e.clientX - startX));
+            colEls[idx].style.width = width + 'px';
+          };
           const stop = ()=>{
             grip.classList.remove('active');
             const widths = {};
