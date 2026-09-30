@@ -571,8 +571,9 @@
   const STORAGE_KEY = 'trips-data';
   const HISTORY_KEY = 'trips-data-history';
   const MAX_HISTORY_DAYS = 14;
-  const APP_VERSION = '1.10.3';
+  const APP_VERSION = '1.10.4';
   const CHANGELOG = {
+    '1.10.4': 'Fixed Actual Expenses and Visited table column alignment after removing notes and ratings: both tables now render exactly seven columns (Description, Category, Qty, Unit Cost, Planned, Actual, action).',
     '1.10.3': 'Actual Expenses and Visited now mirror the planned expense fields: Description, Category, Qty and Unit Cost, with Planned and Actual totals shown for comparison; notes and ratings are no longer part of expense rows.',
     '1.10.2': 'Visited is now the editable bridge from Plan to Actual Expenses: planned values remain the comparison baseline, while description, actual category, quantity, unit cost, notes and rating can be edited inline and update the linked actual expense automatically.',
     '1.10.1': 'Visited items now create an editable actual expense from their estimate automatically; Visited editing supports actual quantity, category, cost, notes and rating, while keeping actuals independent from the original estimate.',
@@ -1897,7 +1898,7 @@
 
   function renderExpenseRows(t){
     const body = document.getElementById('expBody');
-    if (!t.expenses.length){ body.innerHTML = `<tr><td colspan="9" class="empty-state">No expenses yet.</td></tr>`; return; }
+    if (!t.expenses.length){ body.innerHTML = `<tr><td colspan="7" class="empty-state">No expenses yet.</td></tr>`; return; }
     body.innerHTML = t.expenses.map(e=>{
       const actual = (Number(e.quantity)||0)*(Number(e.unitCost)||0);
       const linkedPlan = t.planItems.find(p=>p.linkedExpenseId===e.id || p.actualExpenseId===e.id);
@@ -1910,8 +1911,6 @@
         <td><select class="exp-cat">${state.categories.map(c=>`<option value="${escapeHtml(c.name)}" ${c.name===e.category?'selected':''}>${escapeHtml(c.name)}</option>`).join('')}</select></td>
         <td class="num"><input type="number" class="exp-qty" value="${e.quantity}" min="0" step="1" style="text-align:right"></td>
         <td class="num"><input type="number" class="exp-cost" value="${e.unitCost}" min="0" step="0.01" style="text-align:right"></td>
-        <td><textarea rows="1" class="exp-notes autogrow">${escapeHtml(e.notes||'')}</textarea></td>
-        <td><select class="exp-rating"><option value="">—</option>${[1,2,3,4,5].map(r=>`<option value="${r}" ${Number(e.rating)===r?'selected':''}>${ACTUAL_RATING_LABELS[r]}</option>`).join('')}</select></td>
         <td class="num" style="color:var(--ink-soft);">${planned!=null ? fmt(planned) : '—'}</td>
         <td class="num" style="${overPlan?'color:var(--red);font-weight:700;':''}">${fmt(actual)}</td>
         <td><button class="exp-del" aria-label="Delete expense row" title="Delete row">✕</button></td>
@@ -2175,8 +2174,6 @@
                 <td><select class="pt-cat">${state.categories.map(c=>`<option value="${escapeHtml(c.name)}" ${c.name===actualCategory?'selected':''}>${escapeHtml(c.name)}</option>`).join('')}</select></td>
                 <td class="num"><input type="number" class="pt-qty" value="${actualQty}" min="0" step="1" style="text-align:right"></td>
                 <td class="num"><input type="number" class="pt-unit" value="${actualUnit}" min="0" step="0.01" style="text-align:right"></td>
-                <td><textarea rows="1" class="pt-notes autogrow">${escapeHtml(actualNotes)}</textarea></td>
-                <td><select class="pt-rating"><option value="">—</option>${[1,2,3,4,5].map(r=>`<option value="${r}" ${Number(actualRating)===r?'selected':''}>${ACTUAL_RATING_LABELS[r]}</option>`).join('')}</select></td>
                 <td class="num" style="color:var(--ink-soft);">${planned!=null ? fmt(planned) : '—'}</td>
                 <td class="num pt-actual">${actual!=null ? fmt(actual) : '—'}</td>
                 <td><button class="exp-del pt-unmark" aria-label="Remove from Visited" title="Remove from Visited">✕</button></td>
