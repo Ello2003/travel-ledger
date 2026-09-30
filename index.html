@@ -571,8 +571,9 @@
   const STORAGE_KEY = 'trips-data';
   const HISTORY_KEY = 'trips-data-history';
   const MAX_HISTORY_DAYS = 14;
-  const APP_VERSION = '1.10.2';
+  const APP_VERSION = '1.10.3';
   const CHANGELOG = {
+    '1.10.3': 'Actual Expenses and Visited now mirror the planned expense fields: Description, Category, Qty and Unit Cost, with Planned and Actual totals shown for comparison; notes and ratings are no longer part of expense rows.',
     '1.10.2': 'Visited is now the editable bridge from Plan to Actual Expenses: planned values remain the comparison baseline, while description, actual category, quantity, unit cost, notes and rating can be edited inline and update the linked actual expense automatically.',
     '1.10.1': 'Visited items now create an editable actual expense from their estimate automatically; Visited editing supports actual quantity, category, cost, notes and rating, while keeping actuals independent from the original estimate.',
     '1.10.0': 'Estimated Costs now uses the shared expense categories for planned and manual rows, supports Reset per planned row, updates row totals live while typing, and removes the stale duplicate Index.html entry point so index.html is canonical.',
@@ -1787,8 +1788,8 @@
             <h3>Actual Expenses</h3>
             <div class="table-scroll budget-fixed-scroll">
             <table class="exp-table budget-exp-table">
-              <colgroup><col class="col-desc"><col class="col-cat"><col class="col-qty"><col class="col-unit"><col class="col-notes"><col class="col-rating"><col class="col-planned"><col class="col-actual"><col class="col-actions"></colgroup>
-              <thead><tr><th>Description</th><th>Category</th><th>Qty</th><th>Unit Cost</th><th>Notes</th><th>Rating</th><th>Planned</th><th>Actual</th><th></th></tr></thead>
+              <colgroup><col class="col-desc"><col class="col-cat"><col class="col-qty"><col class="col-unit"><col class="col-planned"><col class="col-actual"><col class="col-actions"></colgroup>
+              <thead><tr><th>Description</th><th>Category</th><th>Qty</th><th>Unit Cost</th><th>Planned</th><th>Actual</th><th></th></tr></thead>
               <tbody id="expBody"></tbody>
               <tfoot><tr class="exp-foot"><td colspan="7">Total Expenses</td><td class="num">${fmt(spent)}</td><td></td></tr></tfoot>
             </table>
@@ -1923,8 +1924,6 @@
       row.querySelector('.exp-cat').addEventListener('change', ev=>{ e.category = ev.target.value; commitExpense(t); });
       row.querySelector('.exp-qty').addEventListener('change', ev=>{ e.quantity = Math.max(0, Number(ev.target.value)||0); commitExpense(t); });
       row.querySelector('.exp-cost').addEventListener('change', ev=>{ e.unitCost = Math.max(0, Number(ev.target.value)||0); commitExpense(t); });
-      row.querySelector('.exp-notes').addEventListener('change', ev=>{ e.notes = ev.target.value.trim(); syncExpenseVisitMeta(t, e); commitExpense(t); });
-      row.querySelector('.exp-rating').addEventListener('change', ev=>{ e.rating = ev.target.value ? Number(ev.target.value) : null; syncExpenseVisitMeta(t, e); commitExpense(t); });
       row.querySelector('.exp-del').addEventListener('click', ()=>{
         state.trash.expenses.unshift({ id: uid('trash'), tripId: t.id, tripName: t.name, expense: e, deletedAt: Date.now() });
         t.expenses = t.expenses.filter(x=>x.id!==id); t.updatedAt = Date.now();
@@ -1933,7 +1932,6 @@
       });
     });
     wireAutogrow(body, 'textarea.exp-desc', { singleValue: true });
-    wireAutogrow(body, 'textarea.exp-notes');
   }
   function syncExpenseVisitMeta(t, expense){
     const item = t.planItems.find(p=>p.actualExpenseId===expense.id || p.linkedExpenseId===expense.id);
@@ -2157,8 +2155,8 @@
         </div>
         <div class="table-scroll">
         <table class="exp-table plan-table visited-table">
-          <colgroup><col class="col-name"><col class="col-cat"><col class="col-qty"><col class="col-unit"><col class="col-notes"><col class="col-rating"><col class="col-planned"><col class="col-actual"><col class="col-actions"></colgroup>
-          <thead><tr><th>Description</th><th>Actual Category</th><th>Qty</th><th>Unit Cost</th><th>Notes</th><th>Rating</th><th>Planned</th><th>Actual</th><th></th></tr></thead>
+          <colgroup><col class="col-name"><col class="col-cat"><col class="col-qty"><col class="col-unit"><col class="col-planned"><col class="col-actual"><col class="col-actions"></colgroup>
+          <thead><tr><th>Description</th><th>Category</th><th>Qty</th><th>Unit Cost</th><th>Planned</th><th>Actual</th><th></th></tr></thead>
           <tbody>
             ${items.map(i=>{
               const expense = i.actualExpenseId ? t.expenses.find(e=>e.id===i.actualExpenseId) : null;
@@ -2166,9 +2164,7 @@
               const actualQty = expense ? expense.quantity : (i.estimateQuantity == null ? 1 : i.estimateQuantity);
               const actualUnit = expense ? expense.unitCost : (i.cost == null ? '' : i.cost);
               const actualCategory = expense ? expense.category : (i.estimateCategory || resolveExpenseCategory(SHEET_TO_CAT[i.sheet] || 'Other'));
-              const actualNotes = expense ? (expense.notes||'') : (i.actualNotes||'');
-              const actualRating = expense ? expense.rating : i.actualRating;
-              const actual = expense ? (Number(expense.quantity)||0)*(Number(expense.unitCost)||0) : null;
+                                          const actual = expense ? (Number(expense.quantity)||0)*(Number(expense.unitCost)||0) : null;
               return `
               <tr data-id="${i.id}">
                 <td>
@@ -2221,8 +2217,6 @@
       row.querySelector('.pt-cat').addEventListener('change', ev=>{ saveVisited(e=>{ e.category = ev.target.value; }); });
       row.querySelector('.pt-qty').addEventListener('change', ev=>{ saveVisited(e=>{ e.quantity = Math.max(0, Number(ev.target.value)||0); }); });
       row.querySelector('.pt-unit').addEventListener('change', ev=>{ saveVisited(e=>{ e.unitCost = Math.max(0, Number(ev.target.value)||0); }); });
-      row.querySelector('.pt-notes').addEventListener('change', ev=>{ saveVisited(e=>{ e.notes = ev.target.value.trim(); syncExpenseVisitMeta(t, e); }); });
-      row.querySelector('.pt-rating').addEventListener('change', ev=>{ saveVisited(e=>{ e.rating = ev.target.value ? Number(ev.target.value) : null; syncExpenseVisitMeta(t, e); }); });
     });
 
     sections.querySelectorAll('.pt-unmark').forEach(btn=>{
@@ -2238,7 +2232,6 @@
       });
     });
     wireAutogrow(sections, 'textarea.pt-desc', { singleValue: true });
-    wireAutogrow(sections, 'textarea.pt-notes');
   }
 
   /* ---------------- Packing list ---------------- */
