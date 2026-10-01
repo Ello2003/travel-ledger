@@ -218,7 +218,7 @@
   #travel-ledger-root .budget-donut-card { grid-column: 1; grid-row: 1 / 3; display: flex; flex-direction: column; }
   #travel-ledger-root .budget-fixed-card { grid-column: 2; display: flex; flex-direction: column; height: auto; }
   #travel-ledger-root .budget-fixed-card h3 { flex-shrink: 0; }
-  #travel-ledger-root .budget-fixed-scroll { overflow-x: auto; overflow-y: visible; min-height: 0; }
+  #travel-ledger-root .budget-fixed-scroll { width: 100%; overflow-x: auto; overflow-y: visible; min-height: 0; }
   @media (max-width: 1280px) {
     #travel-ledger-root .budget-layout { grid-template-columns: 1fr; grid-template-rows: auto; }
     #travel-ledger-root .budget-donut-card { grid-column: 1; grid-row: auto; }
@@ -304,6 +304,29 @@
   #travel-ledger-root table.estimate-table col.col-unit { width: 17%; }
   #travel-ledger-root table.estimate-table col.col-actual { width: 12%; }
   #travel-ledger-root table.estimate-table col.col-actions { width: 6%; }
+  /* Keep Budget fields usable at the default size. The table may scroll on small screens,
+     but it must not squeeze descriptions, categories, and numeric inputs into unusable slivers. */
+  #travel-ledger-root table.estimate-table { min-width: 820px; }
+  #travel-ledger-root table.estimate-table col.col-desc { min-width: 250px; }
+  #travel-ledger-root table.estimate-table col.col-cat { min-width: 190px; }
+  #travel-ledger-root table.estimate-table col.col-qty { min-width: 78px; }
+  #travel-ledger-root table.estimate-table col.col-unit { min-width: 125px; }
+  #travel-ledger-root table.estimate-table col.col-actual { min-width: 115px; }
+  #travel-ledger-root table.estimate-table col.col-actions { min-width: 62px; }
+  #travel-ledger-root table.budget-exp-table { min-width: 930px; }
+  #travel-ledger-root table.budget-exp-table col.col-desc { min-width: 235px; }
+  #travel-ledger-root table.budget-exp-table col.col-cat { min-width: 180px; }
+  #travel-ledger-root table.budget-exp-table col.col-qty { min-width: 76px; }
+  #travel-ledger-root table.budget-exp-table col.col-unit { min-width: 112px; }
+  #travel-ledger-root table.budget-exp-table col.col-planned { min-width: 108px; }
+  #travel-ledger-root table.budget-exp-table col.col-actual { min-width: 120px; }
+  #travel-ledger-root table.budget-exp-table col.col-actions { min-width: 58px; }
+  #travel-ledger-root table.estimate-table th,
+  #travel-ledger-root table.budget-exp-table th { white-space: nowrap; }
+  #travel-ledger-root table.estimate-table td.num,
+  #travel-ledger-root table.budget-exp-table td.num { white-space: nowrap; }
+  #travel-ledger-root table.estimate-table td textarea,
+  #travel-ledger-root table.budget-exp-table td textarea { min-height: 26px; }
   #travel-ledger-root table.budget-exp-table select.exp-cat { width: 100%; max-width: 100%; font-size: 12px; }
   #travel-ledger-root table.estimate-table .planned-estimate-row { background: rgba(213,203,172,.16); }
   #travel-ledger-root table.estimate-table .planned-estimate-row:hover { background: rgba(213,203,172,.30); }
@@ -607,8 +630,9 @@
   const STORAGE_KEY = 'trips-data';
   const HISTORY_KEY = 'trips-data-history';
   const MAX_HISTORY_DAYS = 14;
-  const APP_VERSION = '1.11.0';
+  const APP_VERSION = '1.11.1';
   const CHANGELOG = {
+    '1.11.1': 'Reworked Budget Planned and Actual table defaults: readable minimum column widths, non-wrapping headers and numeric fields, better description controls, and a new column-profile version so stale resized layouts no longer distort the first view.',
     '1.11.0': 'UX/UI audit cleanup: Budget panels stack before tables become cramped, empty Plan/Research/Packing categories use compact cards, trip tabs scroll cleanly on small screens, mobile spacing is improved, and keyboard focus indicators are consistent.',
     '1.10.20': 'Fixed the overall trip Budget/Spent/Variance calculation so Spent represents the full Actual Expenses total.',
     '1.10.16': 'Fixed Budget and Spent calculations so all Actual Expenses, including Shopping, are counted consistently.',
@@ -1978,7 +2002,7 @@
       // Persist only user-created widths. Never let an old/global profile
       // rewrite the table's carefully defined initial layout.
       const tableKey = table.className.replace(/\s+/g,'.');
-      const storageKey = 'travel-ledger-col-widths-v5:' + tableKey;
+      const storageKey = 'travel-ledger-col-widths-v6:' + tableKey;
       let saved = null;
       try { saved = JSON.parse(localStorage.getItem(storageKey) || 'null'); } catch (_) {}
 
