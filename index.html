@@ -583,9 +583,9 @@
   const STORAGE_KEY = 'trips-data';
   const HISTORY_KEY = 'trips-data-history';
   const MAX_HISTORY_DAYS = 14;
-  const APP_VERSION = '1.10.19';
+  const APP_VERSION = '1.10.20';
   const CHANGELOG = {
-    '1.10.19': 'Fixed budget spent totals for existing Suit Supply actuals by excluding Shopping-category, legacy Suit Supply-category, and Suit Supply-linked expenses from budget variance.',
+    '1.10.20': 'Fixed the overall trip Budget/Spent/Variance calculation so Spent represents the full Actual Expenses total.',
     '1.10.16': 'Fixed Budget and Spent calculations so all Actual Expenses, including Shopping, are counted consistently.',
     '1.10.15': 'Fixed Visited quantity and unit-cost editing for items without an existing estimated cost by creating a zero-cost Actual Expense on first edit.',
     '1.10.10': 'Restored the original Budget table formatting and Actual Expenses column proportions while retaining editable expense fields.',
@@ -954,7 +954,7 @@
     return (trip && Array.isArray(trip.expenses) ? trip.expenses : []).reduce((sum,e)=> sum + expenseAmount(e), 0);
   }
   function budgetCountedTotal(trip){
-    return (trip && Array.isArray(trip.expenses) ? trip.expenses : []).reduce((sum,e)=> sum + (isBudgetExcludedExpense(trip, e) ? 0 : expenseAmount(e)), 0);
+    return tripTotal(trip);
   }
   function tripCategoryTotals(trip){
     const totals = {}; state.categories.forEach(c => totals[c.name] = 0);
