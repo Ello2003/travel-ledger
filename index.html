@@ -32,6 +32,11 @@
     box-sizing: border-box;
   }
   #travel-ledger-root * { box-sizing: border-box; }
+  #travel-ledger-root button:focus-visible,
+  #travel-ledger-root input:focus-visible,
+  #travel-ledger-root select:focus-visible,
+  #travel-ledger-root textarea:focus-visible,
+  #travel-ledger-root a:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
   #travel-ledger-root .wrap { max-width: 1080px; margin: 0 auto; padding: 28px 22px 60px; }
   #travel-ledger-root .app-footer {
     display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap;
@@ -214,7 +219,7 @@
   #travel-ledger-root .budget-fixed-card { grid-column: 2; display: flex; flex-direction: column; height: auto; }
   #travel-ledger-root .budget-fixed-card h3 { flex-shrink: 0; }
   #travel-ledger-root .budget-fixed-scroll { overflow-x: auto; overflow-y: visible; min-height: 0; }
-  @media (max-width: 900px) {
+  @media (max-width: 1280px) {
     #travel-ledger-root .budget-layout { grid-template-columns: 1fr; grid-template-rows: auto; }
     #travel-ledger-root .budget-donut-card { grid-column: 1; grid-row: auto; }
     #travel-ledger-root .budget-fixed-card { grid-column: 1; height: auto; }
@@ -361,16 +366,19 @@
   #travel-ledger-root .toast.show { opacity: 1; }
 
   /* ---------- Plan tab ---------- */
-  #travel-ledger-root .tab-bar { display: flex; gap: 6px; margin-bottom: 16px; border-bottom: 2px solid var(--paper-edge); }
+  #travel-ledger-root .tab-bar { display: flex; gap: 6px; margin-bottom: 16px; border-bottom: 2px solid var(--paper-edge); overflow-x: auto; scrollbar-width: thin; }
   #travel-ledger-root .tab-btn {
     border: none; border-bottom: 3px solid transparent; border-radius: 0; background: transparent;
     padding: 8px 4px; margin-right: 18px; color: var(--ink-soft); font-family: var(--font-mono);
-    font-size: 12px; letter-spacing: 1px; text-transform: uppercase;
+    font-size: 12px; letter-spacing: 1px; text-transform: uppercase; flex: 0 0 auto; white-space: nowrap;
   }
   #travel-ledger-root .tab-btn.active { color: var(--ink); border-bottom-color: var(--ink); font-weight: 700; }
   #travel-ledger-root .timeline-toggle { display: flex; gap: 4px; margin-left: auto; }
 
   #travel-ledger-root .sheet-section { margin-bottom: 18px; background: var(--paper-raised); border: 1px solid var(--paper-edge); border-radius: 8px; padding: 14px 16px; }
+  #travel-ledger-root .sheet-section.is-empty { padding: 10px 14px; }
+  #travel-ledger-root .sheet-section.is-empty .sheet-header { margin-bottom: 0; }
+  #travel-ledger-root .sheet-section.is-empty .empty-state { padding: 8px 4px 2px; font-size: 11px; }
   #travel-ledger-root .sheet-header { display: flex; justify-content: space-between; align-items: center; font-family: var(--font-display); font-weight: 700; font-size: 15px; margin-bottom: 10px; }
   #travel-ledger-root .sheet-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 7px; }
 
@@ -430,6 +438,22 @@
   #travel-ledger-root .table-scroll table.packing-table { min-width: 460px; }
   #travel-ledger-root .table-scroll table.exp-table:not(.plan-table):not(.research-table):not(.packing-table):not(.estimate-table) { min-width: 620px; }
   #travel-ledger-root .table-scroll table.estimate-table { min-width: 480px; }
+
+  @media (max-width: 600px) {
+    #travel-ledger-root .wrap { padding: 18px 12px 42px; }
+    #travel-ledger-root .masthead { align-items: stretch; }
+    #travel-ledger-root .masthead-meta { align-items: flex-start; width: 100%; }
+    #travel-ledger-root .wordmark { font-size: 25px; }
+    #travel-ledger-root .kpi-cell { padding: 11px 10px; }
+    #travel-ledger-root .kpi-cell .value { font-size: 16px; }
+    #travel-ledger-root .detail-header { padding: 16px; }
+    #travel-ledger-root .detail-title { font-size: 23px; }
+    #travel-ledger-root .detail-figs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; width: 100%; }
+    #travel-ledger-root .toolbar { gap: 7px; }
+    #travel-ledger-root .toolbar button { padding: 8px 10px; }
+    #travel-ledger-root .charts-row { gap: 12px; }
+    #travel-ledger-root .chart-card { padding: 12px; }
+  }
 
   /* ---------- Up Next ---------- */
   #travel-ledger-root .upnext-card { margin-bottom: 22px; }
@@ -583,8 +607,9 @@
   const STORAGE_KEY = 'trips-data';
   const HISTORY_KEY = 'trips-data-history';
   const MAX_HISTORY_DAYS = 14;
-  const APP_VERSION = '1.10.20';
+  const APP_VERSION = '1.11.0';
   const CHANGELOG = {
+    '1.11.0': 'UX/UI audit cleanup: Budget panels stack before tables become cramped, empty Plan/Research/Packing categories use compact cards, trip tabs scroll cleanly on small screens, mobile spacing is improved, and keyboard focus indicators are consistent.',
     '1.10.20': 'Fixed the overall trip Budget/Spent/Variance calculation so Spent represents the full Actual Expenses total.',
     '1.10.16': 'Fixed Budget and Spent calculations so all Actual Expenses, including Shopping, are counted consistently.',
     '1.10.15': 'Fixed Visited quantity and unit-cost editing for items without an existing estimated cost by creating a zero-cost Actual Expense on first edit.',
@@ -2165,7 +2190,7 @@
       const items = t.planItems.filter(i=>i.sheet===s.key);
       const collapsed = collapsedSheets.has('plan:'+s.key);
       return `
-      <div class="sheet-section">
+      <div class="sheet-section${items.length ? '' : ' is-empty'}">
         <div class="sheet-header">
           <div style="display:flex;align-items:center;gap:6px;cursor:pointer;" class="sheet-toggle" data-key="plan:${escapeHtml(s.key)}"><span class="sheet-chevron">${collapsed?'\u25b8':'\u25be'}</span><span class="sheet-dot" style="background:${s.color}"></span>${s.key} <span style="color:var(--ink-soft);font-family:var(--font-mono);font-size:11px;">(${items.length})</span></div>
           <button class="btn-ghost btn-sm sheet-add" data-sheet="${escapeHtml(s.key)}">+ Add</button>
@@ -2380,7 +2405,7 @@
     sections.innerHTML = PACKING_CATEGORIES.map(c=>{
       const items = t.packingList.filter(i=>i.category===c.key);
       return `
-      <div class="sheet-section">
+      <div class="sheet-section${items.length ? '' : ' is-empty'}">
         <div class="sheet-header">
           <div><span class="sheet-dot" style="background:${c.color}"></span>${c.key} <span style="color:var(--ink-soft);font-family:var(--font-mono);font-size:11px;">(${items.filter(i=>i.packed).length}/${items.length})</span></div>
           <button class="btn-ghost btn-sm pack-add" data-cat="${escapeHtml(c.key)}">+ Add</button>
@@ -2914,7 +2939,7 @@
       const mapExpanded = expandedSectionMaps.has(s.key);
       const mapEditing = sectionMapEditMode.has(s.key);
       return `
-      <div class="sheet-section">
+      <div class="sheet-section${items.length ? '' : ' is-empty'}">
         <div class="sheet-header">
           <div style="display:flex;align-items:center;gap:6px;cursor:pointer;" class="sheet-toggle" data-key="research:${escapeHtml(s.key)}"><span class="sheet-chevron">${collapsed?'\u25b8':'\u25be'}</span><span class="sheet-dot" style="background:${s.color}"></span>${s.key} <span style="color:var(--ink-soft);font-family:var(--font-mono);font-size:11px;">(${items.length})</span></div>
           <div style="display:flex;gap:6px;">
