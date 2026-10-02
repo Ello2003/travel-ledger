@@ -632,8 +632,9 @@
   const STORAGE_KEY = 'trips-data';
   const HISTORY_KEY = 'trips-data-history';
   const MAX_HISTORY_DAYS = 14;
-  const APP_VERSION = '1.11.2';
+  const APP_VERSION = '1.11.3';
   const CHANGELOG = {
+    '1.11.3': 'Aligned resizable tables with their surrounding card frames: tables now fill the available card width when possible and overflow only when their saved column widths require it, instead of retaining a hard pixel width across layouts.',
     '1.11.2': 'Fixed column resizing so each drag adjusts a locked adjacent column pair, preserves the table width, respects both columns’ minimums, and no longer produces unpredictable jumps from table-layout recalculation.',
     '1.11.1': 'Reworked Budget Planned and Actual table defaults: readable minimum column widths, non-wrapping headers and numeric fields, better description controls, and a new column-profile version so stale resized layouts no longer distort the first view.',
     '1.11.0': 'UX/UI audit cleanup: Budget panels stack before tables become cramped, empty Plan/Research/Packing categories use compact cards, trip tabs scroll cleanly on small screens, mobile spacing is improved, and keyboard focus indicators are consistent.',
@@ -2025,7 +2026,7 @@
       const applyWidths = widths=>{
         widths.forEach((w,i)=>{ colEls[i].style.width = Math.round(w) + 'px'; });
         const total = widths.reduce((sum,w)=>sum+w,0);
-        table.style.width = total + 'px';
+        table.style.width = `max(100%, ${Math.round(total)}px)`;
         table.style.minWidth = total + 'px';
       };
 
