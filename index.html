@@ -248,6 +248,7 @@
   #travel-ledger-root table.resizable-table td input,
   #travel-ledger-root table.resizable-table td select { box-sizing: border-box; min-width: 0; }
   #travel-ledger-root table.resizable-table th .col-resizer { position:absolute; top:0; right:-4px; width:9px; height:100%; cursor:col-resize; z-index:10; user-select:none; touch-action:none; }
+  #travel-ledger-root table.resizable-table th:last-child .col-resizer { display: none; }
   #travel-ledger-root table.resizable-table th .col-resizer::after { content:''; position:absolute; top:15%; right:3px; width:2px; height:70%; background:var(--paper-edge); opacity:.7; }
   #travel-ledger-root table.resizable-table th:hover .col-resizer::after, #travel-ledger-root table.resizable-table th .col-resizer.active::after { background:var(--brass); opacity:1; }
   #travel-ledger-root table.exp-table th {
@@ -460,7 +461,8 @@
   #travel-ledger-root .table-scroll table.research-table,
   #travel-ledger-root .table-scroll table.packing-table { min-width: 460px; }
   #travel-ledger-root .table-scroll table.exp-table:not(.plan-table):not(.research-table):not(.packing-table):not(.estimate-table) { min-width: 620px; }
-  #travel-ledger-root .table-scroll table.estimate-table { min-width: 480px; }
+  #travel-ledger-root .table-scroll table.estimate-table { min-width: 820px; }
+  #travel-ledger-root .table-scroll table.budget-exp-table { min-width: 930px; }
 
   @media (max-width: 600px) {
     #travel-ledger-root .wrap { padding: 18px 12px 42px; }
@@ -630,8 +632,9 @@
   const STORAGE_KEY = 'trips-data';
   const HISTORY_KEY = 'trips-data-history';
   const MAX_HISTORY_DAYS = 14;
-  const APP_VERSION = '1.11.1';
+  const APP_VERSION = '1.11.2';
   const CHANGELOG = {
+    '1.11.2': 'Fixed column resizing so each drag adjusts a locked adjacent column pair, preserves the table width, respects both columns’ minimums, and no longer produces unpredictable jumps from table-layout recalculation.',
     '1.11.1': 'Reworked Budget Planned and Actual table defaults: readable minimum column widths, non-wrapping headers and numeric fields, better description controls, and a new column-profile version so stale resized layouts no longer distort the first view.',
     '1.11.0': 'UX/UI audit cleanup: Budget panels stack before tables become cramped, empty Plan/Research/Packing categories use compact cards, trip tabs scroll cleanly on small screens, mobile spacing is improved, and keyboard focus indicators are consistent.',
     '1.10.20': 'Fixed the overall trip Budget/Spent/Variance calculation so Spent represents the full Actual Expenses total.',
@@ -2002,16 +2005,28 @@
       // Persist only user-created widths. Never let an old/global profile
       // rewrite the table's carefully defined initial layout.
       const tableKey = table.className.replace(/\s+/g,'.');
-      const storageKey = 'travel-ledger-col-widths-v6:' + tableKey;
+      const storageKey = 'travel-ledger-col-widths-v7:' + tableKey;
       let saved = null;
       try { saved = JSON.parse(localStorage.getItem(storageKey) || 'null'); } catch (_) {}
 
-      const minWidths = ths.map((_,i)=> i===0 ? 180 : (i===ths.length-1 ? 48 : 78));
+      const minWidths = ths.map((th,i)=>{
+        const col = colEls[i];
+        const className = col ? col.className : '';
+        if (className.includes('col-desc') || className.includes('col-name')) return 220;
+        if (className.includes('col-cat')) return 160;
+        if (className.includes('col-actual')) return 110;
+        if (className.includes('col-planned')) return 100;
+        if (className.includes('col-unit')) return 100;
+        if (className.includes('col-actions')) return 56;
+        if (className.includes('col-qty')) return 72;
+        return i === 0 ? 180 : 78;
+      });
 
       const applyWidths = widths=>{
         widths.forEach((w,i)=>{ colEls[i].style.width = Math.round(w) + 'px'; });
-        table.style.width = 'max-content';
-        table.style.minWidth = widths.reduce((sum,w)=>sum+w,0) + 'px';
+        const total = widths.reduce((sum,w)=>sum+w,0);
+        table.style.width = total + 'px';
+        table.style.minWidth = total + 'px';
       };
 
       if (Array.isArray(saved) && saved.length === colEls.length && saved.every(w=>Number(w)>0)) {
@@ -2027,16 +2042,23 @@
         grip.addEventListener('pointerdown', ev=>{
           ev.preventDefault();
           ev.stopPropagation();
+          if (idx >= colEls.length - 1) return;
           const startX = ev.clientX;
           const startWidths = colEls.map(col=>col.getBoundingClientRect().width);
-          const min = minWidths[idx];
+          const leftMin = minWidths[idx];
+          const rightMin = minWidths[idx + 1];
           grip.classList.add('active');
           table.classList.add('is-resizing');
           if (grip.setPointerCapture) grip.setPointerCapture(ev.pointerId);
 
           const move = e=>{
             const next = startWidths.slice();
-            next[idx] = Math.max(min, startWidths[idx] + (e.clientX - startX));
+            const rawDelta = e.clientX - startX;
+            const minDelta = leftMin - startWidths[idx];
+            const maxDelta = startWidths[idx + 1] - rightMin;
+            const delta = Math.max(minDelta, Math.min(maxDelta, rawDelta));
+            next[idx] = startWidths[idx] + delta;
+            next[idx + 1] = startWidths[idx + 1] - delta;
             applyWidths(next);
           };
 
