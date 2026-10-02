@@ -291,6 +291,18 @@
   #travel-ledger-root table.packing-table input[type="checkbox"] { width: 16px; height: 16px; cursor: pointer; }
   #travel-ledger-root table.packing-table tr.packed-row .pack-name { text-decoration: line-through; opacity: .5; }
   #travel-ledger-root table.packing-table tr.packed-row td { opacity: .75; }
+  #travel-ledger-root table.resizable-table.plan-table,
+  #travel-ledger-root table.resizable-table.research-table,
+  #travel-ledger-root table.resizable-table.visited-table,
+  #travel-ledger-root table.resizable-table.packing-table { width: 100% !important; min-width: 0 !important; }
+  #travel-ledger-root table.resizable-table.plan-table td:last-child,
+  #travel-ledger-root table.resizable-table.research-table td:last-child,
+  #travel-ledger-root table.resizable-table.visited-table td:last-child,
+  #travel-ledger-root table.resizable-table.packing-table td:last-child { white-space: nowrap; overflow: visible; }
+  #travel-ledger-root table.resizable-table.plan-table .exp-del,
+  #travel-ledger-root table.resizable-table.research-table .exp-del,
+  #travel-ledger-root table.resizable-table.visited-table .exp-del,
+  #travel-ledger-root table.resizable-table.packing-table .exp-del { vertical-align: middle; }
   #travel-ledger-root table.budget-exp-table { table-layout: fixed; width: 100%; }
   #travel-ledger-root table.budget-exp-table col.col-desc { width: 24%; }
   #travel-ledger-root table.budget-exp-table col.col-cat { width: 20%; }
@@ -645,8 +657,9 @@
   const STORAGE_KEY = 'trips-data';
   const HISTORY_KEY = 'trips-data-history';
   const MAX_HISTORY_DAYS = 14;
-  const APP_VERSION = '1.11.7';
+  const APP_VERSION = '1.11.8';
   const CHANGELOG = {
+    '1.11.8': 'Standardized Plan, Research, Visited, and Packing table resizing: fluid card-width tables, stable action-column minimums, consistent action alignment, and reliable resizer initialization after section/tab re-renders.',
     '1.11.7': 'Replaced the Planned estimate Reset text button with a compact reset icon while retaining its tooltip, accessible label, and reset behavior.',
     '1.11.6': 'Narrowed the Category Breakdown frame to a compact side panel and kept it beside the Planned and Actual tables at normal desktop widths; the layout still stacks cleanly below 900px.',
     '1.11.5': 'Budget polish: Planned and Actual tables now remain fluid inside their cards without horizontal scrolling, with tighter cell spacing and compact category selects; Category Breakdown is reduced to a smaller 100px chart card footprint.',
@@ -2023,15 +2036,24 @@
       // Persist only user-created widths. Never let an old/global profile
       // rewrite the table's carefully defined initial layout.
       const tableKey = table.className.replace(/\s+/g,'.');
-      const storageKey = 'travel-ledger-col-widths-v7:' + tableKey;
+      const storageKey = 'travel-ledger-col-widths-v8:' + tableKey;
       let saved = null;
       try { saved = JSON.parse(localStorage.getItem(storageKey) || 'null'); } catch (_) {}
 
+      const tableType = table.classList.contains('plan-table') ? 'plan'
+        : table.classList.contains('research-table') ? 'research'
+        : table.classList.contains('visited-table') ? 'visited'
+        : table.classList.contains('packing-table') ? 'packing' : 'other';
       const minWidths = ths.map((th,i)=>{
         const col = colEls[i];
         const className = col ? col.className : '';
-        if (className.includes('col-desc') || className.includes('col-name')) return 220;
-        if (className.includes('col-cat')) return 160;
+        if (className.includes('col-actions')) return tableType === 'plan' || tableType === 'research' ? 150 : 56;
+        if (className.includes('col-desc') || className.includes('col-name')) return tableType === 'plan' ? 240 : 220;
+        if (className.includes('col-cat')) return 150;
+        if (className.includes('col-status')) return 100;
+        if (className.includes('col-when')) return 120;
+        if (className.includes('col-price') || className.includes('col-priority')) return 72;
+        if (className.includes('col-estcost')) return 100;
         if (className.includes('col-actual')) return 110;
         if (className.includes('col-planned')) return 100;
         if (className.includes('col-unit')) return 100;
@@ -2312,6 +2334,7 @@
       const id = btn.closest('tr').dataset.id;
       btn.addEventListener('click', ()=> deletePlanItem(t, id));
     });
+    initTableColumnResizers(sections);
   }
 
   function ensureActualExpense(t, item, allowZeroCost){
@@ -3103,6 +3126,7 @@
       const promoteBtn = row.querySelector('.res-promote');
       if (promoteBtn) promoteBtn.addEventListener('click', ()=> promoteResearchItem(t, id));
     });
+    initTableColumnResizers(content);
   }
 
   function renderResearchMap(t, content){
