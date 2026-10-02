@@ -216,9 +216,9 @@
     display: grid; grid-template-columns: 1fr 1.3fr; grid-template-rows: auto auto; gap: 18px; margin-bottom: 20px; align-items: start;
   }
   #travel-ledger-root .budget-donut-card { grid-column: 1; grid-row: 1 / 3; display: flex; flex-direction: column; }
-  #travel-ledger-root .budget-fixed-card { grid-column: 2; display: flex; flex-direction: column; height: auto; }
+  #travel-ledger-root .budget-fixed-card { grid-column: 2; display: flex; flex-direction: column; height: auto; min-width: 0; }
   #travel-ledger-root .budget-fixed-card h3 { flex-shrink: 0; }
-  #travel-ledger-root .budget-fixed-scroll { width: 100%; overflow-x: auto; overflow-y: visible; min-height: 0; }
+  #travel-ledger-root .budget-fixed-scroll { width: 100%; overflow-x: auto; overflow-y: visible; min-height: 0; min-width: 0; }
   @media (max-width: 1280px) {
     #travel-ledger-root .budget-layout { grid-template-columns: 1fr; grid-template-rows: auto; }
     #travel-ledger-root .budget-donut-card { grid-column: 1; grid-row: auto; }
@@ -237,7 +237,8 @@
   #travel-ledger-root .donut-legend div { display: flex; gap: 7px; align-items: center; margin-bottom: 6px; }
 
   #travel-ledger-root table.exp-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  #travel-ledger-root .table-scroll { overflow-x: auto; }
+  #travel-ledger-root .table-scroll { overflow-x: auto; min-width: 0; }
+  #travel-ledger-root .budget-layout > .chart-card { min-width: 0; }
   #travel-ledger-root table.resizable-table { table-layout: fixed; width: 100%; }
   #travel-ledger-root table.resizable-table.is-resizing { user-select: none; }
   #travel-ledger-root table.resizable-table th { position: relative; overflow: visible; }
@@ -632,8 +633,9 @@
   const STORAGE_KEY = 'trips-data';
   const HISTORY_KEY = 'trips-data-history';
   const MAX_HISTORY_DAYS = 14;
-  const APP_VERSION = '1.11.3';
+  const APP_VERSION = '1.11.4';
   const CHANGELOG = {
+    '1.11.4': 'Kept Estimated and Actual Costs inside their card frames sitewide: resizable columns now use responsive proportions, tables fill their card instead of creating a wider pixel canvas, and grid/table scroll containers can shrink with the surrounding layout.',
     '1.11.3': 'Aligned resizable tables with their surrounding card frames: tables now fill the available card width when possible and overflow only when their saved column widths require it, instead of retaining a hard pixel width across layouts.',
     '1.11.2': 'Fixed column resizing so each drag adjusts a locked adjacent column pair, preserves the table width, respects both columns’ minimums, and no longer produces unpredictable jumps from table-layout recalculation.',
     '1.11.1': 'Reworked Budget Planned and Actual table defaults: readable minimum column widths, non-wrapping headers and numeric fields, better description controls, and a new column-profile version so stale resized layouts no longer distort the first view.',
@@ -2024,10 +2026,10 @@
       });
 
       const applyWidths = widths=>{
-        widths.forEach((w,i)=>{ colEls[i].style.width = Math.round(w) + 'px'; });
-        const total = widths.reduce((sum,w)=>sum+w,0);
-        table.style.width = `max(100%, ${Math.round(total)}px)`;
-        table.style.minWidth = total + 'px';
+        const total = Math.max(1, widths.reduce((sum,w)=>sum+Math.max(0,Number(w)||0),0));
+        widths.forEach((w,i)=>{ colEls[i].style.width = ((Math.max(0,Number(w)||0) / total) * 100).toFixed(4) + '%'; });
+        table.style.width = '100%';
+        table.style.minWidth = '0';
       };
 
       if (Array.isArray(saved) && saved.length === colEls.length && saved.every(w=>Number(w)>0)) {
