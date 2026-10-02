@@ -344,7 +344,7 @@
   #travel-ledger-root table.estimate-table .planned-estimate-row { background: rgba(213,203,172,.16); }
   #travel-ledger-root table.estimate-table .planned-estimate-row:hover { background: rgba(213,203,172,.30); }
   #travel-ledger-root .estimate-source { display: block; color: var(--ink-soft); font-family: var(--font-mono); font-size: 10px; letter-spacing: .3px; margin-top: 1px; }
-  #travel-ledger-root .estimate-reset { font-size: 11px; padding: 2px 5px; color: var(--ink-soft); border-color: var(--paper-edge); }
+  #travel-ledger-root .estimate-reset { width: 26px; height: 26px; display: inline-flex; align-items: center; justify-content: center; font-size: 17px; line-height: 1; padding: 0; color: var(--ink-soft); border: 1px solid var(--paper-edge); border-radius: 4px; }
   #travel-ledger-root .estimate-reset:hover { background: var(--paper); color: var(--ink); }
 
   #travel-ledger-root .notes-box { width: 100%; min-height: 70px; font-family: var(--font-body); font-size: 13px; padding: 10px; border: 1px solid var(--paper-edge); border-radius: 6px; background: var(--paper-raised); resize: vertical; }
@@ -645,8 +645,9 @@
   const STORAGE_KEY = 'trips-data';
   const HISTORY_KEY = 'trips-data-history';
   const MAX_HISTORY_DAYS = 14;
-  const APP_VERSION = '1.11.6';
+  const APP_VERSION = '1.11.7';
   const CHANGELOG = {
+    '1.11.7': 'Replaced the Planned estimate Reset text button with a compact reset icon while retaining its tooltip, accessible label, and reset behavior.',
     '1.11.6': 'Narrowed the Category Breakdown frame to a compact side panel and kept it beside the Planned and Actual tables at normal desktop widths; the layout still stacks cleanly below 900px.',
     '1.11.5': 'Budget polish: Planned and Actual tables now remain fluid inside their cards without horizontal scrolling, with tighter cell spacing and compact category selects; Category Breakdown is reduced to a smaller 100px chart card footprint.',
     '1.11.4': 'Kept Estimated and Actual Costs inside their card frames sitewide: resizable columns now use responsive proportions, tables fill their card instead of creating a wider pixel canvas, and grid/table scroll containers can shrink with the surrounding layout.',
@@ -1873,7 +1874,7 @@
                   <td class="num"><input type="number" class="pe-qty" value="${i.estimateQuantity == null ? 1 : i.estimateQuantity}" min="0" step="1" style="text-align:right"></td>
                   <td class="num"><input type="number" class="pe-unit" value="${Number(i.cost)||0}" min="0" step="0.01" style="text-align:right"></td>
                   <td class="num estimate-row-total">${fmt((Number(i.estimateQuantity == null ? 1 : i.estimateQuantity)||0)*(Number(i.cost)||0))}</td>
-                  <td><button class="btn-ghost estimate-reset" data-reset-estimate="${i.id}" title="Reset this row to its Plan values">Reset</button></td>
+                  <td><button class="btn-ghost estimate-reset" data-reset-estimate="${i.id}" title="Reset this row to its Plan values" aria-label="Reset this row to its Plan values">↺</button></td>
                 </tr>`).join('')}
                 ${t.manualEstimates.map(m=>`
                 <tr data-mid="${m.id}">
