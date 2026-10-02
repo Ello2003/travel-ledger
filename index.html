@@ -215,10 +215,10 @@
   #travel-ledger-root .budget-layout {
     display: grid; grid-template-columns: 1fr 1.3fr; grid-template-rows: auto auto; gap: 18px; margin-bottom: 20px; align-items: start;
   }
-  #travel-ledger-root .budget-donut-card { grid-column: 1; grid-row: 1 / 3; display: flex; flex-direction: column; }
+  #travel-ledger-root .budget-donut-card { grid-column: 1; grid-row: 1 / 3; display: flex; flex-direction: column; padding: 12px; }
   #travel-ledger-root .budget-fixed-card { grid-column: 2; display: flex; flex-direction: column; height: auto; min-width: 0; }
   #travel-ledger-root .budget-fixed-card h3 { flex-shrink: 0; }
-  #travel-ledger-root .budget-fixed-scroll { width: 100%; overflow-x: auto; overflow-y: visible; min-height: 0; min-width: 0; }
+  #travel-ledger-root .budget-fixed-scroll { width: 100%; overflow-x: visible; overflow-y: visible; min-height: 0; min-width: 0; }
   @media (max-width: 1280px) {
     #travel-ledger-root .budget-layout { grid-template-columns: 1fr; grid-template-rows: auto; }
     #travel-ledger-root .budget-donut-card { grid-column: 1; grid-row: auto; }
@@ -226,9 +226,9 @@
   }
 
   #travel-ledger-root .donut-wrap { display: flex; align-items: center; gap: 18px; }
-  #travel-ledger-root .donut { width: 140px; height: 140px; border-radius: 50%; flex-shrink: 0; position: relative; }
+  #travel-ledger-root .donut { width: 100px; height: 100px; border-radius: 50%; flex-shrink: 0; position: relative; }
   #travel-ledger-root .donut-center {
-    position: absolute; top: 22px; right: 22px; bottom: 22px; left: 22px; inset: 22px; border-radius: 50%; background: var(--paper-raised);
+    position: absolute; top: 16px; right: 16px; bottom: 16px; left: 16px; inset: 16px; border-radius: 50%; background: var(--paper-raised);
     display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: var(--font-mono);
   }
   #travel-ledger-root .donut-center .amt { font-size: 14px; font-weight: 700; }
@@ -329,6 +329,17 @@
   #travel-ledger-root table.budget-exp-table td.num { white-space: nowrap; }
   #travel-ledger-root table.estimate-table td textarea,
   #travel-ledger-root table.budget-exp-table td textarea { min-height: 26px; }
+  /* Planned and Actual are compact, fluid tables: they fit the card at every size
+     instead of sending the main Budget workflow into a horizontal scroll area. */
+  #travel-ledger-root table.estimate-table,
+  #travel-ledger-root table.budget-exp-table { min-width: 0 !important; width: 100% !important; }
+  #travel-ledger-root table.estimate-table col,
+  #travel-ledger-root table.budget-exp-table col { min-width: 0 !important; }
+  #travel-ledger-root table.estimate-table th,
+  #travel-ledger-root table.estimate-table td,
+  #travel-ledger-root table.budget-exp-table th,
+  #travel-ledger-root table.budget-exp-table td { padding-left: 4px; padding-right: 4px; }
+  #travel-ledger-root table.budget-exp-table select.exp-cat { font-size: 11px; }
   #travel-ledger-root table.budget-exp-table select.exp-cat { width: 100%; max-width: 100%; font-size: 12px; }
   #travel-ledger-root table.estimate-table .planned-estimate-row { background: rgba(213,203,172,.16); }
   #travel-ledger-root table.estimate-table .planned-estimate-row:hover { background: rgba(213,203,172,.30); }
@@ -464,6 +475,7 @@
   #travel-ledger-root .table-scroll table.exp-table:not(.plan-table):not(.research-table):not(.packing-table):not(.estimate-table) { min-width: 620px; }
   #travel-ledger-root .table-scroll table.estimate-table { min-width: 820px; }
   #travel-ledger-root .table-scroll table.budget-exp-table { min-width: 930px; }
+  #travel-ledger-root .budget-fixed-scroll { overflow-x: visible; -webkit-overflow-scrolling: auto; }
 
   @media (max-width: 600px) {
     #travel-ledger-root .wrap { padding: 18px 12px 42px; }
@@ -633,8 +645,9 @@
   const STORAGE_KEY = 'trips-data';
   const HISTORY_KEY = 'trips-data-history';
   const MAX_HISTORY_DAYS = 14;
-  const APP_VERSION = '1.11.4';
+  const APP_VERSION = '1.11.5';
   const CHANGELOG = {
+    '1.11.5': 'Budget polish: Planned and Actual tables now remain fluid inside their cards without horizontal scrolling, with tighter cell spacing and compact category selects; Category Breakdown is reduced to a smaller 100px chart card footprint.',
     '1.11.4': 'Kept Estimated and Actual Costs inside their card frames sitewide: resizable columns now use responsive proportions, tables fill their card instead of creating a wider pixel canvas, and grid/table scroll containers can shrink with the surrounding layout.',
     '1.11.3': 'Aligned resizable tables with their surrounding card frames: tables now fill the available card width when possible and overflow only when their saved column widths require it, instead of retaining a hard pixel width across layouts.',
     '1.11.2': 'Fixed column resizing so each drag adjusts a locked adjacent column pair, preserves the table width, respects both columns’ minimums, and no longer produces unpredictable jumps from table-layout recalculation.',
