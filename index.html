@@ -1432,10 +1432,15 @@
             const diff = Math.round((current - start) / 86400000);
             if (Number.isFinite(diff) && diff >= 0) i.dayNumber = diff + 1;
           }
-          if (!i.date && i.dayNumber != null){
+          if (i.dayNumber != null && Number.isFinite(Number(i.dayNumber))){
             const d = new Date(t.startDate+'T00:00:00');
             d.setDate(d.getDate() + Number(i.dayNumber) - 1);
             i.date = d.toISOString().slice(0,10);
+          }
+          if (i.dayNumberEnd != null && Number.isFinite(Number(i.dayNumberEnd))){
+            const d = new Date(t.startDate+'T00:00:00');
+            d.setDate(d.getDate() + Number(i.dayNumberEnd) - 1);
+            i.endDate = d.toISOString().slice(0,10);
           }
           // A timed item with neither anchor is malformed legacy/local data;
           // treat it as Day 1 rather than allowing it to reorder unpredictably.
