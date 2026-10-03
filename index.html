@@ -1917,19 +1917,6 @@
           </div>
         </div>
 
-        <div id="tabCharts" ${activeTripTab!=='charts'?'hidden':''}>
-          <div class="charts-row">
-            <div class="chart-card">
-              <h3>Category Breakdown</h3>
-              ${activeCats.length ? `
-              <div class="donut-wrap">
-                <div class="donut" style="background:${donutBg}"><div class="donut-center"><div class="amt">${fmt(spent)}</div><div class="lbl">spent</div></div></div>
-                <div class="donut-legend">${activeCats.map(c=>`<div><span class="swatch" style="background:${getCategoryColor(c)}"></span>${escapeHtml(c)} — ${fmt(catTotals[c])}</div>`).join('')}</div>
-              </div>` : '<div class="empty-state">No expenses logged yet.</div>'}
-            </div>
-          </div>
-        </div>
-
         <div class="chart-card" id="myMapCard">
           <div style="display:flex;align-items:center;justify-content:space-between;">
             <h3 style="margin:0;">My Maps</h3>
@@ -1953,6 +1940,20 @@
           <textarea class="notes-box" id="notesBox" placeholder="Itinerary notes, daily spending caps, reminders\u2026">${escapeHtml(t.notes||'')}</textarea>
         </div>
       </div>
+
+        <div id="tabCharts" ${activeTripTab!=='charts'?'hidden':''}>
+          <div class="charts-row">
+            <div class="chart-card">
+              <h3>Category Breakdown</h3>
+              ${activeCats.length ? `
+              <div class="donut-wrap">
+                <div class="donut" style="background:${donutBg}"><div class="donut-center"><div class="amt">${fmt(spent)}</div><div class="lbl">spent</div></div></div>
+                <div class="donut-legend">${activeCats.map(c=>`<div><span class="swatch" style="background:${getCategoryColor(c)}"></span>${escapeHtml(c)} — ${fmt(catTotals[c])}</div>`).join('')}</div>
+              </div>` : '<div class="empty-state">No expenses logged yet.</div>'}
+            </div>
+          </div>
+        </div>
+
 
       <div id="tabPlan" ${activeTripTab!=='plan'?'hidden':''}></div>
       <div id="tabResearch" ${activeTripTab!=='research'?'hidden':''}></div>
