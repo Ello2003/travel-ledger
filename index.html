@@ -213,15 +213,13 @@
   #travel-ledger-root .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 20px; }
   @media (max-width: 780px) { #travel-ledger-root .detail-grid { grid-template-columns: 1fr; } }
   #travel-ledger-root .budget-layout {
-    display: grid; grid-template-columns: .72fr 1.5fr; grid-template-rows: auto auto; gap: 18px; margin-bottom: 20px; align-items: start;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 20px; align-items: start;
   }
-  #travel-ledger-root .budget-donut-card { grid-column: 1; grid-row: 1 / 3; display: flex; flex-direction: column; padding: 12px; }
-  #travel-ledger-root .budget-fixed-card { grid-column: 2; display: flex; flex-direction: column; height: auto; min-width: 0; }
+  #travel-ledger-root .budget-fixed-card { display: flex; flex-direction: column; height: auto; min-width: 0; }
   #travel-ledger-root .budget-fixed-card h3 { flex-shrink: 0; }
   #travel-ledger-root .budget-fixed-scroll { width: 100%; overflow-x: visible; overflow-y: visible; min-height: 0; min-width: 0; }
   @media (max-width: 900px) {
-    #travel-ledger-root .budget-layout { grid-template-columns: 1fr; grid-template-rows: auto; }
-    #travel-ledger-root .budget-donut-card { grid-column: 1; grid-row: auto; }
+    #travel-ledger-root .budget-layout { grid-template-columns: 1fr; }
     #travel-ledger-root .budget-fixed-card { grid-column: 1; height: auto; }
   }
 
@@ -657,8 +655,9 @@
   const STORAGE_KEY = 'trips-data';
   const HISTORY_KEY = 'trips-data-history';
   const MAX_HISTORY_DAYS = 14;
-  const APP_VERSION = '1.11.8';
+  const APP_VERSION = '1.12.0';
   const CHANGELOG = {
+    '1.12.0': 'Applied the London trip layout as the shared trip default: Days timeline with manual ordering, consistent tab order, and a dedicated per-trip Charts tab. Moved Category Breakdown out of Budget so Estimated and Actual Expenses have the full Budget width.',
     '1.11.8': 'Standardized Plan, Research, Visited, and Packing table resizing: fluid card-width tables, stable action-column minimums, consistent action alignment, and reliable resizer initialization after section/tab re-renders.',
     '1.11.7': 'Replaced the Planned estimate Reset text button with a compact reset icon while retaining its tooltip, accessible label, and reset behavior.',
     '1.11.6': 'Narrowed the Category Breakdown frame to a compact side panel and kept it beside the Planned and Actual tables at normal desktop widths; the layout still stacks cleanly below 900px.',
@@ -922,10 +921,10 @@
       mapsApiKey: '',
       githubEnabled: false, githubToken: '', githubOwner: '', githubRepo: '',
       githubPath: 'data.json', githubBranch: 'main', githubSha: null, githubLastSyncAt: null,
-      tripTabOrder: ['budget','plan','research','posttrip']
+      tripTabOrder: ['budget','charts','plan','research','posttrip']
     };
   }
-  const TRIP_TAB_LABELS = { budget: 'Budget', plan: 'Plan', research: 'Research', posttrip: 'Visited' };
+  const TRIP_TAB_LABELS = { budget: 'Budget', charts: 'Charts', plan: 'Plan', research: 'Research', posttrip: 'Visited' };
   function tripTabButtonHtml(key, t){
     let count = '';
     if (key==='plan' && t.planItems.length) count = ` (${t.planItems.length})`;
@@ -977,7 +976,7 @@
       id: uid('trip'), name, year, status, budget,
       startDate: opts.startDate || null, endDate: opts.endDate || null,
       travelers: opts.travelers || 2, notes: opts.notes || '',
-      expenses, planItems: opts.planItems || [], timelineMode: opts.timelineMode || null,
+      expenses, planItems: opts.planItems || [], timelineMode: opts.timelineMode || 'days', timelineManualOrder: true,
       research: opts.research || [], packingList: opts.packingList || [], country: opts.country || '', countryGuessed: opts.countryGuessed || false,
       mapEmbedUrl: opts.mapEmbedUrl || '', manualEstimates: opts.manualEstimates || [], hiddenSheets: opts.hiddenSheets || [],
       sectionMapUrls: opts.sectionMapUrls || {},
@@ -1386,7 +1385,7 @@
     if (!state.settings) state.settings = defaultSettings();
     const sDefaults = defaultSettings();
     Object.keys(sDefaults).forEach(k=>{ if (state.settings[k] === undefined) state.settings[k] = sDefaults[k]; });
-    if (!Array.isArray(state.settings.tripTabOrder) || !state.settings.tripTabOrder.length) state.settings.tripTabOrder = sDefaults.tripTabOrder;
+    state.settings.tripTabOrder = sDefaults.tripTabOrder.slice();
     sDefaults.tripTabOrder.forEach(key=>{ if (!state.settings.tripTabOrder.includes(key)) state.settings.tripTabOrder.push(key); });
     let guessedCount = 0;
     (state.trips||[]).forEach(t=>{
@@ -1395,8 +1394,9 @@
       if (t.endDate === undefined) t.endDate = null;
       if (t.notes === undefined) t.notes = '';
       if (!Array.isArray(t.planItems)) t.planItems = [];
-      if (t.timelineMode === undefined) t.timelineMode = null;
-      if (t.timelineManualOrder === undefined) t.timelineManualOrder = false;
+      if (t.timelineMode === undefined || t.timelineMode === null) t.timelineMode = 'days';
+      t.timelineMode = 'days';
+      t.timelineManualOrder = true;
       if (!Array.isArray(t.research)) t.research = [];
       if (!Array.isArray(t.packingList)) t.packingList = [];
       if (t.country === undefined) t.country = '';
@@ -1863,15 +1863,6 @@
 
       <div id="tabBudget" ${activeTripTab!=='budget'?'hidden':''}>
         <div class="budget-layout">
-          <div class="chart-card budget-donut-card">
-            <h3>Category Breakdown</h3>
-            ${activeCats.length ? `
-            <div class="donut-wrap">
-              <div class="donut" style="background:${donutBg}"><div class="donut-center"><div class="amt">${fmt(spent)}</div><div class="lbl">spent</div></div></div>
-              <div class="donut-legend">${activeCats.map(c=>`<div><span class="swatch" style="background:${getCategoryColor(c)}"></span>${escapeHtml(c)} \u2014 ${fmt(catTotals[c])}</div>`).join('')}</div>
-            </div>` : '<div class="empty-state">No expenses logged yet.</div>'}
-          </div>
-
           <div class="chart-card budget-fixed-card">
             <h3>Estimated Costs</h3>
             <div class="table-scroll budget-fixed-scroll">
@@ -1918,6 +1909,19 @@
             </table>
             </div>
             <div class="toolbar" style="margin-top:10px;margin-bottom:0;"><button class="btn-primary" id="addExpBtn">+ Add Expense</button></div>
+          </div>
+        </div>
+
+        <div id="tabCharts" ${activeTripTab!=='charts'?'hidden':''}>
+          <div class="charts-row">
+            <div class="chart-card">
+              <h3>Category Breakdown</h3>
+              ${activeCats.length ? `
+              <div class="donut-wrap">
+                <div class="donut" style="background:${donutBg}"><div class="donut-center"><div class="amt">${fmt(spent)}</div><div class="lbl">spent</div></div></div>
+                <div class="donut-legend">${activeCats.map(c=>`<div><span class="swatch" style="background:${getCategoryColor(c)}"></span>${escapeHtml(c)} — ${fmt(catTotals[c])}</div>`).join('')}</div>
+              </div>` : '<div class="empty-state">No expenses logged yet.</div>'}
+            </div>
           </div>
         </div>
 
