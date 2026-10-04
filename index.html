@@ -921,11 +921,9 @@
       mapsApiKey: '',
       githubEnabled: false, githubToken: '', githubOwner: '', githubRepo: '',
       githubPath: 'data.json', githubBranch: 'main', githubSha: null, githubLastSyncAt: null,
-      tripTabOrder: DEFAULT_TRIP_TAB_ORDER.slice()
+      tripTabOrder: ['budget','charts','plan','research','posttrip']
     };
   }
-  const TRIP_DEFAULTS = Object.freeze({ timelineMode: 'days', timelineManualOrder: true });
-  const DEFAULT_TRIP_TAB_ORDER = Object.freeze(['budget','charts','plan','research','posttrip']);
   const TRIP_TAB_LABELS = { budget: 'Budget', charts: 'Charts', plan: 'Plan', research: 'Research', posttrip: 'Visited' };
   function tripTabButtonHtml(key, t){
     let count = '';
@@ -978,7 +976,7 @@
       id: uid('trip'), name, year, status, budget,
       startDate: opts.startDate || null, endDate: opts.endDate || null,
       travelers: opts.travelers || 2, notes: opts.notes || '',
-      expenses, planItems: opts.planItems || [], timelineMode: opts.timelineMode || TRIP_DEFAULTS.timelineMode, timelineManualOrder: TRIP_DEFAULTS.timelineManualOrder,
+      expenses, planItems: opts.planItems || [], timelineMode: opts.timelineMode || 'days', timelineManualOrder: true,
       research: opts.research || [], packingList: opts.packingList || [], country: opts.country || '', countryGuessed: opts.countryGuessed || false,
       mapEmbedUrl: opts.mapEmbedUrl || '', manualEstimates: opts.manualEstimates || [], hiddenSheets: opts.hiddenSheets || [],
       sectionMapUrls: opts.sectionMapUrls || {},
@@ -1396,13 +1394,16 @@
       if (t.endDate === undefined) t.endDate = null;
       if (t.notes === undefined) t.notes = '';
       if (!Array.isArray(t.planItems)) t.planItems = [];
-      t.timelineMode = TRIP_DEFAULTS.timelineMode;
-      t.timelineManualOrder = TRIP_DEFAULTS.timelineManualOrder;
+      if (t.timelineMode === undefined || t.timelineMode === null) t.timelineMode = 'days';
+      t.timelineMode = 'days';
+      t.timelineManualOrder = true;
       if (!Array.isArray(t.research)) t.research = [];
       if (!Array.isArray(t.packingList)) t.packingList = [];
       if (t.country === undefined) t.country = '';
       if (t.countryGuessed === undefined) t.countryGuessed = false;
-      if (t.mapEmbedUrl === undefined) t.mapEmbedUrl = '';
+      if (t.mapEmbedUrl === undefined){
+        t.mapEmbedUrl = /london/i.test(t.name) ? 'https://www.google.com/maps/d/embed?mid=1agtFV4DvC-eE9MuhqqB5i3a2XWuJ0e4&hl=en&ehbc=2E312F' : '';
+      }
       if (!Array.isArray(t.manualEstimates)) t.manualEstimates = [];
       t.manualEstimates.forEach(m=>{
         if (m.description === undefined){
@@ -1419,7 +1420,7 @@
         if (guess){ t.country = guess; t.countryGuessed = true; guessedCount++; }
       }
       t.planItems.forEach(i=>{
-        // Keep legacy itinerary records internally consistent. Older itinerary
+        // Keep legacy itinerary records internally consistent. Older London
         // data can contain either a date or a day number (and some locally
         // created timed items have neither). The Hour-by-Hour view needs one
         // canonical day/date anchor so the same item cannot jump between
@@ -1941,7 +1942,7 @@
       </div>
 
         <div id="tabCharts" ${activeTripTab!=='charts'?'hidden':''}>
-          <div class="charts-row" style="grid-template-columns:1fr;">
+          <div class="charts-row">
             <div class="chart-card">
               <h3>Category Breakdown</h3>
               ${activeCats.length ? `
