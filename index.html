@@ -246,9 +246,9 @@
   #travel-ledger-root table.resizable-table td textarea,
   #travel-ledger-root table.resizable-table td input,
   #travel-ledger-root table.resizable-table td select { box-sizing: border-box; min-width: 0; }
-  #travel-ledger-root table.resizable-table th .col-resizer { position:absolute; top:0; right:-4px; width:9px; height:100%; cursor:col-resize; z-index:10; user-select:none; touch-action:none; }
+  #travel-ledger-root table.resizable-table th .col-resizer { position:absolute; top:0; right:0; width:18px; height:100%; cursor:col-resize; z-index:10; user-select:none; touch-action:none; pointer-events:auto; }
   #travel-ledger-root table.resizable-table th:last-child .col-resizer { display: none; }
-  #travel-ledger-root table.resizable-table th .col-resizer::after { content:''; position:absolute; top:15%; right:3px; width:2px; height:70%; background:var(--paper-edge); opacity:.7; }
+  #travel-ledger-root table.resizable-table th .col-resizer::after { content:''; position:absolute; top:12%; right:0; width:3px; height:76%; background:var(--paper-edge); opacity:.85; border-radius:2px; }
   #travel-ledger-root table.resizable-table th:hover .col-resizer::after, #travel-ledger-root table.resizable-table th .col-resizer.active::after { background:var(--brass); opacity:1; }
   #travel-ledger-root table.exp-table th {
     font-family: var(--font-mono); font-size: 10px; letter-spacing: 1px; text-transform: uppercase;
