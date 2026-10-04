@@ -2043,8 +2043,8 @@
       table.classList.add('resizable-table');
       table.dataset.resizersReady = '1';
 
-      // Persist only user-created widths. Never let an old/global profile
-      // rewrite the table's carefully defined initial layout.
+      // Widths are shared by equivalent table types and stored as pixel
+      // measurements; applyWidths converts them to percentages for this card.
       const tableKey = table.className.replace(/\s+/g,'.');
       const storageKey = 'travel-ledger-col-widths-v8:' + tableKey;
       let saved = null;
@@ -2055,8 +2055,7 @@
         : table.classList.contains('visited-table') ? 'visited'
         : table.classList.contains('packing-table') ? 'packing' : 'other';
       const minWidths = ths.map((th,i)=>{
-        const col = colEls[i];
-        const className = col ? col.className : '';
+        const className = colEls[i] ? colEls[i].className : '';
         if (className.includes('col-actions')) return tableType === 'plan' || tableType === 'research' ? 150 : 56;
         if (className.includes('col-desc') || className.includes('col-name')) return tableType === 'plan' ? 240 : 220;
         if (className.includes('col-cat')) return 150;
@@ -2065,66 +2064,94 @@
         if (className.includes('col-price') || className.includes('col-priority')) return 72;
         if (className.includes('col-estcost')) return 100;
         if (className.includes('col-actual')) return 110;
-        if (className.includes('col-planned')) return 100;
-        if (className.includes('col-unit')) return 100;
-        if (className.includes('col-actions')) return 56;
+        if (className.includes('col-planned') || className.includes('col-unit')) return 100;
         if (className.includes('col-qty')) return 72;
         return i === 0 ? 180 : 78;
       });
 
       const applyWidths = widths=>{
-        const total = Math.max(1, widths.reduce((sum,w)=>sum+Math.max(0,Number(w)||0),0));
-        widths.forEach((w,i)=>{ colEls[i].style.width = ((Math.max(0,Number(w)||0) / total) * 100).toFixed(4) + '%'; });
+        const safeWidths = widths.map(w=>Math.max(1,Number(w)||1));
+        const total = safeWidths.reduce((sum,w)=>sum+w,0);
+        safeWidths.forEach((w,i)=>{ colEls[i].style.width = ((w / total) * 100).toFixed(4) + '%'; });
         table.style.width = '100%';
         table.style.minWidth = '0';
       };
 
-      if (Array.isArray(saved) && saved.length === colEls.length && saved.every(w=>Number(w)>0)) {
-        applyWidths(saved.map(w=>Math.max(48,Number(w))));
+      if (Array.isArray(saved) && saved.length === colEls.length && saved.every(w=>Number.isFinite(Number(w)) && Number(w)>0)) {
+        applyWidths(saved);
       }
 
       ths.forEach((th,idx)=>{
+        if (idx >= colEls.length - 1) return;
         const grip = document.createElement('span');
         grip.className = 'col-resizer';
         grip.setAttribute('aria-hidden','true');
+        grip.setAttribute('role','separator');
+        grip.setAttribute('aria-orientation','vertical');
+        grip.setAttribute('aria-label','Resize column');
         th.appendChild(grip);
 
         grip.addEventListener('pointerdown', ev=>{
+          if (ev.button !== undefined && ev.button !== 0) return;
           ev.preventDefault();
           ev.stopPropagation();
-          if (idx >= colEls.length - 1) return;
+
+          const pointerId = ev.pointerId;
+          try { if (grip.setPointerCapture) grip.setPointerCapture(pointerId); } catch (_) {}
           const startX = ev.clientX;
           const startWidths = colEls.map(col=>col.getBoundingClientRect().width);
-          const leftMin = minWidths[idx];
-          const rightMin = minWidths[idx + 1];
+          const pairWidth = startWidths[idx] + startWidths[idx + 1];
+          if (!Number.isFinite(pairWidth) || pairWidth <= 0) return;
+
+          let leftMin = Math.min(minWidths[idx], Math.max(24, startWidths[idx] * 0.4));
+          let rightMin = Math.min(minWidths[idx + 1], Math.max(24, startWidths[idx + 1] * 0.4));
+          // On narrow cards, leave some room for movement even when the
+          // nominal minimums would consume the entire adjacent column pair.
+          const minTotal = leftMin + rightMin;
+          if (minTotal > pairWidth * 0.7) {
+            const scale = pairWidth * 0.7 / minTotal;
+            leftMin *= scale;
+            rightMin *= scale;
+          }
+
           grip.classList.add('active');
           table.classList.add('is-resizing');
-          if (grip.setPointerCapture) grip.setPointerCapture(ev.pointerId);
 
           const move = e=>{
-            const next = startWidths.slice();
+            if (e.pointerId !== pointerId) return;
+            e.preventDefault();
+            const minLeft = leftMin;
+            const maxLeft = pairWidth - rightMin;
             const rawDelta = e.clientX - startX;
-            const minDelta = leftMin - startWidths[idx];
-            const maxDelta = startWidths[idx + 1] - rightMin;
+            // Keep the current widths stable even when saved widths are already
+            // outside today's minimums; only clamp movement beyond that point.
+            const minDelta = Math.min(0, minLeft - startWidths[idx]);
+            const maxDelta = Math.max(0, maxLeft - startWidths[idx]);
             const delta = Math.max(minDelta, Math.min(maxDelta, rawDelta));
-            next[idx] = startWidths[idx] + delta;
-            next[idx + 1] = startWidths[idx + 1] - delta;
+            const nextLeft = startWidths[idx] + delta;
+            const next = startWidths.slice();
+            next[idx] = nextLeft;
+            next[idx + 1] = pairWidth - nextLeft;
+            // Other columns keep their measured widths; only this adjacent pair moves.
             applyWidths(next);
           };
 
-          const stop = ()=>{
+          const stop = e=>{
+            if (e && e.pointerId != null && e.pointerId !== pointerId) return;
             const widths = colEls.map(col=>col.getBoundingClientRect().width);
             try { localStorage.setItem(storageKey, JSON.stringify(widths)); } catch (_) {}
             grip.classList.remove('active');
             table.classList.remove('is-resizing');
-            grip.removeEventListener('pointermove',move);
-            grip.removeEventListener('pointerup',stop);
-            grip.removeEventListener('pointercancel',stop);
+            window.removeEventListener('pointermove',move);
+            window.removeEventListener('pointerup',stop);
+            window.removeEventListener('pointercancel',stop);
+            window.removeEventListener('blur',stop);
           };
 
-          grip.addEventListener('pointermove',move);
-          grip.addEventListener('pointerup',stop);
-          grip.addEventListener('pointercancel',stop);
+          window.addEventListener('pointermove',move,{passive:false});
+          window.addEventListener('pointerup',stop);
+          window.addEventListener('pointercancel',stop);
+          window.addEventListener('blur',stop,{once:true});
         });
       });
     });
