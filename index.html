@@ -141,6 +141,19 @@
     font-family: var(--font-mono); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase;
     color: var(--ink-soft); margin: 0 0 14px 0; font-weight: 600;
   }
+  #travel-ledger-root .trip-chart-row { display:flex; align-items:center; gap:8px; margin:8px 0; font-size:12px; min-width:0; }
+  #travel-ledger-root .trip-chart-label { width:64px; flex:0 0 64px; color:var(--ink-soft); font-family:var(--font-mono); font-size:10px; text-transform:uppercase; }
+  #travel-ledger-root .trip-chart-track { flex:1; min-width:24px; height:12px; background:var(--paper); border-radius:3px; overflow:hidden; }
+  #travel-ledger-root .trip-chart-fill { height:100%; border-radius:3px; }
+  #travel-ledger-root .trip-chart-value { width:112px; flex:0 0 112px; text-align:right; font-family:var(--font-mono); font-size:11px; white-space:nowrap; }
+  #travel-ledger-root .trip-chart-note { margin-top:12px; color:var(--ink-soft); font-family:var(--font-mono); font-size:11px; text-align:right; }
+  #travel-ledger-root .trip-category-chart { margin:10px 0 14px; }
+  #travel-ledger-root .trip-category-title { margin-bottom:4px; font-weight:600; font-size:12px; }
+  #travel-ledger-root .trip-expense-label { width:132px; flex:0 1 132px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:11px; }
+  @media (max-width:520px) {
+    #travel-ledger-root .trip-chart-value { width:88px; flex-basis:88px; font-size:10px; }
+    #travel-ledger-root .trip-expense-label { width:90px; flex-basis:90px; }
+  }
   #travel-ledger-root .cat-bar-row, #travel-ledger-root .year-row { display: flex; align-items: center; gap: 8px; margin-bottom: 9px; font-size: 12px; }
   #travel-ledger-root .cat-bar-label, #travel-ledger-root .year-label { width: 90px; font-family: var(--font-mono); flex-shrink: 0; }
   #travel-ledger-root .cat-bar-track, #travel-ledger-root .year-track { flex: 1; background: var(--paper); border-radius: 3px; height: 12px; overflow: hidden; position: relative; }
@@ -1838,6 +1851,28 @@
     });
     const donutBg = stops.length ? `conic-gradient(${stops.join(',')})` : 'var(--paper-edge)';
     const perPerson = t.travelers>1 ? spent/t.travelers : null;
+    const estimateByCategory = {};
+    estimatedItems.forEach(item=>{
+      const category = item.estimateCategory || 'Other';
+      estimateByCategory[category] = (estimateByCategory[category]||0)
+        + (Number(item.estimateQuantity == null ? 1 : item.estimateQuantity)||0)*(Number(item.cost)||0);
+    });
+    t.manualEstimates.forEach(item=>{
+      const category = item.category || 'Other';
+      estimateByCategory[category] = (estimateByCategory[category]||0)
+        + (Number(item.quantity)||0)*(Number(item.unitCost)||0);
+    });
+    const comparisonCats = [...new Set([...activeCats,...Object.keys(estimateByCategory)])]
+      .sort((a,b)=>((catTotals[b]||0)+(estimateByCategory[b]||0))-((catTotals[a]||0)+(estimateByCategory[a]||0)));
+    const comparisonMax = Math.max(1,...comparisonCats.flatMap(category=>[catTotals[category]||0,estimateByCategory[category]||0]));
+    const expenseMax = Math.max(1,...t.expenses.map(expenseAmount));
+    const largestExpenses = [...t.expenses].sort((a,b)=>expenseAmount(b)-expenseAmount(a)).slice(0,5);
+    const budgetMax = Math.max(1,budget,totalEstimated,budgetSpent);
+    const budgetChartRows = [
+      {label:'Budget',value:budget,color:'var(--brass)'},
+      {label:'Estimated',value:totalEstimated,color:'var(--blue)'},
+      {label:'Actual',value:budgetSpent,color:budgetSpent>budget?'var(--red)':'var(--green)'}
+    ];
     let dateSub = `${t.year} \u00b7 ${t.status}`;
     if (t.startDate) dateSub += ` \u00b7 ${t.startDate}${t.endDate ? ' \u2192 '+t.endDate : ''}`;
     const detailDays = tripDuration(t);
@@ -1957,6 +1992,40 @@
               <div class="donut-wrap">
                 <div class="donut" style="background:${donutBg}"><div class="donut-center"><div class="amt">${fmt(spent)}</div><div class="lbl">spent</div></div></div>
                 <div class="donut-legend">${activeCats.map(c=>`<div><span class="swatch" style="background:${getCategoryColor(c)}"></span>${escapeHtml(c)} — ${fmt(catTotals[c])}</div>`).join('')}</div>
+              </div>` : '<div class="empty-state">No expenses logged yet.</div>'}
+            </div>
+            <div class="chart-card">
+              <h3>Budget, Estimate & Actual</h3>
+              <div class="trip-chart-bars">
+                ${budgetChartRows.map(row=>`
+                  <div class="trip-chart-row">
+                    <div class="trip-chart-label">${row.label}</div>
+                    <div class="trip-chart-track"><div class="trip-chart-fill" style="width:${(row.value/budgetMax*100).toFixed(1)}%;background:${row.color}"></div></div>
+                    <div class="trip-chart-value">${fmt(row.value)}</div>
+                  </div>`).join('')}
+              </div>
+              ${budget > 0 ? `<div class="trip-chart-note">${budgetSpent>budget ? `Over budget by ${fmt(budgetSpent-budget)}` : `${(budgetSpent/budget*100).toFixed(0)}% of budget spent`}</div>` : '<div class="trip-chart-note">Set a budget to track spending against it.</div>'}
+            </div>
+          </div>
+          <div class="charts-row">
+            <div class="chart-card">
+              <h3>Estimated vs Actual by Category</h3>
+              ${comparisonCats.length ? `<div class="trip-chart-bars">
+                ${comparisonCats.map(category=>`<div class="trip-category-chart">
+                  <div class="trip-category-title">${escapeHtml(category)}</div>
+                  <div class="trip-chart-row"><div class="trip-chart-label">Est.</div><div class="trip-chart-track"><div class="trip-chart-fill" style="width:${((estimateByCategory[category]||0)/comparisonMax*100).toFixed(1)}%;background:var(--blue)"></div></div><div class="trip-chart-value">${fmt(estimateByCategory[category]||0)}</div></div>
+                  <div class="trip-chart-row"><div class="trip-chart-label">Actual</div><div class="trip-chart-track"><div class="trip-chart-fill" style="width:${((catTotals[category]||0)/comparisonMax*100).toFixed(1)}%;background:var(--green)"></div></div><div class="trip-chart-value">${fmt(catTotals[category]||0)}</div></div>
+                </div>`).join('')}
+              </div>` : '<div class="empty-state">Add estimates or expenses to compare categories.</div>'}
+            </div>
+            <div class="chart-card">
+              <h3>Largest Expenses</h3>
+              ${largestExpenses.length ? `<div class="trip-chart-bars">
+                ${largestExpenses.map(expense=>`<div class="trip-chart-row trip-expense-chart-row">
+                  <div class="trip-expense-label" title="${escapeHtml(expense.description)}">${escapeHtml(expense.description||'Expense')}</div>
+                  <div class="trip-chart-track"><div class="trip-chart-fill" style="width:${(expenseAmount(expense)/expenseMax*100).toFixed(1)}%;background:var(--ochre)"></div></div>
+                  <div class="trip-chart-value">${fmt(expenseAmount(expense))}</div>
+                </div>`).join('')}
               </div>` : '<div class="empty-state">No expenses logged yet.</div>'}
             </div>
           </div>
