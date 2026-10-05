@@ -150,9 +150,16 @@
   #travel-ledger-root .trip-category-chart { margin:10px 0 14px; }
   #travel-ledger-root .trip-category-title { margin-bottom:4px; font-weight:600; font-size:12px; }
   #travel-ledger-root .trip-expense-label { width:132px; flex:0 1 132px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:11px; }
+  #travel-ledger-root .trip-daily-label { width:180px; flex:0 1 180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:11px; }
+  #travel-ledger-root .planning-gap { padding:9px 0; border-bottom:1px solid var(--paper-edge); }
+  #travel-ledger-root .planning-gap:last-child { border-bottom:0; }
+  #travel-ledger-root .planning-gap-heading { display:flex; justify-content:space-between; gap:12px; font-weight:600; font-size:12px; }
+  #travel-ledger-root .planning-gap-heading strong { font-family:var(--font-mono); }
+  #travel-ledger-root .planning-gap-examples { margin-top:4px; color:var(--ink-soft); font-size:11px; line-height:1.5; }
   @media (max-width:520px) {
     #travel-ledger-root .trip-chart-value { width:88px; flex-basis:88px; font-size:10px; }
     #travel-ledger-root .trip-expense-label { width:90px; flex-basis:90px; }
+    #travel-ledger-root .trip-daily-label { width:100px; flex-basis:100px; }
   }
   #travel-ledger-root .cat-bar-row, #travel-ledger-root .year-row { display: flex; align-items: center; gap: 8px; margin-bottom: 9px; font-size: 12px; }
   #travel-ledger-root .cat-bar-label, #travel-ledger-root .year-label { width: 90px; font-family: var(--font-mono); flex-shrink: 0; }
@@ -644,6 +651,12 @@
               <span><span class="swatch" style="background:var(--brass)"></span>Budget</span>
               <span><span class="swatch" style="background:var(--ink)"></span>Spent</span>
             </div>
+          </div>
+        </div>
+        <div class="charts-row" style="grid-template-columns: 1fr;">
+          <div class="chart-card">
+            <h3>Average Spend per Day by Trip</h3>
+            <div id="tripDailySpendRows"></div>
           </div>
         </div>
       </div>
@@ -1755,6 +1768,23 @@
     svg.innerHTML = gridlines + bars + labels;
   }
 
+  function renderTripDailySpend(){
+    const container = document.getElementById('tripDailySpendRows');
+    if (!container) return;
+    const comparable = state.trips
+      .filter(t=>t.status!=='cancelled' && tripDuration(t))
+      .map(t=>({trip:t,days:tripDuration(t),perDay:budgetCountedTotal(t)/tripDuration(t)}))
+      .sort((a,b)=>b.perDay-a.perDay);
+    const top = comparable.slice(0,10);
+    const max = Math.max(1,...top.map(row=>row.perDay));
+    container.innerHTML = top.length ? top.map(row=>`
+      <div class="trip-chart-row">
+        <div class="trip-daily-label" title="${escapeHtml(row.trip.name)}">${escapeHtml(row.trip.name)}</div>
+        <div class="trip-chart-track"><div class="trip-chart-fill" style="width:${(row.perDay/max*100).toFixed(1)}%;background:var(--blue)"></div></div>
+        <div class="trip-chart-value">${fmt(row.perDay)} / day</div>
+      </div>`).join('') : '<div class="empty-state">Add trip dates or day numbers to compare daily spending.</div>';
+  }
+
   function statusLabel(t){
     const spent = budgetCountedTotal(t);
     if (t.status === 'cancelled') return {cls:'status-cancelled', text:'Cancelled'};
@@ -1873,6 +1903,13 @@
       {label:'Estimated',value:totalEstimated,color:'var(--blue)'},
       {label:'Actual',value:budgetSpent,color:budgetSpent>budget?'var(--red)':'var(--green)'}
     ];
+    const pendingPlanItems = t.planItems.filter(item=>!item.visited);
+    const unestimatedItems = pendingPlanItems.filter(item=>item.cost==null);
+    const unscheduledItems = pendingPlanItems.filter(item=>tripTimelineMode(t)==='dates' ? !item.date : !item.dayNumber);
+    const gapRows = [
+      {label:'Need cost estimates',items:unestimatedItems},
+      {label:tripTimelineMode(t)==='dates'?'Need dates':'Need day assignments',items:unscheduledItems}
+    ].filter(row=>row.items.length);
     let dateSub = `${t.year} \u00b7 ${t.status}`;
     if (t.startDate) dateSub += ` \u00b7 ${t.startDate}${t.endDate ? ' \u2192 '+t.endDate : ''}`;
     const detailDays = tripDuration(t);
@@ -2027,6 +2064,13 @@
                   <div class="trip-chart-value">${fmt(expenseAmount(expense))}</div>
                 </div>`).join('')}
               </div>` : '<div class="empty-state">No expenses logged yet.</div>'}
+            </div>
+            <div class="chart-card">
+              <h3>Planning Gaps</h3>
+              ${gapRows.length ? gapRows.map(row=>`<div class="planning-gap">
+                <div class="planning-gap-heading">${row.label}<strong>${row.items.length}</strong></div>
+                <div class="planning-gap-examples">${row.items.slice(0,4).map(item=>escapeHtml(item.name||'Untitled item')).join(' · ')}${row.items.length>4? ` and ${row.items.length-4} more`:''}</div>
+              </div>`).join('') : '<div class="empty-state">No missing estimates or schedule details found.</div>'}
             </div>
           </div>
         </div>
@@ -4289,7 +4333,7 @@
   renderDashTabs();
 
   function renderAll(){
-    renderKPIs(); renderUpNext(); renderCatBars(); renderYearRows(); renderTrend(); renderTripsGrid();
+    renderKPIs(); renderUpNext(); renderCatBars(); renderYearRows(); renderTrend(); renderTripDailySpend(); renderTripsGrid();
   }
 
   function openChangelogModal(){
