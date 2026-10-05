@@ -2059,9 +2059,9 @@
       let saved = null;
       try { saved = JSON.parse(localStorage.getItem(storageKey) || 'null'); } catch (_) {}
 
-      const tableType = table.classList.contains('plan-table') ? 'plan'
+      const tableType = table.classList.contains('visited-table') ? 'visited'
+        : table.classList.contains('plan-table') ? 'plan'
         : table.classList.contains('research-table') ? 'research'
-        : table.classList.contains('visited-table') ? 'visited'
         : table.classList.contains('packing-table') ? 'packing' : 'other';
       const minWidths = ths.map((th,i)=>{
         const className = colEls[i] ? colEls[i].className : '';
@@ -2086,8 +2086,59 @@
         table.style.minWidth = '0';
       };
 
-      if (Array.isArray(saved) && saved.length === colEls.length && saved.every(w=>Number.isFinite(Number(w)) && Number(w)>0)) {
+      const hasSavedWidths = Array.isArray(saved) && saved.length === colEls.length && saved.every(w=>Number.isFinite(Number(w)) && Number(w)>0);
+      if (hasSavedWidths) {
         applyWidths(saved);
+      } else {
+        // Choose first-use defaults from the actual labels and controls. Selects
+        // account for every option, so category names fit even when the current
+        // selection is shorter (for example, "Food & Drink").
+        const measureCanvas = document.createElement('canvas');
+        const measureContext = measureCanvas.getContext('2d');
+        const textWidths = ths.map((th,i)=>{
+          const colClass = colEls[i] ? colEls[i].className : '';
+          let maxText = 0;
+          const measure = (text, element)=>{
+            if (!text || !measureContext) return;
+            const style = window.getComputedStyle(element || th);
+            measureContext.font = style.font || `${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
+            maxText = Math.max(maxText, measureContext.measureText(String(text).trim()).width);
+          };
+          measure(th.textContent, th);
+          const cells = table.querySelectorAll(`tbody tr > :nth-child(${i + 1})`);
+          cells.forEach(cell=>{
+            measure(cell.textContent, cell);
+            cell.querySelectorAll('input,textarea,select,button').forEach(control=>{
+              if (control.tagName === 'SELECT') {
+                Array.from(control.options).forEach(option=>measure(option.textContent, control));
+              } else {
+                measure(control.value || control.placeholder || control.textContent, control);
+              }
+            });
+          });
+          // Header/cell padding, select arrows, and letter spacing need room too.
+          return Math.ceil(maxText * 1.12 + 42);
+        });
+        const caps = textWidths.map((_,i)=>{
+          const cls = colEls[i] ? colEls[i].className : '';
+          if (cls.includes('col-actions')) return 220;
+          if (cls.includes('col-cat')) return 280;
+          if (cls.includes('col-name') || cls.includes('col-desc')) return 380;
+          return 260;
+        });
+        const required = textWidths.map((width,i)=>Math.max(minWidths[i],Math.min(caps[i],width)));
+        const weights = ths.map(th=>Math.max(1,th.getBoundingClientRect().width));
+        const available = Math.max(1, table.parentElement ? table.parentElement.clientWidth : table.clientWidth);
+        const requiredTotal = required.reduce((sum,width)=>sum+width,0);
+        let defaults;
+        if (requiredTotal >= available) {
+          defaults = required.map(width=>width * available / requiredTotal);
+        } else {
+          const extra = available - requiredTotal;
+          const weightTotal = weights.reduce((sum,width)=>sum+width,0) || weights.length;
+          defaults = required.map((width,i)=>width + extra * (weights[i] / weightTotal));
+        }
+        applyWidths(defaults);
       }
 
       const resizeStartHandlers = [];
