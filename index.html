@@ -2167,21 +2167,15 @@
           window.addEventListener('blur',stop,{once:true});
         };
 
-        // Safari's mouse path is more reliable through mouse events than pointer
-        // capture. Keep pointer events for touch and pen input.
-        grip.addEventListener('pointerdown',ev=>{
-          if (ev.pointerType === 'mouse') return;
-          beginResize(ev,true);
-        });
-        resizeStartHandlers[idx] = ev=>beginResize(ev,false);
+        resizeStartHandlers[idx] = (ev,usePointerEvents=false)=>beginResize(ev,usePointerEvents);
       });
 
-      // Safari can miss the absolutely positioned grip during hit testing.
-      // Start a mouse resize when the press lands near a header boundary.
-      table.addEventListener('mousedown',ev=>{
-        if (ev.button !== 0) return;
+      // Detect divider presses on the table itself. Safari can miss the
+      // absolutely positioned grip during hit testing, so use the measured
+      // header boundaries for both pointer and compatibility mouse input.
+      const findResizeIndex = ev=>{
         let closestIndex = -1;
-        let closestDistance = 16;
+        let closestDistance = 20;
         for (let i=0;i<ths.length-1;i++){
           const distance = Math.abs(ev.clientX - ths[i].getBoundingClientRect().right);
           if (distance <= closestDistance) {
@@ -2189,8 +2183,20 @@
             closestIndex = i;
           }
         }
-        if (closestIndex >= 0 && resizeStartHandlers[closestIndex]) {
-          resizeStartHandlers[closestIndex](ev);
+        return closestIndex;
+      };
+      table.addEventListener('pointerdown',ev=>{
+        if (ev.pointerType === 'mouse' && ev.button !== 0) return;
+        const idx = findResizeIndex(ev);
+        if (idx >= 0 && resizeStartHandlers[idx]) {
+          resizeStartHandlers[idx](ev,true);
+        }
+      },true);
+      table.addEventListener('mousedown',ev=>{
+        if (ev.button !== 0) return;
+        const idx = findResizeIndex(ev);
+        if (idx >= 0 && resizeStartHandlers[idx]) {
+          resizeStartHandlers[idx](ev);
         }
       },true);
     });
