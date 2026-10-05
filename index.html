@@ -2091,13 +2091,15 @@
         grip.setAttribute('aria-label','Resize column');
         th.appendChild(grip);
 
-        grip.addEventListener('pointerdown', ev=>{
+        const beginResize=(ev, usePointerEvents)=>{
           if (ev.button !== undefined && ev.button !== 0) return;
           ev.preventDefault();
           ev.stopPropagation();
 
-          const pointerId = ev.pointerId;
-          try { if (grip.setPointerCapture) grip.setPointerCapture(pointerId); } catch (_) {}
+          const pointerId = usePointerEvents ? ev.pointerId : null;
+          if (usePointerEvents) {
+            try { if (grip.setPointerCapture) grip.setPointerCapture(pointerId); } catch (_) {}
+          }
           const startX = ev.clientX;
           const startWidths = colEls.map(col=>col.getBoundingClientRect().width);
           const pairWidth = startWidths[idx] + startWidths[idx + 1];
@@ -2118,7 +2120,7 @@
           table.classList.add('is-resizing');
 
           const move = e=>{
-            if (e.pointerId !== pointerId) return;
+            if (usePointerEvents && e.pointerId !== pointerId) return;
             e.preventDefault();
             const minLeft = leftMin;
             const maxLeft = pairWidth - rightMin;
@@ -2137,22 +2139,40 @@
           };
 
           const stop = e=>{
-            if (e && e.pointerId != null && e.pointerId !== pointerId) return;
+            if (usePointerEvents && e && e.pointerId != null && e.pointerId !== pointerId) return;
             const widths = colEls.map(col=>col.getBoundingClientRect().width);
             try { localStorage.setItem(storageKey, JSON.stringify(widths)); } catch (_) {}
             grip.classList.remove('active');
             table.classList.remove('is-resizing');
-            window.removeEventListener('pointermove',move);
-            window.removeEventListener('pointerup',stop);
-            window.removeEventListener('pointercancel',stop);
+            if (usePointerEvents) {
+              document.removeEventListener('pointermove',move,true);
+              document.removeEventListener('pointerup',stop,true);
+              document.removeEventListener('pointercancel',stop,true);
+            } else {
+              document.removeEventListener('mousemove',move,true);
+              document.removeEventListener('mouseup',stop,true);
+            }
             window.removeEventListener('blur',stop);
           };
 
-          window.addEventListener('pointermove',move,{passive:false});
-          window.addEventListener('pointerup',stop);
-          window.addEventListener('pointercancel',stop);
+          if (usePointerEvents) {
+            document.addEventListener('pointermove',move,{capture:true,passive:false});
+            document.addEventListener('pointerup',stop,true);
+            document.addEventListener('pointercancel',stop,true);
+          } else {
+            document.addEventListener('mousemove',move,{capture:true,passive:false});
+            document.addEventListener('mouseup',stop,true);
+          }
           window.addEventListener('blur',stop,{once:true});
+        };
+
+        // Safari's mouse path is more reliable through mouse events than pointer
+        // capture. Keep pointer events for touch and pen input.
+        grip.addEventListener('pointerdown',ev=>{
+          if (ev.pointerType === 'mouse') return;
+          beginResize(ev,true);
         });
+        grip.addEventListener('mousedown',ev=>beginResize(ev,false));
       });
     });
   }
