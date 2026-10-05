@@ -2102,7 +2102,7 @@
             try { if (grip.setPointerCapture) grip.setPointerCapture(pointerId); } catch (_) {}
           }
           const startX = ev.clientX;
-          const startWidths = colEls.map(col=>col.getBoundingClientRect().width);
+          const startWidths = ths.map(th=>th.getBoundingClientRect().width);
           const pairWidth = startWidths[idx] + startWidths[idx + 1];
           if (!Number.isFinite(pairWidth) || pairWidth <= 0) return;
 
@@ -2141,7 +2141,7 @@
 
           const stop = e=>{
             if (usePointerEvents && e && e.pointerId != null && e.pointerId !== pointerId) return;
-            const widths = colEls.map(col=>col.getBoundingClientRect().width);
+            const widths = ths.map(th=>th.getBoundingClientRect().width);
             try { localStorage.setItem(storageKey, JSON.stringify(widths)); } catch (_) {}
             grip.classList.remove('active');
             table.classList.remove('is-resizing');
