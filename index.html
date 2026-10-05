@@ -271,6 +271,14 @@
   #travel-ledger-root table.plan-table col.col-when { width: 16%; }
   #travel-ledger-root table.plan-table col.col-cost { width: 12%; }
   #travel-ledger-root table.plan-table col.col-actions { width: 28%; }
+  #travel-ledger-root table.visited-table { table-layout: fixed; width: 100%; min-width: 0; }
+  #travel-ledger-root table.visited-table col.col-name { width: 30%; }
+  #travel-ledger-root table.visited-table col.col-cat { width: 17%; }
+  #travel-ledger-root table.visited-table col.col-qty { width: 8%; }
+  #travel-ledger-root table.visited-table col.col-unit { width: 13%; }
+  #travel-ledger-root table.visited-table col.col-planned { width: 12%; }
+  #travel-ledger-root table.visited-table col.col-actual { width: 13%; }
+  #travel-ledger-root table.visited-table col.col-actions { width: 7%; }
   #travel-ledger-root table.plan-table td, #travel-ledger-root table.plan-table th { overflow-wrap: anywhere; text-overflow: clip; }
   #travel-ledger-root td.when-cell { font-family: var(--font-mono); font-size: 12px; text-align: left; white-space: normal; overflow-wrap: anywhere; }
   #travel-ledger-root table.research-table { table-layout: fixed; }
@@ -2046,7 +2054,8 @@
       // Widths are shared by equivalent table types and stored as pixel
       // measurements; applyWidths converts them to percentages for this card.
       const tableKey = table.className.replace(/\s+/g,'.');
-      const storageKey = 'travel-ledger-col-widths-v9:' + tableKey;
+      const storageVersion = table.classList.contains('visited-table') ? 'v10' : 'v9';
+      const storageKey = 'travel-ledger-col-widths-' + storageVersion + ':' + tableKey;
       let saved = null;
       try { saved = JSON.parse(localStorage.getItem(storageKey) || 'null'); } catch (_) {}
 
