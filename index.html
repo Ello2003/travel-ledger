@@ -2081,6 +2081,7 @@
         applyWidths(saved);
       }
 
+      const resizeStartHandlers = [];
       ths.forEach((th,idx)=>{
         if (idx >= colEls.length - 1) return;
         const grip = document.createElement('span');
@@ -2172,8 +2173,26 @@
           if (ev.pointerType === 'mouse') return;
           beginResize(ev,true);
         });
-        grip.addEventListener('mousedown',ev=>beginResize(ev,false));
+        resizeStartHandlers[idx] = ev=>beginResize(ev,false);
       });
+
+      // Safari can miss the absolutely positioned grip during hit testing.
+      // Start a mouse resize when the press lands near a header boundary.
+      table.addEventListener('mousedown',ev=>{
+        if (ev.button !== 0) return;
+        let closestIndex = -1;
+        let closestDistance = 16;
+        for (let i=0;i<ths.length-1;i++){
+          const distance = Math.abs(ev.clientX - ths[i].getBoundingClientRect().right);
+          if (distance <= closestDistance) {
+            closestDistance = distance;
+            closestIndex = i;
+          }
+        }
+        if (closestIndex >= 0 && resizeStartHandlers[closestIndex]) {
+          resizeStartHandlers[closestIndex](ev);
+        }
+      },true);
     });
   }
 
