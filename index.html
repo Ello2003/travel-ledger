@@ -1078,8 +1078,45 @@
     return totals;
   }
   function fmt(n){ return CUR + (Number(n)||0).toLocaleString('en-GB', {minimumFractionDigits:2, maximumFractionDigits:2}); }
-  function daysUntil(dateStr){ const d = new Date(dateStr + 'T00:00:00'); const now = new Date(); now.setHours(0,0,0,0); return Math.round((d-now)/86400000); }
-  function shortDate(dateStr){ return new Date(dateStr + 'T00:00:00').toLocaleDateString('en-GB', {day:'numeric', month:'short'}); }
+  // Keep calendar dates as date-only keys and do their arithmetic in UTC. Creating
+  // local midnight and then calling toISOString shifts dates in positive-offset
+  // zones (for example, British Summer Time), which used to move itinerary days
+  // back by one day in the persisted data.
+  function dateKeyParts(key){
+    const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(key||''));
+    if (!match) return null;
+    const year=Number(match[1]), month=Number(match[2]), day=Number(match[3]);
+    const timestamp=Date.UTC(year,month-1,day);
+    const check=new Date(timestamp);
+    if (check.getUTCFullYear()!==year || check.getUTCMonth()!==month-1 || check.getUTCDate()!==day) return null;
+    return {year,month,day,timestamp};
+  }
+  function addDaysToDateKey(key,days){
+    const parts=dateKeyParts(key), offset=Number(days);
+    if (!parts || !Number.isFinite(offset)) return null;
+    return new Date(parts.timestamp + Math.trunc(offset)*86400000).toISOString().slice(0,10);
+  }
+  function daysBetweenDateKeys(later,earlier){
+    const a=dateKeyParts(later), b=dateKeyParts(earlier);
+    return a && b ? Math.round((a.timestamp-b.timestamp)/86400000) : NaN;
+  }
+  function formatDateKey(key,options){
+    const parts=dateKeyParts(key);
+    return parts ? new Date(parts.timestamp).toLocaleDateString('en-GB',Object.assign({timeZone:'UTC'},options||{})) : '';
+  }
+  function dateKeyToLocalDate(key,time){
+    const parts=dateKeyParts(key);
+    if (!parts) return null;
+    const match=/^(\d{2}):(\d{2})$/.exec(String(time||'00:00'));
+    const hours=match?Number(match[1]):0, minutes=match?Number(match[2]):0;
+    return new Date(parts.year,parts.month-1,parts.day,hours,minutes,0,0);
+  }
+  function daysUntil(dateStr){
+    const today=new Date();
+    const todayKey=`${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
+    return daysBetweenDateKeys(dateStr,todayKey);
+  }
+  function shortDate(dateStr){ return formatDateKey(dateStr,{day:'numeric',month:'short'}); }
   function autoGrow(el){ if (!el) return; el.style.height = 'auto'; el.style.height = el.scrollHeight + 'px'; }
   function extractMapEmbedUrl(raw){
     raw = (raw||'').trim();
@@ -1101,7 +1138,7 @@
   }
   function tripDuration(t){
     if (t.startDate && t.endDate){
-      const days = Math.round((new Date(t.endDate+'T00:00:00') - new Date(t.startDate+'T00:00:00')) / 86400000) + 1;
+      const days = daysBetweenDateKeys(t.endDate,t.startDate) + 1;
       return days > 0 ? days : null;
     }
     if (tripTimelineMode(t)==='days' && Array.isArray(t.planItems) && t.planItems.length){
@@ -1461,20 +1498,14 @@
         // groups or fall into Unscheduled simply because timeline mode changed.
         if (t.startDate){
           if (i.dayNumber == null && i.date){
-            const start = new Date(t.startDate+'T00:00:00');
-            const current = new Date(i.date+'T00:00:00');
-            const diff = Math.round((current - start) / 86400000);
+            const diff = daysBetweenDateKeys(i.date,t.startDate);
             if (Number.isFinite(diff) && diff >= 0) i.dayNumber = diff + 1;
           }
           if (i.dayNumber != null && Number.isFinite(Number(i.dayNumber))){
-            const d = new Date(t.startDate+'T00:00:00');
-            d.setDate(d.getDate() + Number(i.dayNumber) - 1);
-            i.date = d.toISOString().slice(0,10);
+            i.date = addDaysToDateKey(t.startDate,Number(i.dayNumber)-1) || i.date;
           }
           if (i.dayNumberEnd != null && Number.isFinite(Number(i.dayNumberEnd))){
-            const d = new Date(t.startDate+'T00:00:00');
-            d.setDate(d.getDate() + Number(i.dayNumberEnd) - 1);
-            i.endDate = d.toISOString().slice(0,10);
+            i.endDate = addDaysToDateKey(t.startDate,Number(i.dayNumberEnd)-1) || i.endDate;
           }
           // A timed item with neither anchor is malformed legacy/local data;
           // treat it as Day 1 rather than allowing it to reorder unpredictably.
@@ -1483,14 +1514,10 @@
             i.date = t.startDate;
           }
           if (i.dayNumberEnd != null && !i.endDate){
-            const d = new Date(t.startDate+'T00:00:00');
-            d.setDate(d.getDate() + Number(i.dayNumberEnd) - 1);
-            i.endDate = d.toISOString().slice(0,10);
+            i.endDate = addDaysToDateKey(t.startDate,Number(i.dayNumberEnd)-1) || i.endDate;
           }
           if (i.endDate && i.dayNumberEnd == null){
-            const start = new Date(t.startDate+'T00:00:00');
-            const end = new Date(i.endDate+'T00:00:00');
-            const diff = Math.round((end - start) / 86400000);
+            const diff = daysBetweenDateKeys(i.endDate,t.startDate);
             if (Number.isFinite(diff) && diff >= 0) i.dayNumberEnd = diff + 1;
           }
         }
@@ -1632,13 +1659,10 @@
     const mode = tripTimelineMode(t);
     if (mode === 'dates'){
       if (!item.date) return null;
-      return new Date(item.date + 'T' + (item.time || '00:00') + ':00');
+      return dateKeyToLocalDate(item.date,item.time);
     }
     if (item.dayNumber && t.startDate){
-      const base = new Date(t.startDate + 'T00:00:00');
-      base.setDate(base.getDate() + (item.dayNumber - 1));
-      if (item.time){ const [h,m] = item.time.split(':'); base.setHours(Number(h),Number(m),0,0); }
-      return base;
+      return dateKeyToLocalDate(addDaysToDateKey(t.startDate,Number(item.dayNumber)-1),item.time);
     }
     return null;
   }
@@ -2461,8 +2485,8 @@
     const mode = tripTimelineMode(t);
     if (mode === 'dates'){
       if (!item.date) return '\u2014';
-      const d = new Date(item.date+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short'});
-      const d2 = item.endDate && item.endDate!==item.date ? ' \u2192 '+new Date(item.endDate+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short'}) : '';
+      const d = formatDateKey(item.date,{day:'numeric',month:'short'});
+      const d2 = item.endDate && item.endDate!==item.date ? ' \u2192 '+formatDateKey(item.endDate,{day:'numeric',month:'short'}) : '';
       return d + d2 + (item.time ? ' \u00b7 '+item.time : '');
     }
     if (!item.dayNumber) return '\u2014';
@@ -2902,18 +2926,14 @@
         // item as unscheduled.
         let itemDate = item.date || null;
         if (!itemDate && item.dayNumber != null && t.startDate){
-          const d = new Date(t.startDate+'T00:00:00');
-          d.setDate(d.getDate() + Number(item.dayNumber) - 1);
-          itemDate = d.toISOString().slice(0,10);
+          itemDate = addDaysToDateKey(t.startDate,Number(item.dayNumber)-1);
         }
         key = itemDate || UNSCHEDULED;
-        label = itemDate ? new Date(itemDate+'T00:00:00').toLocaleDateString('en-GB', {weekday:'short', day:'numeric', month:'short'}) : 'Unscheduled';
+        label = itemDate ? formatDateKey(itemDate,{weekday:'short',day:'numeric',month:'short'}) : 'Unscheduled';
       } else {
         let itemDay = item.dayNumber != null ? Number(item.dayNumber) : null;
         if (itemDay == null && item.date && t.startDate){
-          const start = new Date(t.startDate+'T00:00:00');
-          const current = new Date(item.date+'T00:00:00');
-          const diff = Math.round((current - start) / 86400000);
+          const diff = daysBetweenDateKeys(item.date,t.startDate);
           if (Number.isFinite(diff)) itemDay = diff + 1;
         }
         key = itemDay != null && itemDay > 0 ? String(itemDay) : UNSCHEDULED;
@@ -2926,25 +2946,12 @@
       holder.innerHTML = '<div class="empty-state">Add items with a date/day to build the hour-by-hour view.</div>';
       return;
     }
-    // A time is useful even when an older/local item has lost its date/day.
-    // Keep dated/day-grouped items chronological, but put timed unscheduled
-    // items into the correct position rather than blindly forcing all
-    // unscheduled rows to the bottom.
-    const groupTime = key=>{
-      const g = groups[key];
-      const timed = g.items.map(i=>timelineTimeMinutes(i.time)).filter(Number.isFinite);
-      return timed.length ? Math.min(...timed) : Number.POSITIVE_INFINITY;
-    };
+    // Sort scheduled groups by their canonical date/day key and keep the
+    // unscheduled group last. Mixing unscheduled times into this comparator
+    // made it non-transitive, which could leave dates out of order.
     order.sort((a,b)=>{
-      if (a===UNSCHEDULED && b!==UNSCHEDULED){
-        const at=groupTime(a), bt=groupTime(b);
-        return Number.isFinite(at) && at<bt ? -1 : 1;
-      }
-      if (b===UNSCHEDULED && a!==UNSCHEDULED){
-        const at=groupTime(a), bt=groupTime(b);
-        return Number.isFinite(bt) && bt<at ? 1 : -1;
-      }
-      if (a===UNSCHEDULED && b===UNSCHEDULED) return groupTime(a)-groupTime(b);
+      if (a===UNSCHEDULED) return b===UNSCHEDULED ? 0 : 1;
+      if (b===UNSCHEDULED) return -1;
       return mode==='dates' ? a.localeCompare(b) : Number(a)-Number(b);
     });
     holder.innerHTML = order.map(key=>{
@@ -2981,17 +2988,13 @@
             if (mode === 'dates'){
               item.date = key;
               if (t.startDate){
-                const start = new Date(t.startDate+'T00:00:00');
-                const current = new Date(key+'T00:00:00');
-                const diff = Math.round((current - start) / 86400000);
+                const diff = daysBetweenDateKeys(key,t.startDate);
                 if (Number.isFinite(diff) && diff >= 0) item.dayNumber = diff + 1;
               }
             } else {
               item.dayNumber = Number(key);
               if (t.startDate && item.dayNumber > 0){
-                const d = new Date(t.startDate+'T00:00:00');
-                d.setDate(d.getDate() + item.dayNumber - 1);
-                item.date = d.toISOString().slice(0,10);
+                item.date = addDaysToDateKey(t.startDate,item.dayNumber-1) || item.date;
               }
             }
           }
