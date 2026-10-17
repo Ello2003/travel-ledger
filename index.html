@@ -689,8 +689,9 @@
   const STORAGE_KEY = 'trips-data';
   const HISTORY_KEY = 'trips-data-history';
   const MAX_HISTORY_DAYS = 14;
-  const APP_VERSION = '1.13.0';
+  const APP_VERSION = '1.13.1';
   const CHANGELOG = {
+    '1.13.1': 'Quantity and unit-cost fields now share one set of number helpers across Estimated, Actual and Visited tables: decimals are accepted without browser validation errors (step=any), values are rounded consistently (4dp inputs, 2dp totals), blank unit costs stay blank instead of becoming 0, and totals update live as you type in every table.',
     '1.13.0': 'Every planned cost now has a matching Actual Expenses row for all trips (existing and new). Items promoted from Research to Plan, plus manual estimates, automatically add an Actual row with the same description, category and quantity and an empty Actual field to fill in later. Marking an item Visited copies the estimate across into any still-empty actual. Blank actuals count as zero in totals, and blank rows are removed if the plan item is deleted or moved back to Research.',
     '1.12.0': 'Applied the London trip layout as the shared trip default: Days timeline with manual ordering, consistent tab order, and a dedicated per-trip Charts tab. Moved Category Breakdown out of Budget so Estimated and Actual Expenses have the full Budget width.',
     '1.11.8': 'Standardized Plan, Research, Visited, and Packing table resizing: fluid card-width tables, stable action-column minimums, consistent action alignment, and reliable resizer initialization after section/tab re-renders.',
@@ -1987,8 +1988,8 @@
                 <tr data-pid="${i.id}" class="planned-estimate-row">
                   <td><textarea rows="1" class="pe-desc autogrow">${escapeHtml(i.name)}</textarea><span class="estimate-source">from Plan · ${escapeHtml(i.sheet)}</span></td>
                   <td><select class="pe-cat">${state.categories.map(c=>`<option value="${escapeHtml(c.name)}" ${c.name===(i.estimateCategory||resolveExpenseCategory(SHEET_TO_CAT[i.sheet]||'Other'))?'selected':''}>${escapeHtml(c.name)}</option>`).join('')}</select></td>
-                  <td class="num"><input type="number" class="pe-qty" value="${i.estimateQuantity == null ? 1 : i.estimateQuantity}" min="0" step="1" style="text-align:right"></td>
-                  <td class="num"><input type="number" class="pe-unit" value="${Number(i.cost)||0}" min="0" step="0.01" style="text-align:right"></td>
+                  <td class="num"><input type="number" class="pe-qty" value="${numVal(i.estimateQuantity == null ? 1 : i.estimateQuantity)}" min="0" step="any" inputmode="decimal" style="text-align:right"></td>
+                  <td class="num"><input type="number" class="pe-unit" value="${numVal(Number(i.cost)||0)}" min="0" step="any" inputmode="decimal" style="text-align:right"></td>
                   <td class="num estimate-row-total">${fmt((Number(i.estimateQuantity == null ? 1 : i.estimateQuantity)||0)*(Number(i.cost)||0))}</td>
                   <td><button class="btn-ghost estimate-reset" data-reset-estimate="${i.id}" title="Reset this row to its Plan values" aria-label="Reset this row to its Plan values">↺</button></td>
                 </tr>`).join('')}
@@ -1996,8 +1997,8 @@
                 <tr data-mid="${m.id}">
                   <td><textarea rows="1" class="me-desc autogrow">${escapeHtml(m.description)}</textarea></td>
                   <td><select class="me-cat">${state.categories.map(c=>`<option value="${escapeHtml(c.name)}" ${c.name===m.category?'selected':''}>${escapeHtml(c.name)}</option>`).join('')}</select></td>
-                  <td class="num"><input type="number" class="me-qty" value="${m.quantity}" min="0" step="1" style="text-align:right"></td>
-                  <td class="num"><input type="number" class="me-unit" value="${m.unitCost}" min="0" step="0.01" style="text-align:right"></td>
+                  <td class="num"><input type="number" class="me-qty" value="${numVal(m.quantity)}" min="0" step="any" inputmode="decimal" style="text-align:right"></td>
+                  <td class="num"><input type="number" class="me-unit" value="${numVal(m.unitCost)}" min="0" step="any" inputmode="decimal" style="text-align:right"></td>
                   <td class="num estimate-row-total">${fmt((Number(m.quantity)||0)*(Number(m.unitCost)||0))}</td>
                   <td><button class="exp-del me-del" aria-label="Delete estimate" title="Delete">\u2715</button></td>
                 </tr>`).join('')}
@@ -2142,10 +2143,10 @@
       if (!item) return;
       row.querySelector('.pe-desc').addEventListener('change', ev=>{ item.name = singleLine(ev.target.value) || item.name; commitEstimate(t); });
       row.querySelector('.pe-cat').addEventListener('change', ev=>{ item.estimateCategory = ev.target.value; const expense = item.actualExpenseId ? t.expenses.find(e=>e.id===item.actualExpenseId) : null; if (expense) expense.category = ev.target.value; commitEstimate(t); });
-      row.querySelector('.pe-qty').addEventListener('change', ev=>{ item.estimateQuantity = Math.max(0, Number(ev.target.value)||0); commitEstimate(t); });
-      row.querySelector('.pe-unit').addEventListener('change', ev=>{ item.cost = Math.max(0, Number(ev.target.value)||0); commitEstimate(t); });
-      row.querySelector('.pe-qty').addEventListener('input', ev=>{ item.estimateQuantity = Math.max(0, Number(ev.target.value)||0); refreshEstimateTotals(t); });
-      row.querySelector('.pe-unit').addEventListener('input', ev=>{ item.cost = Math.max(0, Number(ev.target.value)||0); refreshEstimateTotals(t); });
+      row.querySelector('.pe-qty').addEventListener('change', ev=>{ item.estimateQuantity = parseQty(ev.target.value); commitEstimate(t); });
+      row.querySelector('.pe-unit').addEventListener('change', ev=>{ item.cost = parseMoney(ev.target.value); commitEstimate(t); });
+      row.querySelector('.pe-qty').addEventListener('input', ev=>{ item.estimateQuantity = parseQty(ev.target.value); refreshEstimateTotals(t); });
+      row.querySelector('.pe-unit').addEventListener('input', ev=>{ item.cost = parseMoney(ev.target.value); refreshEstimateTotals(t); });
       row.querySelector('.estimate-reset').addEventListener('click', ()=> resetPlannedEstimate(t, item));
     });
     document.querySelectorAll('tr[data-mid]').forEach(row=>{
@@ -2154,10 +2155,10 @@
       if (!m) return;
       row.querySelector('.me-desc').addEventListener('change', ev=>{ m.description = singleLine(ev.target.value) || m.description; commitEstimate(t); });
       row.querySelector('.me-cat').addEventListener('change', ev=>{ m.category = ev.target.value; commitEstimate(t); });
-      row.querySelector('.me-qty').addEventListener('change', ev=>{ m.quantity = Math.max(0, Number(ev.target.value)||0); commitEstimate(t); });
-      row.querySelector('.me-unit').addEventListener('change', ev=>{ m.unitCost = Math.max(0, Number(ev.target.value)||0); commitEstimate(t); });
-      row.querySelector('.me-qty').addEventListener('input', ev=>{ m.quantity = Math.max(0, Number(ev.target.value)||0); refreshEstimateTotals(t); });
-      row.querySelector('.me-unit').addEventListener('input', ev=>{ m.unitCost = Math.max(0, Number(ev.target.value)||0); refreshEstimateTotals(t); });
+      row.querySelector('.me-qty').addEventListener('change', ev=>{ m.quantity = parseQty(ev.target.value); commitEstimate(t); });
+      row.querySelector('.me-unit').addEventListener('change', ev=>{ m.unitCost = parseMoney(ev.target.value); commitEstimate(t); });
+      row.querySelector('.me-qty').addEventListener('input', ev=>{ m.quantity = parseQty(ev.target.value); refreshEstimateTotals(t); });
+      row.querySelector('.me-unit').addEventListener('input', ev=>{ m.unitCost = parseMoney(ev.target.value); refreshEstimateTotals(t); });
       row.querySelector('.me-del').addEventListener('click', ()=>{
         removeBlankActual(t, m);
         t.manualEstimates = t.manualEstimates.filter(x=>x.id!==mid);
@@ -2417,10 +2418,10 @@
       return `<tr data-id="${e.id}">
         <td><textarea rows="1" class="exp-desc autogrow">${escapeHtml(e.description)}</textarea></td>
         <td><select class="exp-cat">${state.categories.map(c=>`<option value="${escapeHtml(c.name)}" ${c.name===e.category?'selected':''}>${escapeHtml(c.name)}</option>`).join('')}</select></td>
-        <td class="num"><input type="number" class="exp-qty" value="${e.quantity}" min="0" step="1" style="text-align:right"></td>
-        <td class="num"><input type="number" class="exp-cost" value="${e.unitCost == null ? '' : e.unitCost}" placeholder="—" min="0" step="0.01" style="text-align:right"></td>
+        <td class="num"><input type="number" class="exp-qty" value="${numVal(e.quantity)}" min="0" step="any" inputmode="decimal" style="text-align:right"></td>
+        <td class="num"><input type="number" class="exp-cost" value="${numVal(e.unitCost)}" placeholder="—" min="0" step="any" inputmode="decimal" style="text-align:right"></td>
         <td class="num" style="color:var(--ink-soft);">${planned!=null ? fmt(planned) : '—'}</td>
-        <td class="num"><input type="number" class="exp-actual" value="${e.unitCost == null ? '' : actual.toFixed(2)}" placeholder="—" min="0" step="0.01" style="text-align:right;${overPlan?'color:var(--red);font-weight:700;':''}" aria-label="Actual cost"></td>
+        <td class="num"><input type="number" class="exp-actual" value="${e.unitCost == null ? '' : lineTotal(e.quantity, e.unitCost).toFixed(2)}" placeholder="—" min="0" step="any" inputmode="decimal" style="text-align:right;${overPlan?'color:var(--red);font-weight:700;':''}" aria-label="Actual cost"></td>
         <td><button class="exp-del" aria-label="Delete expense row" title="Delete row">✕</button></td>
       </tr>`;
     }).join('');
@@ -2429,16 +2430,22 @@
       const e = t.expenses.find(x=>x.id===id);
       row.querySelector('.exp-desc').addEventListener('change', ev=>{ e.description = singleLine(ev.target.value); commitExpense(t); });
       row.querySelector('.exp-cat').addEventListener('change', ev=>{ e.category = ev.target.value; commitExpense(t); });
-      row.querySelector('.exp-qty').addEventListener('change', ev=>{ e.quantity = Math.max(0, Number(ev.target.value)||0); commitExpense(t); });
-      row.querySelector('.exp-cost').addEventListener('change', ev=>{ e.unitCost = ev.target.value === '' ? null : Math.max(0, Number(ev.target.value)||0); commitExpense(t); });
+      row.querySelector('.exp-qty').addEventListener('change', ev=>{ e.quantity = parseQty(ev.target.value); commitExpense(t); });
+      row.querySelector('.exp-cost').addEventListener('change', ev=>{ e.unitCost = parseMoney(ev.target.value, true); commitExpense(t); });
       row.querySelector('.exp-actual').addEventListener('change', ev=>{
         if (ev.target.value === ''){ e.unitCost = null; commitExpense(t); return; }
-        const actualValue = Math.max(0, Number(ev.target.value)||0);
-        const qty = Math.max(0, Number(e.quantity)||0);
-        if (qty > 0) e.unitCost = actualValue / qty;
+        const actualValue = parseMoney(ev.target.value);
+        const qty = parseQty(e.quantity);
+        if (qty > 0) e.unitCost = roundTo(actualValue / qty, 4);
         else { e.quantity = 1; e.unitCost = actualValue; }
         commitExpense(t);
       });
+      const liveActual = ()=>{
+        const q = row.querySelector('.exp-qty'), u = row.querySelector('.exp-cost'), a = row.querySelector('.exp-actual');
+        if (a && document.activeElement !== a) a.value = (u.value === '') ? '' : lineTotal(parseQty(q.value), parseMoney(u.value)).toFixed(2);
+      };
+      row.querySelector('.exp-qty').addEventListener('input', liveActual);
+      row.querySelector('.exp-cost').addEventListener('input', liveActual);
       row.querySelector('.exp-del').addEventListener('click', ()=>{
         state.trash.expenses.unshift({ id: uid('trash'), tripId: t.id, tripName: t.name, expense: e, deletedAt: Date.now() });
         t.expenses = t.expenses.filter(x=>x.id!==id); t.updatedAt = Date.now();
@@ -2475,7 +2482,7 @@
       if (!totalCell) return;
       const qty = row.dataset.pid ? row.querySelector('.pe-qty') : row.querySelector('.me-qty');
       const unit = row.dataset.pid ? row.querySelector('.pe-unit') : row.querySelector('.me-unit');
-      totalCell.textContent = fmt((Number(qty&&qty.value)||0)*(Number(unit&&unit.value)||0));
+      totalCell.textContent = fmt(lineTotal(parseQty(qty&&qty.value), parseMoney(unit&&unit.value)));
     });
   }
   function resetPlannedEstimate(t, item){
@@ -2622,6 +2629,17 @@
     initTableColumnResizers(sections);
   }
 
+  /* ---- Shared number helpers: every Qty / Unit Cost / Actual field uses these ---- */
+  function roundTo(n, dp){ const f = Math.pow(10, dp); return Math.round((Number(n) + Number.EPSILON) * f) / f; }
+  function parseQty(v){ if (v === '' || v == null) return 0; const n = Number(v); return isFinite(n) ? Math.max(0, roundTo(n, 4)) : 0; }
+  function parseMoney(v, allowBlank){
+    if (v === '' || v == null) return allowBlank ? null : 0;
+    const n = Number(v);
+    if (!isFinite(n)) return allowBlank ? null : 0;
+    return Math.max(0, roundTo(n, 4));
+  }
+  function numVal(v){ return (v == null || v === '' || !isFinite(Number(v))) ? '' : String(roundTo(Number(v), 4)); }
+  function lineTotal(q, u){ return roundTo((Number(q) || 0) * (Number(u) || 0), 2); }
   /* Every estimate (plan item with a cost, or manual estimate) owns one Actual Expenses row.
      The row mirrors description/category/qty from the estimate while its unitCost is blank (null);
      once the user enters an actual it becomes independent. Idempotent; safe to call any time. */
@@ -2742,8 +2760,8 @@
                   ${renderLinksInline(i.links)}
                 </td>
                 <td><select class="pt-cat">${state.categories.map(c=>`<option value="${escapeHtml(c.name)}" ${c.name===actualCategory?'selected':''}>${escapeHtml(c.name)}</option>`).join('')}</select></td>
-                <td class="num"><input type="number" class="pt-qty" value="${actualQty}" min="0" step="1" style="text-align:right"></td>
-                <td class="num"><input type="number" class="pt-unit" value="${actualUnit}" placeholder="—" min="0" step="0.01" style="text-align:right"></td>
+                <td class="num"><input type="number" class="pt-qty" value="${numVal(actualQty)}" min="0" step="any" inputmode="decimal" style="text-align:right"></td>
+                <td class="num"><input type="number" class="pt-unit" value="${numVal(actualUnit)}" placeholder="—" min="0" step="any" inputmode="decimal" style="text-align:right"></td>
                 <td class="num" style="color:var(--ink-soft);">${planned!=null ? fmt(planned) : '—'}</td>
                 <td class="num pt-actual">${actual!=null ? fmt(actual) : '—'}</td>
                 <td><button class="exp-del pt-unmark" aria-label="Remove from Visited" title="Remove from Visited">✕</button></td>
@@ -2782,8 +2800,14 @@
         renderTripView();
       });
       row.querySelector('.pt-cat').addEventListener('change', ev=>{ item.estimateCategory = ev.target.value; saveVisited(e=>{ e.category = ev.target.value; }); });
-      row.querySelector('.pt-qty').addEventListener('change', ev=>{ saveVisited(e=>{ e.quantity = Math.max(0, Number(ev.target.value)||0); }); });
-      row.querySelector('.pt-unit').addEventListener('change', ev=>{ saveVisited(e=>{ e.unitCost = ev.target.value === '' ? null : Math.max(0, Number(ev.target.value)||0); }); });
+      row.querySelector('.pt-qty').addEventListener('change', ev=>{ saveVisited(e=>{ e.quantity = parseQty(ev.target.value); }); });
+      row.querySelector('.pt-unit').addEventListener('change', ev=>{ saveVisited(e=>{ e.unitCost = parseMoney(ev.target.value, true); }); });
+      const livePT = ()=>{
+        const q = row.querySelector('.pt-qty'), u = row.querySelector('.pt-unit'), a = row.querySelector('.pt-actual');
+        if (a) a.textContent = u.value === '' ? '\u2014' : fmt(lineTotal(parseQty(q.value), parseMoney(u.value)));
+      };
+      row.querySelector('.pt-qty').addEventListener('input', livePT);
+      row.querySelector('.pt-unit').addEventListener('input', livePT);
       row.querySelector('.pt-location').addEventListener('change', ev=>{ item.location = singleLine(ev.target.value); t.updatedAt = Date.now(); saveState(); renderTripView(); });
     });
 
@@ -3193,7 +3217,7 @@
             <div id="p-links-list"></div>
             <button type="button" class="btn-ghost btn-sm" id="p-add-link">+ Add Link</button>
           </div>
-          <div class="field"><label>Cost (optional, ${CUR})</label><input id="p-cost" type="number" step="0.01" value="${isEdit&&existing.cost!=null?existing.cost:''}"></div>
+          <div class="field"><label>Cost (optional, ${CUR})</label><input id="p-cost" type="number" step="any" value="${isEdit&&existing.cost!=null?existing.cost:''}"></div>
           <div class="field" style="display:flex;align-items:center;gap:8px;">
             <input type="checkbox" id="p-linkexp" style="width:auto;" ${isEdit&&existing.linkedExpenseId?'checked':''}>
             <label style="margin:0;">Also add this cost to the trip's expenses</label>
@@ -3619,7 +3643,7 @@
               ${[1,2,3,4,5].map(p=>`<option value="${p}" ${isEdit&&existing.priority===p?'selected':''}>${PRIORITY_LABELS[p]}</option>`).join('')}
             </select></div>
           </div>
-          <div class="field"><label>Estimated Cost (optional, ${CUR})</label><input id="r-cost" type="number" step="0.01" value="${isEdit&&existing.estCost!=null?existing.estCost:''}"></div>
+          <div class="field"><label>Estimated Cost (optional, ${CUR})</label><input id="r-cost" type="number" step="any" value="${isEdit&&existing.estCost!=null?existing.estCost:''}"></div>
           <div class="field">
             <label>Links (optional)</label>
             <div id="r-links-list"></div>
@@ -3788,7 +3812,7 @@
             <div class="field"><label>Travelers</label><input id="m-travelers" type="number" min="1" value="${isEdit?existing.travelers:2}"></div>
           </div>
           <div class="field-row">
-            <div class="field"><label>Total Budget (${CUR})</label><input id="m-budget" type="number" step="0.01" value="${isEdit?existing.budget:''}" placeholder="0.00"></div>
+            <div class="field"><label>Total Budget (${CUR})</label><input id="m-budget" type="number" step="any" value="${isEdit?existing.budget:''}" placeholder="0.00"></div>
             <div class="field"><label>Status</label>
               <select id="m-status">
                 <option value="upcoming" ${isEdit&&existing.status==='upcoming'?'selected':''}>Upcoming</option>
@@ -3849,8 +3873,8 @@
           <div class="field"><label>Description</label><textarea id="me-desc-new" rows="1" class="autogrow" placeholder="e.g. Souvenir budget"></textarea></div>
           <div class="field"><label>Category</label><select id="me-cat-new">${state.categories.map(c=>`<option value="${escapeHtml(c.name)}">${escapeHtml(c.name)}</option>`).join('')}</select></div>
           <div class="field-row">
-            <div class="field"><label>Quantity</label><input id="me-qty-new" type="number" value="1" min="0" step="1"></div>
-            <div class="field"><label>Unit Cost (${CUR})</label><input id="me-unit-new" type="number" step="0.01" placeholder="0.00"></div>
+            <div class="field"><label>Quantity</label><input id="me-qty-new" type="number" value="1" min="0" step="any"></div>
+            <div class="field"><label>Unit Cost (${CUR})</label><input id="me-unit-new" type="number" step="any" placeholder="0.00"></div>
           </div>
           <div class="modal-actions">
             <button class="btn-ghost" id="me-cancel">Cancel</button>
@@ -3916,8 +3940,8 @@
           <div class="field"><label>Description</label><textarea id="m-desc" rows="1" class="autogrow" placeholder="e.g. Hotel deposit">${escapeHtml(draft.desc||'')}</textarea></div>
           <div class="field"><label>Category</label><select id="m-cat">${state.categories.map(c=>`<option value="${escapeHtml(c.name)}" ${selectCategory===c.name?'selected':''}>${escapeHtml(c.name)}</option>`).join('')}<option value="__add_new__">+ Add new category\u2026</option></select></div>
           <div class="field-row">
-            <div class="field"><label>Quantity</label><input id="m-qty" type="number" value="${draft.qty!=null&&draft.qty!==''?draft.qty:1}" min="0" step="1"></div>
-            <div class="field"><label>Unit Cost (${CUR})</label><input id="m-cost" type="number" value="${draft.cost||''}" step="0.01" placeholder="0.00"></div>
+            <div class="field"><label>Quantity</label><input id="m-qty" type="number" value="${draft.qty!=null&&draft.qty!==''?draft.qty:1}" min="0" step="any"></div>
+            <div class="field"><label>Unit Cost (${CUR})</label><input id="m-cost" type="number" value="${draft.cost||''}" step="any" placeholder="0.00"></div>
           </div>
           <div class="modal-actions">
             <button class="btn-ghost" id="m-cancel">Cancel</button>
