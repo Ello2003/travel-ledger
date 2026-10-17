@@ -689,8 +689,9 @@
   const STORAGE_KEY = 'trips-data';
   const HISTORY_KEY = 'trips-data-history';
   const MAX_HISTORY_DAYS = 14;
-  const APP_VERSION = '1.13.1';
+  const APP_VERSION = '1.13.2';
   const CHANGELOG = {
+    '1.13.2': 'Quantity / unit-cost spinner arrows now work repeatedly: each click used to rebuild the whole table and drop focus after one step. Number fields now update the model and live totals instantly and only redraw the page once you stop editing (focus is never stolen).',
     '1.13.1': 'Quantity and unit-cost fields now share one set of number helpers across Estimated, Actual and Visited tables: decimals are accepted without browser validation errors (step=any), values are rounded consistently (4dp inputs, 2dp totals), blank unit costs stay blank instead of becoming 0, and totals update live as you type in every table.',
     '1.13.0': 'Every planned cost now has a matching Actual Expenses row for all trips (existing and new). Items promoted from Research to Plan, plus manual estimates, automatically add an Actual row with the same description, category and quantity and an empty Actual field to fill in later. Marking an item Visited copies the estimate across into any still-empty actual. Blank actuals count as zero in totals, and blank rows are removed if the plan item is deleted or moved back to Research.',
     '1.12.0': 'Applied the London trip layout as the shared trip default: Days timeline with manual ordering, consistent tab order, and a dedicated per-trip Charts tab. Moved Category Breakdown out of Budget so Estimated and Actual Expenses have the full Budget width.',
@@ -2143,8 +2144,8 @@
       if (!item) return;
       row.querySelector('.pe-desc').addEventListener('change', ev=>{ item.name = singleLine(ev.target.value) || item.name; commitEstimate(t); });
       row.querySelector('.pe-cat').addEventListener('change', ev=>{ item.estimateCategory = ev.target.value; const expense = item.actualExpenseId ? t.expenses.find(e=>e.id===item.actualExpenseId) : null; if (expense) expense.category = ev.target.value; commitEstimate(t); });
-      row.querySelector('.pe-qty').addEventListener('change', ev=>{ item.estimateQuantity = parseQty(ev.target.value); commitEstimate(t); });
-      row.querySelector('.pe-unit').addEventListener('change', ev=>{ item.cost = parseMoney(ev.target.value); commitEstimate(t); });
+      row.querySelector('.pe-qty').addEventListener('change', ev=>{ item.estimateQuantity = parseQty(ev.target.value); commitNumber(t); });
+      row.querySelector('.pe-unit').addEventListener('change', ev=>{ item.cost = parseMoney(ev.target.value); commitNumber(t); });
       row.querySelector('.pe-qty').addEventListener('input', ev=>{ item.estimateQuantity = parseQty(ev.target.value); refreshEstimateTotals(t); });
       row.querySelector('.pe-unit').addEventListener('input', ev=>{ item.cost = parseMoney(ev.target.value); refreshEstimateTotals(t); });
       row.querySelector('.estimate-reset').addEventListener('click', ()=> resetPlannedEstimate(t, item));
@@ -2155,8 +2156,8 @@
       if (!m) return;
       row.querySelector('.me-desc').addEventListener('change', ev=>{ m.description = singleLine(ev.target.value) || m.description; commitEstimate(t); });
       row.querySelector('.me-cat').addEventListener('change', ev=>{ m.category = ev.target.value; commitEstimate(t); });
-      row.querySelector('.me-qty').addEventListener('change', ev=>{ m.quantity = parseQty(ev.target.value); commitEstimate(t); });
-      row.querySelector('.me-unit').addEventListener('change', ev=>{ m.unitCost = parseMoney(ev.target.value); commitEstimate(t); });
+      row.querySelector('.me-qty').addEventListener('change', ev=>{ m.quantity = parseQty(ev.target.value); commitNumber(t); });
+      row.querySelector('.me-unit').addEventListener('change', ev=>{ m.unitCost = parseMoney(ev.target.value); commitNumber(t); });
       row.querySelector('.me-qty').addEventListener('input', ev=>{ m.quantity = parseQty(ev.target.value); refreshEstimateTotals(t); });
       row.querySelector('.me-unit').addEventListener('input', ev=>{ m.unitCost = parseMoney(ev.target.value); refreshEstimateTotals(t); });
       row.querySelector('.me-del').addEventListener('click', ()=>{
@@ -2430,15 +2431,15 @@
       const e = t.expenses.find(x=>x.id===id);
       row.querySelector('.exp-desc').addEventListener('change', ev=>{ e.description = singleLine(ev.target.value); commitExpense(t); });
       row.querySelector('.exp-cat').addEventListener('change', ev=>{ e.category = ev.target.value; commitExpense(t); });
-      row.querySelector('.exp-qty').addEventListener('change', ev=>{ e.quantity = parseQty(ev.target.value); commitExpense(t); });
-      row.querySelector('.exp-cost').addEventListener('change', ev=>{ e.unitCost = parseMoney(ev.target.value, true); commitExpense(t); });
+      row.querySelector('.exp-qty').addEventListener('change', ev=>{ e.quantity = parseQty(ev.target.value); commitNumber(t); });
+      row.querySelector('.exp-cost').addEventListener('change', ev=>{ e.unitCost = parseMoney(ev.target.value, true); commitNumber(t); });
       row.querySelector('.exp-actual').addEventListener('change', ev=>{
-        if (ev.target.value === ''){ e.unitCost = null; commitExpense(t); return; }
+        if (ev.target.value === ''){ e.unitCost = null; commitNumber(t); return; }
         const actualValue = parseMoney(ev.target.value);
         const qty = parseQty(e.quantity);
         if (qty > 0) e.unitCost = roundTo(actualValue / qty, 4);
         else { e.quantity = 1; e.unitCost = actualValue; }
-        commitExpense(t);
+        commitNumber(t);
       });
       const liveActual = ()=>{
         const q = row.querySelector('.exp-qty'), u = row.querySelector('.exp-cost'), a = row.querySelector('.exp-actual');
@@ -2462,6 +2463,20 @@
     item.actualNotes = expense.notes || '';
     item.actualRating = expense.rating != null ? expense.rating : null;
   }
+  /* Number fields (qty / unit / actual): save + live-update immediately, redraw only when idle and unfocused,
+     so the spinner arrows can be clicked or held repeatedly without the input being replaced. */
+  let deferredRenderTimer = null;
+  function scheduleRender(){
+    clearTimeout(deferredRenderTimer);
+    const tick = ()=>{
+      const a = document.activeElement;
+      if (a && a.tagName === 'INPUT' && a.type === 'number'){ deferredRenderTimer = setTimeout(tick, 600); return; }
+      deferredRenderTimer = null;
+      renderTripView();
+    };
+    deferredRenderTimer = setTimeout(tick, 600);
+  }
+  function commitNumber(t){ t.updatedAt = Date.now(); saveState(); scheduleRender(); }
   function commitExpense(t){ t.updatedAt = Date.now(); saveState(); renderTripView(); }
   function commitEstimate(t){ t.updatedAt = Date.now(); saveState(); renderTripView(); }
   function calculateEstimatedTotal(t){
@@ -2782,12 +2797,12 @@
         if (!expense) expense = ensureActualExpense(t, item, true);
         return expense;
       };
-      const saveVisited = (mutateExpense)=>{
+      const saveVisited = (mutateExpense, defer)=>{
         const expense = getOrCreateExpense();
         if (expense) mutateExpense(expense);
         t.updatedAt = Date.now();
         saveState();
-        renderTripView();
+        if (defer) scheduleRender(); else renderTripView();
       };
       row.querySelector('.pt-desc').addEventListener('change', ev=>{
         const value = singleLine(ev.target.value);
@@ -2800,8 +2815,8 @@
         renderTripView();
       });
       row.querySelector('.pt-cat').addEventListener('change', ev=>{ item.estimateCategory = ev.target.value; saveVisited(e=>{ e.category = ev.target.value; }); });
-      row.querySelector('.pt-qty').addEventListener('change', ev=>{ saveVisited(e=>{ e.quantity = parseQty(ev.target.value); }); });
-      row.querySelector('.pt-unit').addEventListener('change', ev=>{ saveVisited(e=>{ e.unitCost = parseMoney(ev.target.value, true); }); });
+      row.querySelector('.pt-qty').addEventListener('change', ev=>{ saveVisited(e=>{ e.quantity = parseQty(ev.target.value); }, true); });
+      row.querySelector('.pt-unit').addEventListener('change', ev=>{ saveVisited(e=>{ e.unitCost = parseMoney(ev.target.value, true); }, true); });
       const livePT = ()=>{
         const q = row.querySelector('.pt-qty'), u = row.querySelector('.pt-unit'), a = row.querySelector('.pt-actual');
         if (a) a.textContent = u.value === '' ? '\u2014' : fmt(lineTotal(parseQty(q.value), parseMoney(u.value)));
