@@ -689,8 +689,10 @@
   const STORAGE_KEY = 'trips-data';
   const HISTORY_KEY = 'trips-data-history';
   const MAX_HISTORY_DAYS = 14;
-  const APP_VERSION = '1.13.2';
+  const APP_VERSION = '1.13.4';
   const CHANGELOG = {
+    '1.13.4': 'An Actual row that is still blank no longer overwrites your own edits to its description, category or quantity: it follows the estimate only until you change it yourself.',
+    '1.13.3': 'Fixed the spinner arrows on Qty / Unit Cost fields: the column-resize hit area (20px either side of every column edge, on every row) was swallowing presses on the arrows and starting a column resize instead. Presses on inputs, selects, buttons and links are now left alone; resizing still works from the header grip and from empty cell space near a border.',
     '1.13.2': 'Quantity / unit-cost spinner arrows now work repeatedly: each click used to rebuild the whole table and drop focus after one step. Number fields now update the model and live totals instantly and only redraw the page once you stop editing (focus is never stolen).',
     '1.13.1': 'Quantity and unit-cost fields now share one set of number helpers across Estimated, Actual and Visited tables: decimals are accepted without browser validation errors (step=any), values are rounded consistently (4dp inputs, 2dp totals), blank unit costs stay blank instead of becoming 0, and totals update live as you type in every table.',
     '1.13.0': 'Every planned cost now has a matching Actual Expenses row for all trips (existing and new). Items promoted from Research to Plan, plus manual estimates, automatically add an Actual row with the same description, category and quantity and an empty Actual field to fill in later. Marking an item Visited copies the estimate across into any still-empty actual. Blank actuals count as zero in totals, and blank rows are removed if the plan item is deleted or moved back to Research.',
@@ -2377,6 +2379,8 @@
       // absolutely positioned grip during hit testing, so use the measured
       // header boundaries for both pointer and compatibility mouse input.
       const findResizeIndex = ev=>{
+        // Never hijack presses aimed at controls (number spinners sit right on column edges).
+        if (ev.target && ev.target.closest && ev.target.closest('input,select,textarea,button,a,label') && !ev.target.closest('.col-resizer')) return -1;
         let closestIndex = -1;
         let closestDistance = 20;
         for (let i=0;i<ths.length-1;i++){
@@ -2429,9 +2433,9 @@
     body.querySelectorAll('tr').forEach(row=>{
       const id = row.dataset.id;
       const e = t.expenses.find(x=>x.id===id);
-      row.querySelector('.exp-desc').addEventListener('change', ev=>{ e.description = singleLine(ev.target.value); commitExpense(t); });
-      row.querySelector('.exp-cat').addEventListener('change', ev=>{ e.category = ev.target.value; commitExpense(t); });
-      row.querySelector('.exp-qty').addEventListener('change', ev=>{ e.quantity = parseQty(ev.target.value); commitNumber(t); });
+      row.querySelector('.exp-desc').addEventListener('change', ev=>{ e.description = singleLine(ev.target.value); e.mirror = false; commitExpense(t); });
+      row.querySelector('.exp-cat').addEventListener('change', ev=>{ e.category = ev.target.value; e.mirror = false; commitExpense(t); });
+      row.querySelector('.exp-qty').addEventListener('change', ev=>{ e.quantity = parseQty(ev.target.value); e.mirror = false; commitNumber(t); });
       row.querySelector('.exp-cost').addEventListener('change', ev=>{ e.unitCost = parseMoney(ev.target.value, true); commitNumber(t); });
       row.querySelector('.exp-actual').addEventListener('change', ev=>{
         if (ev.target.value === ''){ e.unitCost = null; commitNumber(t); return; }
@@ -2687,7 +2691,7 @@
         return;
       }
       if (!o.actualExpenseId){ o.actualExpenseId = e.id; changed = true; }
-      if (e.unitCost == null){
+      if (e.unitCost == null && e.mirror !== false){
         const qty = Math.max(0, Number(x.quantity)||0);
         if (e.description !== x.name){ e.description = x.name; changed = true; }
         if (e.category !== x.category){ e.category = x.category; changed = true; }
@@ -2815,7 +2819,7 @@
         renderTripView();
       });
       row.querySelector('.pt-cat').addEventListener('change', ev=>{ item.estimateCategory = ev.target.value; saveVisited(e=>{ e.category = ev.target.value; }); });
-      row.querySelector('.pt-qty').addEventListener('change', ev=>{ saveVisited(e=>{ e.quantity = parseQty(ev.target.value); }, true); });
+      row.querySelector('.pt-qty').addEventListener('change', ev=>{ saveVisited(e=>{ e.quantity = parseQty(ev.target.value); e.mirror = false; }, true); });
       row.querySelector('.pt-unit').addEventListener('change', ev=>{ saveVisited(e=>{ e.unitCost = parseMoney(ev.target.value, true); }, true); });
       const livePT = ()=>{
         const q = row.querySelector('.pt-qty'), u = row.querySelector('.pt-unit'), a = row.querySelector('.pt-actual');
