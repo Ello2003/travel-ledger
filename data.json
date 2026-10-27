@@ -724,12 +724,12 @@
           "sheet": "Hotels",
           "name": "Hotel Aragon",
           "status": "idea",
-          "date": "2026-12-11",
-          "endDate": "2026-12-12",
+          "date": null,
+          "endDate": null,
           "time": null,
           "dayNumber": 1,
           "dayNumberEnd": 2,
-          "location": "",
+          "location": "hotel Aragon",
           "links": [],
           "cost": null,
           "linkedExpenseId": null,
@@ -746,7 +746,11 @@
             "category": "Hotels",
             "quantity": 1,
             "cost": null
-          }
+          },
+          "currency": "GBP",
+          "originalCost": null,
+          "exchangeRate": 1,
+          "homeCurrency": "GBP"
         }
       ],
       "timelineMode": "days",
@@ -823,7 +827,7 @@
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1793057474078,
+      "updatedAt": 1793140173791,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -5250,6 +5254,12 @@
     ]
   },
   "activityLog": [
+    {
+      "id": "log_mvr9d13z_w_a6c6s",
+      "ts": 1793140173791,
+      "action": "plan-item-edited",
+      "detail": "Updated \"Hotel Aragon\" on Brugge"
+    },
     {
       "id": "log_mvpw4hlr_7_ejcnp",
       "ts": 1793057474079,
