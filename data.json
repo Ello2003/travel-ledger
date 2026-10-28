@@ -3233,7 +3233,7 @@
       "country": "United Kingdom",
       "countryGuessed": false,
       "createdAt": 1786110350004,
-      "updatedAt": 1792096094030,
+      "updatedAt": 1793230924442,
       "mapEmbedUrl": "https://www.google.com/maps/d/u/0/embed?mid=11LfUXb5kKkPuZQaevNFVaQ820krDU14&ehbc=2E312F",
       "manualEstimates": [],
       "hiddenSheets": [
@@ -5254,6 +5254,12 @@
     ]
   },
   "activityLog": [
+    {
+      "id": "log_mvsre4rh_2_5xo1g",
+      "ts": 1793230924445,
+      "action": "research-edited",
+      "detail": "Updated \"The Spence\" in Edinburgh research"
+    },
     {
       "id": "log_mvr9d13z_w_a6c6s",
       "ts": 1793140173791,
