@@ -805,9 +805,9 @@
           "id": "res_mvvmemkc_k_02nwo",
           "sheet": "Pubs",
           "name": "'t Brugs Beertje",
-          "address": "",
-          "lat": null,
-          "lng": null,
+          "address": "'t Brugs Beertje, 5, Kemelstraat, Steenstraatkwartier, Brugge-Centrum, Brugge, Bruges, Brugge, West Flanders, Flanders, 8000, Belgium",
+          "lat": 51.2068494,
+          "lng": 3.2216971,
           "priceLevel": null,
           "priority": null,
           "estCost": null,
@@ -1171,7 +1171,7 @@
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1793405248067,
+      "updatedAt": 1793540885775,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -10732,6 +10732,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mvxvxogf_y_7pcim",
+      "ts": 1793540885775,
+      "action": "research-edited",
+      "detail": "Updated \"'t Brugs Beertje\" in Brugge research"
+    },
+    {
       "id": "log_mvxvtmez_x_z24r1",
       "ts": 1793540696507,
       "action": "backup-imported",
@@ -11924,18 +11930,6 @@
       "ts": 1789944712216,
       "action": "research-added",
       "detail": "Added \"The Beauchamp\" to London research"
-    },
-    {
-      "id": "log_muaen5wz_l_2b486",
-      "ts": 1789944337331,
-      "action": "settings-updated",
-      "detail": "Updated GitHub Sync settings"
-    },
-    {
-      "id": "log_muaemnya_k_n3s7i",
-      "ts": 1789944314050,
-      "action": "map-updated",
-      "detail": "Updated My Maps embed for London"
     }
   ]
 }
