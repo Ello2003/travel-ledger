@@ -3722,9 +3722,9 @@
           "id": "res_mti11ygk_w_jt8hb",
           "sheet": "Pubs",
           "name": "Brewhemia",
-          "address": "",
-          "lat": null,
-          "lng": null,
+          "address": "Brewhemia, 1A, Market Street, Abbeyhill, Old Town, City of Edinburgh, Scotland, EH1 1DE, United Kingdom",
+          "lat": 55.9511467,
+          "lng": -3.1887459,
           "priceLevel": null,
           "priority": 4,
           "estCost": null,
@@ -3739,7 +3739,7 @@
       "country": "United Kingdom",
       "countryGuessed": false,
       "createdAt": 1786110350004,
-      "updatedAt": 1793663861279,
+      "updatedAt": 1793663933721,
       "mapEmbedUrl": "https://www.google.com/maps/d/u/0/embed?mid=11LfUXb5kKkPuZQaevNFVaQ820krDU14&ehbc=2E312F",
       "manualEstimates": [],
       "hiddenSheets": [
@@ -5763,6 +5763,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mvzx70ux_4_m3y2t",
+      "ts": 1793663933722,
+      "action": "research-edited",
+      "detail": "Updated \"Brewhemia\" in Edinburgh research"
+    },
+    {
       "id": "log_mvzx5gyn_3_jhywf",
       "ts": 1793663861279,
       "action": "research-edited",
@@ -6955,12 +6961,6 @@
       "ts": 1790286287903,
       "action": "research-edited",
       "detail": "Updated \"WatchHouse\" to London research"
-    },
-    {
-      "id": "log_mug22wlq_9_zdg9l",
-      "ts": 1790286033806,
-      "action": "section-map-added",
-      "detail": "Added a map for Shopping on London"
     }
   ]
 }
