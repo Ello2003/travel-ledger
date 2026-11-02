@@ -978,9 +978,9 @@
           "id": "res_mvvmg3ek_y_ebjcc",
           "sheet": "Sights",
           "name": "Market Square",
-          "address": "",
-          "lat": null,
-          "lng": null,
+          "address": "Markt, 8000 Brugge, Belgium",
+          "lat": 51.208688099999996,
+          "lng": 3.2244082,
           "priceLevel": null,
           "priority": null,
           "estCost": null,
@@ -1250,7 +1250,7 @@
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1793659498013,
+      "updatedAt": 1793659506712,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -5681,6 +5681,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mvzuk4yg_1h_lek5p",
+      "ts": 1793659506712,
+      "action": "research-edited",
+      "detail": "Updated \"Market Square\" in Brugge research"
+    },
+    {
       "id": "log_mvzujy8t_1g_d6w0u",
       "ts": 1793659498013,
       "action": "research-edited",
@@ -6873,12 +6879,6 @@
       "ts": 1789949402799,
       "action": "plan-item-edited",
       "detail": "Updated \"Colbert\" (Bars) on London"
-    },
-    {
-      "id": "log_muahnor9_w_poibu",
-      "ts": 1789949400597,
-      "action": "research-promoted",
-      "detail": "Promoted \"Colbert\" to Plan on London"
     }
   ]
 }
