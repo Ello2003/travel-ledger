@@ -852,14 +852,20 @@
           "id": "res_mvvmenpe_m_dj31u",
           "sheet": "Pubs",
           "name": "Le Trappiste",
-          "address": "",
-          "lat": null,
-          "lng": null,
+          "address": "Kuipersstraat 33, 8000 Brugge, Belgium",
+          "lat": 51.210837999999995,
+          "lng": 3.222809,
           "priceLevel": null,
           "priority": null,
           "estCost": null,
           "notes": "",
-          "links": [],
+          "links": [
+            {
+              "id": "link_mvztzfnt_12_mge1m",
+              "label": "Official Website",
+              "url": "http://www.letrappistebrugge.be/"
+            }
+          ],
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1793403949442
@@ -1208,7 +1214,7 @@
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1793658533943,
+      "updatedAt": 1793658541730,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -5639,6 +5645,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mvztzgde_13_03dc2",
+      "ts": 1793658541730,
+      "action": "research-edited",
+      "detail": "Updated \"Le Trappiste\" in Brugge research"
+    },
+    {
       "id": "log_mvztzad3_11_cu7aa",
       "ts": 1793658533943,
       "action": "research-edited",
@@ -6831,12 +6843,6 @@
       "ts": 1789944712216,
       "action": "research-added",
       "detail": "Added \"The Beauchamp\" to London research"
-    },
-    {
-      "id": "log_muaen5wz_l_2b486",
-      "ts": 1789944337331,
-      "action": "settings-updated",
-      "detail": "Updated GitHub Sync settings"
     }
   ]
 }
