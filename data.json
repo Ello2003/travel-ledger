@@ -3073,15 +3073,21 @@
         {
           "id": "res_msjcveb5_1v_t87fz",
           "sheet": "Pubs",
-          "name": "Cafe Royale",
-          "address": "19 West Register Street",
-          "lat": null,
-          "lng": null,
+          "name": "Cafe Royal",
+          "address": "19 W Register St, Edinburgh EH2 2AA, UK",
+          "lat": 55.9538387,
+          "lng": -3.1904209000000003,
           "priceLevel": 3,
           "priority": 5,
           "estCost": null,
           "notes": "",
-          "links": [],
+          "links": [
+            {
+              "id": "link_mvzx5f47_2_3utzv",
+              "label": "Official Website",
+              "url": "https://www.caferoyaledinburgh.com/?utm_source=g_places&utm_medium=locations&utm_campaign=MC_pubpage"
+            }
+          ],
           "status": "shortlisted",
           "linkedPlanItemId": null,
           "createdAt": 1786131993137
@@ -3733,7 +3739,7 @@
       "country": "United Kingdom",
       "countryGuessed": false,
       "createdAt": 1786110350004,
-      "updatedAt": 1792096094030,
+      "updatedAt": 1793663861279,
       "mapEmbedUrl": "https://www.google.com/maps/d/u/0/embed?mid=11LfUXb5kKkPuZQaevNFVaQ820krDU14&ehbc=2E312F",
       "manualEstimates": [],
       "hiddenSheets": [
@@ -5757,6 +5763,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mvzx5gyn_3_jhywf",
+      "ts": 1793663861279,
+      "action": "research-edited",
+      "detail": "Updated \"Cafe Royal\" in Edinburgh research"
+    },
+    {
       "id": "log_mvzx3pjd_8_65n3h",
       "ts": 1793663779081,
       "action": "trip-archived",
@@ -6949,12 +6961,6 @@
       "ts": 1790286033806,
       "action": "section-map-added",
       "detail": "Added a map for Shopping on London"
-    },
-    {
-      "id": "log_mug21x1y_8_t2occ",
-      "ts": 1790285987734,
-      "action": "plan-item-edited",
-      "detail": "Updated \"RH London, The Gallery in Mayfair\" (Coffee) on London"
     }
   ]
 }
