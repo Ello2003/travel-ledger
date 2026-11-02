@@ -962,9 +962,9 @@
           "id": "res_mvvmfnou_w_rqzde",
           "sheet": "Sights",
           "name": "Historic centre of Brugge (Bruges)",
-          "address": "",
-          "lat": null,
-          "lng": null,
+          "address": "Grote Markt, 2000 Antwerpen, Belgium",
+          "lat": 51.2088142,
+          "lng": 3.2243722999999997,
           "priceLevel": null,
           "priority": null,
           "estCost": null,
@@ -1250,7 +1250,7 @@
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1793659489615,
+      "updatedAt": 1793659498013,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -5681,6 +5681,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mvzujy8t_1g_d6w0u",
+      "ts": 1793659498013,
+      "action": "research-edited",
+      "detail": "Updated \"Historic centre of Brugge (Bruges)\" in Brugge research"
+    },
+    {
       "id": "log_mvzujrrj_1f_bf6t2",
       "ts": 1793659489615,
       "action": "research-edited",
@@ -6873,12 +6879,6 @@
       "ts": 1789949400597,
       "action": "research-promoted",
       "detail": "Promoted \"Colbert\" to Plan on London"
-    },
-    {
-      "id": "log_muahmjzn_u_komkv",
-      "ts": 1789949347763,
-      "action": "research-edited",
-      "detail": "Updated \"The Ivy Chelsea Garden\" to London research"
     }
   ]
 }
