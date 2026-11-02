@@ -896,14 +896,20 @@
           "id": "res_mvvmepgb_q_mf4ny",
           "sheet": "Pubs",
           "name": "Bauhaus",
-          "address": "",
-          "lat": null,
-          "lng": null,
+          "address": "Langestraat 135, 8000 Brugge, Belgium",
+          "lat": 51.211900199999995,
+          "lng": 3.2374684,
           "priceLevel": null,
           "priority": null,
           "estCost": null,
           "notes": "",
-          "links": [],
+          "links": [
+            {
+              "id": "link_mvztzqsv_16_vdf5w",
+              "label": "Official Website",
+              "url": "http://www.bauhaus.be/?utm_source=google&utm_medium=organic&utm_campaign=gmb_bruges"
+            }
+          ],
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1793403951707
@@ -1220,7 +1226,7 @@
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1793658546580,
+      "updatedAt": 1793658556264,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -5651,6 +5657,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mvztzrl4_17_e7oge",
+      "ts": 1793658556264,
+      "action": "research-edited",
+      "detail": "Updated \"Bauhaus\" in Brugge research"
+    },
+    {
       "id": "log_mvztzk45_15_ecw9g",
       "ts": 1793658546581,
       "action": "research-edited",
@@ -6843,12 +6855,6 @@
       "ts": 1789945075451,
       "action": "research-edited",
       "detail": "Updated \"The Garden at Corinthia London\" to London research"
-    },
-    {
-      "id": "log_muaez6g8_o_az2wr",
-      "ts": 1789944897896,
-      "action": "research-edited",
-      "detail": "Updated \"Stanley's\" to London research"
     }
   ]
 }
