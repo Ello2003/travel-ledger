@@ -1196,14 +1196,20 @@
           "id": "res_mvvmikzc_1k_8vw09",
           "sheet": "Sights",
           "name": "Gunpowder Tower (Poertoren)",
-          "address": "",
-          "lat": null,
-          "lng": null,
+          "address": "Begijnenvest 1, 8000 Brugge, Belgium",
+          "lat": 51.1985841,
+          "lng": 3.2236217999999996,
           "priceLevel": null,
           "priority": null,
           "estCost": null,
           "notes": "",
-          "links": [],
+          "links": [
+            {
+              "id": "link_mvzultuc_1z_rkk64",
+              "label": "Official Website",
+              "url": "https://inventaris.onroerenderfgoed.be/erfgoedobjecten/200722"
+            }
+          ],
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1793404132536
@@ -1292,7 +1298,7 @@
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1793659582434,
+      "updatedAt": 1793659586571,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -5723,6 +5729,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mvzuluks_20_1i3pv",
+      "ts": 1793659586572,
+      "action": "research-edited",
+      "detail": "Updated \"Gunpowder Tower (Poertoren)\" in Brugge research"
+    },
+    {
       "id": "log_mvzulrdu_1y_2zt3j",
       "ts": 1793659582434,
       "action": "research-edited",
@@ -6915,12 +6927,6 @@
       "ts": 1790036154731,
       "action": "research-edited",
       "detail": "Updated \"108 Brasserie\" to London research"
-    },
-    {
-      "id": "log_mubxazag_1d_srf88",
-      "ts": 1790036147752,
-      "action": "research-added",
-      "detail": "Added \"The Ivy Café\" to London research"
     }
   ]
 }
