@@ -1301,10 +1301,32 @@
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1793405248067
+        },
+        {
+          "id": "res_mvzvhspx_24_r8l8a",
+          "sheet": "Sights",
+          "name": "Hotel Dukes' Palace",
+          "address": "Prinsenhof 8, 8000 Brugge, Belgium",
+          "lat": 51.20854800000001,
+          "lng": 3.2201049999999998,
+          "priceLevel": null,
+          "priority": null,
+          "estCost": null,
+          "notes": "",
+          "links": [
+            {
+              "id": "link_mvzvhpf3_23_cjryk",
+              "label": "Official Website",
+              "url": "https://www.hoteldukespalace.com/en/?utm_source=GMB&utm_medium=organic"
+            }
+          ],
+          "status": "researching",
+          "linkedPlanItemId": null,
+          "createdAt": 1793661077157
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1793660595776,
+      "updatedAt": 1793661077157,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -5735,6 +5757,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mvzvhspx_25_zd1hr",
+      "ts": 1793661077157,
+      "action": "research-added",
+      "detail": "Added \"Hotel Dukes' Palace\" to Brugge research"
+    },
+    {
       "id": "log_mvzv7ha8_22_atek9",
       "ts": 1793660595776,
       "action": "research-edited",
@@ -6927,12 +6955,6 @@
       "ts": 1790036211774,
       "action": "research-added",
       "detail": "Added \"WatchHouse\" to London research"
-    },
-    {
-      "id": "log_mubxbuhq_1g_vyytg",
-      "ts": 1790036188190,
-      "action": "research-added",
-      "detail": "Added \"The Portman\" to London research"
     }
   ]
 }
