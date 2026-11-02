@@ -1016,14 +1016,20 @@
           "id": "res_mvvmgowr_12_otykb",
           "sheet": "Sights",
           "name": "Basilica of the Holy Blood",
-          "address": "",
-          "lat": null,
-          "lng": null,
+          "address": "Burg 13, 8000 Brugge, Belgium",
+          "lat": 51.2081343,
+          "lng": 3.2265447999999997,
           "priceLevel": null,
           "priority": null,
           "estCost": null,
           "notes": "",
-          "links": [],
+          "links": [
+            {
+              "id": "link_mvzukdk6_1k_t1nxs",
+              "label": "Official Website",
+              "url": "http://www.holyblood.com/"
+            }
+          ],
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1793404044316
@@ -1256,7 +1262,7 @@
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1793659513787,
+      "updatedAt": 1793659519237,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -5687,6 +5693,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mvzukemd_1l_kqvea",
+      "ts": 1793659519237,
+      "action": "research-edited",
+      "detail": "Updated \"Basilica of the Holy Blood\" in Brugge research"
+    },
+    {
       "id": "log_mvzukaez_1j_rd7h5",
       "ts": 1793659513787,
       "action": "research-edited",
@@ -6879,12 +6891,6 @@
       "ts": 1789949418029,
       "action": "plan-item-edited",
       "detail": "Updated \"The Beauchamp\" (Bars) on London"
-    },
-    {
-      "id": "log_muaho18i_z_ul6jq",
-      "ts": 1789949416770,
-      "action": "research-promoted",
-      "detail": "Promoted \"The Beauchamp\" to Plan on London"
     }
   ]
 }
