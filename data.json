@@ -1114,14 +1114,20 @@
           "id": "res_mvvmhqev_1c_r7jte",
           "sheet": "Sights",
           "name": "Boniface Bridge",
-          "address": "",
-          "lat": null,
-          "lng": null,
+          "address": "Groeninge 6, 8000 Brugge, Belgium",
+          "lat": 51.204911599999996,
+          "lng": 3.2253486,
           "priceLevel": null,
           "priority": null,
           "estCost": null,
           "notes": "",
-          "links": [],
+          "links": [
+            {
+              "id": "link_mvzukx70_1s_qiodx",
+              "label": "Official Website",
+              "url": "https://www.visitbruges.be/en/bonifaciusbrug-bonifaciusbridge"
+            }
+          ],
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1793404092919
@@ -1130,14 +1136,20 @@
           "id": "res_mvvmhzxs_1e_x40nj",
           "sheet": "Sights",
           "name": "Huisbrouwerij De Halve Maan",
-          "address": "",
-          "lat": null,
-          "lng": null,
+          "address": "Walplein 26, 8000 Brugge, Belgium",
+          "lat": 51.202447299999996,
+          "lng": 3.2241779999999998,
           "priceLevel": null,
           "priority": null,
           "estCost": null,
           "notes": "",
-          "links": [],
+          "links": [
+            {
+              "id": "link_mvzukztn_1u_o4mex",
+              "label": "Official Website",
+              "url": "http://www.halvemaan.be/"
+            }
+          ],
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1793404105264
@@ -1274,7 +1286,7 @@
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1793659539796,
+      "updatedAt": 1793659547492,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -5705,6 +5717,18 @@
   },
   "activityLog": [
     {
+      "id": "log_mvzul0f8_1v_vugyi",
+      "ts": 1793659547492,
+      "action": "research-edited",
+      "detail": "Updated \"Huisbrouwerij De Halve Maan\" in Brugge research"
+    },
+    {
+      "id": "log_mvzukxsr_1t_nj5xn",
+      "ts": 1793659544091,
+      "action": "research-edited",
+      "detail": "Updated \"Boniface Bridge\" in Brugge research"
+    },
+    {
       "id": "log_mvzukuhi_1r_1qupb",
       "ts": 1793659539798,
       "action": "research-edited",
@@ -6891,18 +6915,6 @@
       "ts": 1790035972879,
       "action": "research-added",
       "detail": "Added \"108 Brasserie\" to London research"
-    },
-    {
-      "id": "log_mubvatik_17_gs5nv",
-      "ts": 1790032781036,
-      "action": "plan-item-edited",
-      "detail": "Updated \"The Wolesy\" (Coffee) on London"
-    },
-    {
-      "id": "log_mubvasb4_16_tjr5m",
-      "ts": 1790032779472,
-      "action": "research-promoted",
-      "detail": "Promoted \"The Wolesy\" to Plan on London"
     }
   ]
 }
