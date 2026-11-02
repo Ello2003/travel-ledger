@@ -3161,9 +3161,9 @@
           "id": "res_msjd3jhm_23_w3a75",
           "sheet": "Cocktails",
           "name": "Panda & Sons",
-          "address": "",
-          "lat": null,
-          "lng": null,
+          "address": "Panda & Sons, 79, Queen Street, New Town, New Town/Broughton, City of Edinburgh, Scotland, EH2 4NF, United Kingdom",
+          "lat": 55.9532068,
+          "lng": -3.2069716,
           "priceLevel": 4,
           "priority": 5,
           "estCost": null,
@@ -3739,7 +3739,7 @@
       "country": "United Kingdom",
       "countryGuessed": false,
       "createdAt": 1786110350004,
-      "updatedAt": 1793663933721,
+      "updatedAt": 1793663982885,
       "mapEmbedUrl": "https://www.google.com/maps/d/u/0/embed?mid=11LfUXb5kKkPuZQaevNFVaQ820krDU14&ehbc=2E312F",
       "manualEstimates": [],
       "hiddenSheets": [
@@ -5763,6 +5763,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mvzx82sl_5_n8oek",
+      "ts": 1793663982885,
+      "action": "research-edited",
+      "detail": "Updated \"Panda & Sons\" in Edinburgh research"
+    },
+    {
       "id": "log_mvzx70ux_4_m3y2t",
       "ts": 1793663933722,
       "action": "research-edited",
@@ -6955,12 +6961,6 @@
       "ts": 1790286511203,
       "action": "research-edited",
       "detail": "Updated \"28°-50° Wine Workshop & Kitchen\" to London research"
-    },
-    {
-      "id": "log_mug28cnz_a_e4ixq",
-      "ts": 1790286287903,
-      "action": "research-edited",
-      "detail": "Updated \"WatchHouse\" to London research"
     }
   ]
 }
