@@ -1054,14 +1054,20 @@
           "id": "res_mvvmh2tg_16_fb7av",
           "sheet": "Sights",
           "name": "Rosary Quay",
-          "address": "",
-          "lat": null,
-          "lng": null,
+          "address": "Rozenhoedkaai 3, 8000 Brugge, Belgium",
+          "lat": 51.2073745,
+          "lng": 3.2278678999999997,
           "priceLevel": null,
           "priority": null,
           "estCost": null,
           "notes": "",
-          "links": [],
+          "links": [
+            {
+              "id": "link_mvzukn0p_1n_kbcv5",
+              "label": "Official Website",
+              "url": "https://www.visitbruges.be/en/rozenhoedkaai"
+            }
+          ],
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1793404062340
@@ -1070,9 +1076,9 @@
           "id": "res_mvvmhan9_18_ak574",
           "sheet": "Sights",
           "name": "De Dijver park",
-          "address": "",
-          "lat": null,
-          "lng": null,
+          "address": "Dijver, 8000 Brugge, Belgium",
+          "lat": 51.206101700000005,
+          "lng": 3.2257072,
           "priceLevel": null,
           "priority": null,
           "estCost": null,
@@ -1262,7 +1268,7 @@
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1793659526308,
+      "updatedAt": 1793659535100,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -5693,6 +5699,18 @@
   },
   "activityLog": [
     {
+      "id": "log_mvzukqv0_1p_cirve",
+      "ts": 1793659535100,
+      "action": "research-edited",
+      "detail": "Updated \"De Dijver park\" in Brugge research"
+    },
+    {
+      "id": "log_mvzuknwn_1o_17zsr",
+      "ts": 1793659531271,
+      "action": "research-edited",
+      "detail": "Updated \"Rosary Quay\" in Brugge research"
+    },
+    {
       "id": "log_mvzukk2s_1m_6keul",
       "ts": 1793659526308,
       "action": "research-edited",
@@ -6879,18 +6897,6 @@
       "ts": 1790032762571,
       "action": "research-edited",
       "detail": "Updated \"NCL to LDN\" to London research"
-    },
-    {
-      "id": "log_mual5sur_13_yjd8j",
-      "ts": 1789955284563,
-      "action": "plan-item-edited",
-      "detail": "Updated \"Drakes\" (Shopping) on London"
-    },
-    {
-      "id": "log_mual5rp4_12_xc94h",
-      "ts": 1789955283064,
-      "action": "research-promoted",
-      "detail": "Promoted \"Drakes\" to Plan on London"
     }
   ]
 }
