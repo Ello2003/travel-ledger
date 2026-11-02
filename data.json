@@ -1192,14 +1192,20 @@
           "id": "res_mvvmnkxh_1o_2vrhr",
           "sheet": "Cigars",
           "name": "Missault",
-          "address": "",
-          "lat": null,
-          "lng": null,
+          "address": "Braambergstraat 5, 8000 Brugge, Belgium",
+          "lat": 51.207465,
+          "lng": 3.2280439999999997,
           "priceLevel": null,
           "priority": null,
           "estCost": null,
           "notes": "",
-          "links": [],
+          "links": [
+            {
+              "id": "link_mvzujqti_1e_hltlq",
+              "label": "Official Website",
+              "url": "http://www.missaultbrugge.be/"
+            }
+          ],
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1793404365750
@@ -1244,7 +1250,7 @@
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1793659479719,
+      "updatedAt": 1793659489615,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -5675,6 +5681,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mvzujrrj_1f_bf6t2",
+      "ts": 1793659489615,
+      "action": "research-edited",
+      "detail": "Updated \"Missault\" in Brugge research"
+    },
+    {
       "id": "log_mvzujk4o_1d_3us3m",
       "ts": 1793659479720,
       "action": "research-edited",
@@ -6867,12 +6879,6 @@
       "ts": 1789949347763,
       "action": "research-edited",
       "detail": "Updated \"The Ivy Chelsea Garden\" to London research"
-    },
-    {
-      "id": "log_muahmehd_t_nfkwf",
-      "ts": 1789949340625,
-      "action": "research-deleted",
-      "detail": "Removed \"The Windmill\" from London research"
     }
   ]
 }
