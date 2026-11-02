@@ -874,14 +874,20 @@
           "id": "res_mvvmeoq9_o_7g0qr",
           "sheet": "Pubs",
           "name": "De Garre",
-          "address": "",
-          "lat": null,
-          "lng": null,
+          "address": "De Garre 1, 8000 Brugge, Belgium",
+          "lat": 51.208334699999995,
+          "lng": 3.2258407,
           "priceLevel": null,
           "priority": null,
           "estCost": null,
           "notes": "",
-          "links": [],
+          "links": [
+            {
+              "id": "link_mvztzjft_14_hqdvo",
+              "label": "Official Website",
+              "url": "https://www.degarre.be/"
+            }
+          ],
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1793403950769
@@ -1214,7 +1220,7 @@
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1793658541730,
+      "updatedAt": 1793658546580,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -5645,6 +5651,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mvztzk45_15_ecw9g",
+      "ts": 1793658546581,
+      "action": "research-edited",
+      "detail": "Updated \"De Garre\" in Brugge research"
+    },
+    {
       "id": "log_mvztzgde_13_03dc2",
       "ts": 1793658541730,
       "action": "research-edited",
@@ -6837,12 +6849,6 @@
       "ts": 1789944897896,
       "action": "research-edited",
       "detail": "Updated \"Stanley's\" to London research"
-    },
-    {
-      "id": "log_muaev76g_n_shjla",
-      "ts": 1789944712216,
-      "action": "research-added",
-      "detail": "Added \"The Beauchamp\" to London research"
     }
   ]
 }
