@@ -940,14 +940,20 @@
           "id": "res_mvvmeqpq_u_gwvdv",
           "sheet": "Pubs",
           "name": "De Kelk",
-          "address": "",
-          "lat": null,
-          "lng": null,
+          "address": "Langestraat 69, 8000 Brugge, Belgium",
+          "lat": 51.210583299999996,
+          "lng": 3.2354016,
           "priceLevel": null,
           "priority": null,
           "estCost": null,
           "notes": "",
-          "links": [],
+          "links": [
+            {
+              "id": "link_mvztzyzj_1a_a2fra",
+              "label": "Official Website",
+              "url": "http://www.dekelk.be/"
+            }
+          ],
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1793403953342
@@ -1232,7 +1238,7 @@
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1793658562284,
+      "updatedAt": 1793658566647,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -5663,6 +5669,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mvztzzlj_1b_hwgm4",
+      "ts": 1793658566647,
+      "action": "research-edited",
+      "detail": "Updated \"De Kelk\" in Brugge research"
+    },
+    {
       "id": "log_mvztzw8d_19_pnkuy",
       "ts": 1793658562285,
       "action": "research-edited",
@@ -6855,12 +6867,6 @@
       "ts": 1789949312646,
       "action": "research-edited",
       "detail": "Updated \"The Garden at Corinthia London\" to London research"
-    },
-    {
-      "id": "log_muafo24w_r_g8l0q",
-      "ts": 1789946058704,
-      "action": "research-added",
-      "detail": "Added \"The Cadogan Arms\" to London research"
     }
   ]
 }
