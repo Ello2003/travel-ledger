@@ -1170,14 +1170,20 @@
           "id": "res_mvvmn3ds_1m_d5g9x",
           "sheet": "Cigars",
           "name": "Jerry's Cigar Bar",
-          "address": "",
-          "lat": null,
-          "lng": null,
+          "address": "Simon Stevinplein 13, 8000 Brugge, Belgium",
+          "lat": 51.2062405,
+          "lng": 3.2226736999999996,
           "priceLevel": null,
           "priority": null,
           "estCost": null,
           "notes": "",
-          "links": [],
+          "links": [
+            {
+              "id": "link_mvzujjbf_1c_dxmu6",
+              "label": "Official Website",
+              "url": "http://www.jerryscigarbar.be/"
+            }
+          ],
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1793404343009
@@ -1238,7 +1244,7 @@
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1793658566647,
+      "updatedAt": 1793659479719,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -5669,6 +5675,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mvzujk4o_1d_3us3m",
+      "ts": 1793659479720,
+      "action": "research-edited",
+      "detail": "Updated \"Jerry's Cigar Bar\" in Brugge research"
+    },
+    {
       "id": "log_mvztzzlj_1b_hwgm4",
       "ts": 1793658566647,
       "action": "research-edited",
@@ -6861,12 +6873,6 @@
       "ts": 1789949340625,
       "action": "research-deleted",
       "detail": "Removed \"The Windmill\" from London research"
-    },
-    {
-      "id": "log_muahlsw6_s_r5qj9",
-      "ts": 1789949312646,
-      "action": "research-edited",
-      "detail": "Updated \"The Garden at Corinthia London\" to London research"
     }
   ]
 }
