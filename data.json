@@ -1037,10 +1037,10 @@
         {
           "id": "res_mvvmgv79_14_kl3mc",
           "sheet": "Sights",
-          "name": "De Burg",
-          "address": "",
-          "lat": null,
-          "lng": null,
+          "name": "Den Burg",
+          "address": "Den Burg, Netherlands",
+          "lat": 53.0546266,
+          "lng": 4.7997252999999995,
           "priceLevel": null,
           "priority": null,
           "estCost": null,
@@ -1262,7 +1262,7 @@
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1793659519237,
+      "updatedAt": 1793659526308,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -5693,6 +5693,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mvzukk2s_1m_6keul",
+      "ts": 1793659526308,
+      "action": "research-edited",
+      "detail": "Updated \"Den Burg\" in Brugge research"
+    },
+    {
       "id": "log_mvzukemd_1l_kqvea",
       "ts": 1793659519237,
       "action": "research-edited",
@@ -6885,12 +6891,6 @@
       "ts": 1789955283064,
       "action": "research-promoted",
       "detail": "Promoted \"Drakes\" to Plan on London"
-    },
-    {
-      "id": "log_muaho27h_10_76axm",
-      "ts": 1789949418029,
-      "action": "plan-item-edited",
-      "detail": "Updated \"The Beauchamp\" (Bars) on London"
     }
   ]
 }
