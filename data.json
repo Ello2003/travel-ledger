@@ -104,7 +104,7 @@
       "id": "trip_ms9g79qh_8_lc9sb",
       "name": "Santorini",
       "year": 2024,
-      "status": "completed",
+      "status": "archived",
       "budget": 4000,
       "startDate": null,
       "endDate": null,
@@ -179,7 +179,7 @@
       "timelineMode": "days",
       "research": [],
       "createdAt": 1785532924169,
-      "updatedAt": 1786110017518,
+      "updatedAt": 1793580689374,
       "packingList": [],
       "country": "Greece",
       "countryGuessed": false,
@@ -187,13 +187,14 @@
       "manualEstimates": [],
       "hiddenSheets": [],
       "sectionMapUrls": {},
-      "timelineManualOrder": true
+      "timelineManualOrder": true,
+      "isArchived": true
     },
     {
       "id": "trip_ms9g79qh_e_y0tq4",
       "name": "London",
       "year": 2024,
-      "status": "completed",
+      "status": "archived",
       "budget": 1000,
       "startDate": null,
       "endDate": null,
@@ -250,7 +251,7 @@
       "timelineMode": "days",
       "research": [],
       "createdAt": 1785532924169,
-      "updatedAt": 1786109968948,
+      "updatedAt": 1793580690922,
       "packingList": [],
       "country": "United Kingdom",
       "countryGuessed": false,
@@ -258,13 +259,14 @@
       "manualEstimates": [],
       "hiddenSheets": [],
       "sectionMapUrls": {},
-      "timelineManualOrder": true
+      "timelineManualOrder": true,
+      "isArchived": true
     },
     {
       "id": "trip_ms9g79qh_m_f4vz9",
       "name": "Paris",
       "year": 2025,
-      "status": "completed",
+      "status": "archived",
       "budget": 2500,
       "startDate": null,
       "endDate": null,
@@ -339,7 +341,7 @@
       "timelineMode": "days",
       "research": [],
       "createdAt": 1785532924169,
-      "updatedAt": 1786110098095,
+      "updatedAt": 1793580687224,
       "packingList": [],
       "country": "France",
       "countryGuessed": false,
@@ -347,13 +349,14 @@
       "manualEstimates": [],
       "hiddenSheets": [],
       "sectionMapUrls": {},
-      "timelineManualOrder": true
+      "timelineManualOrder": true,
+      "isArchived": true
     },
     {
       "id": "trip_ms9g79qh_q_oggtn",
       "name": "Liverpool",
       "year": 2025,
-      "status": "completed",
+      "status": "archived",
       "budget": 1000,
       "startDate": null,
       "endDate": null,
@@ -392,7 +395,7 @@
       "timelineMode": "days",
       "research": [],
       "createdAt": 1785532924169,
-      "updatedAt": 1786109865158,
+      "updatedAt": 1793580688614,
       "packingList": [],
       "country": "United Kingdom",
       "countryGuessed": false,
@@ -400,13 +403,14 @@
       "manualEstimates": [],
       "hiddenSheets": [],
       "sectionMapUrls": {},
-      "timelineManualOrder": true
+      "timelineManualOrder": true,
+      "isArchived": true
     },
     {
       "id": "trip_ms9g79qh_11_kwuzd",
       "name": "Italy",
       "year": 2025,
-      "status": "cancelled",
+      "status": "archived",
       "budget": 4000,
       "startDate": null,
       "endDate": null,
@@ -508,7 +512,7 @@
       "timelineMode": "days",
       "research": [],
       "createdAt": 1785532924169,
-      "updatedAt": 1786110023044,
+      "updatedAt": 1793580687989,
       "packingList": [],
       "country": "Italy",
       "countryGuessed": false,
@@ -516,7 +520,8 @@
       "manualEstimates": [],
       "hiddenSheets": [],
       "sectionMapUrls": {},
-      "timelineManualOrder": true
+      "timelineManualOrder": true,
+      "isArchived": true
     },
     {
       "id": "trip_ms9g79qh_14_mvqhc",
@@ -1210,7 +1215,7 @@
       "id": "trip_ms9gp16e_1_0n81d",
       "name": "London",
       "year": 2026,
-      "status": "completed",
+      "status": "archived",
       "budget": 400,
       "startDate": "2026-08-04",
       "endDate": "2026-08-05",
@@ -2523,7 +2528,7 @@
         }
       ],
       "createdAt": 1785533752886,
-      "updatedAt": 1789842339105,
+      "updatedAt": 1793580686199,
       "packingList": [
         {
           "id": "pack_msa8n1yn_4_f0stn",
@@ -2630,7 +2635,8 @@
       "manualEstimates": [],
       "hiddenSheets": [],
       "sectionMapUrls": {},
-      "timelineManualOrder": true
+      "timelineManualOrder": true,
+      "isArchived": true
     },
     {
       "id": "trip_msizzid0_1p_eq7is",
@@ -3475,7 +3481,7 @@
       "id": "trip_mswbxsjm_8_wbnn1",
       "name": "London",
       "year": 2026,
-      "status": "completed",
+      "status": "archived",
       "budget": 500,
       "startDate": "2026-09-27",
       "endDate": "2026-09-29",
@@ -5202,14 +5208,15 @@
         "Pubs"
       ],
       "createdAt": 1786916485570,
-      "updatedAt": 1790898929627,
+      "updatedAt": 1793580684972,
       "sectionMapUrls": {
         "Shopping": "https://www.google.com/maps/d/u/0/embed?mid=1OfW-BTzHmlazTWW50UhG-lmpt1GVl4s&ehbc=2E312F",
         "Restaurants": "https://www.google.com/maps/d/u/0/embed?mid=1g_ZKFxA4a5NyxwHKImbOP1LdUOI1ts4&ehbc=2E312F",
         "Cigars": "https://www.google.com/maps/d/u/0/embed?mid=1E4IugDGMc2J8zc1n8-U5LVj1TGhoj4k&ehbc=2E312F",
         "Bars": "https://www.google.com/maps/d/u/0/embed?mid=17JtustSph_DQVK3QNVy0FSrZ39Jqys4&ehbc=2E312F"
       },
-      "timelineManualOrder": true
+      "timelineManualOrder": true,
+      "isArchived": true
     }
   ],
   "trash": {
@@ -10747,6 +10754,48 @@
   },
   "activityLog": [
     {
+      "id": "log_mvyjmuay_18_bqd3a",
+      "ts": 1793580690922,
+      "action": "trip-archived",
+      "detail": "Archived trip \"London\""
+    },
+    {
+      "id": "log_mvyjmt3y_17_1zuzn",
+      "ts": 1793580689374,
+      "action": "trip-archived",
+      "detail": "Archived trip \"Santorini\""
+    },
+    {
+      "id": "log_mvyjmsiv_16_dvrqx",
+      "ts": 1793580688615,
+      "action": "trip-archived",
+      "detail": "Archived trip \"Liverpool\""
+    },
+    {
+      "id": "log_mvyjms1i_15_etw1r",
+      "ts": 1793580687990,
+      "action": "trip-archived",
+      "detail": "Archived trip \"Italy\""
+    },
+    {
+      "id": "log_mvyjmrg8_14_lrxcc",
+      "ts": 1793580687224,
+      "action": "trip-archived",
+      "detail": "Archived trip \"Paris\""
+    },
+    {
+      "id": "log_mvyjmqnt_13_5ua2i",
+      "ts": 1793580686201,
+      "action": "trip-archived",
+      "detail": "Archived trip \"London\""
+    },
+    {
+      "id": "log_mvyjmppr_12_8zfmc",
+      "ts": 1793580684975,
+      "action": "trip-archived",
+      "detail": "Archived trip \"London\""
+    },
+    {
       "id": "log_mvyjlrdh_11_nvo49",
       "ts": 1793580640469,
       "action": "research-added",
@@ -11903,48 +11952,6 @@
       "ts": 1789949416770,
       "action": "research-promoted",
       "detail": "Promoted \"The Beauchamp\" to Plan on London"
-    },
-    {
-      "id": "log_muahnqgf_x_zcfuc",
-      "ts": 1789949402799,
-      "action": "plan-item-edited",
-      "detail": "Updated \"Colbert\" (Bars) on London"
-    },
-    {
-      "id": "log_muahnor9_w_poibu",
-      "ts": 1789949400597,
-      "action": "research-promoted",
-      "detail": "Promoted \"Colbert\" to Plan on London"
-    },
-    {
-      "id": "log_muahmjzn_u_komkv",
-      "ts": 1789949347763,
-      "action": "research-edited",
-      "detail": "Updated \"The Ivy Chelsea Garden\" to London research"
-    },
-    {
-      "id": "log_muahmehd_t_nfkwf",
-      "ts": 1789949340625,
-      "action": "research-deleted",
-      "detail": "Removed \"The Windmill\" from London research"
-    },
-    {
-      "id": "log_muahlsw6_s_r5qj9",
-      "ts": 1789949312646,
-      "action": "research-edited",
-      "detail": "Updated \"The Garden at Corinthia London\" to London research"
-    },
-    {
-      "id": "log_muafo24w_r_g8l0q",
-      "ts": 1789946058704,
-      "action": "research-added",
-      "detail": "Added \"The Cadogan Arms\" to London research"
-    },
-    {
-      "id": "log_muaf2zgb_p_dc4wv",
-      "ts": 1789945075451,
-      "action": "research-edited",
-      "detail": "Updated \"The Garden at Corinthia London\" to London research"
     }
   ]
 }
