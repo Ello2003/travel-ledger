@@ -830,14 +830,20 @@
           "id": "res_mvvmemkc_k_02nwo",
           "sheet": "Pubs",
           "name": "'t Brugs Beertje",
-          "address": "",
-          "lat": null,
-          "lng": null,
+          "address": "Kemelstraat 5, 8000 Brugge, Belgium",
+          "lat": 51.2068237,
+          "lng": 3.2217179,
           "priceLevel": null,
           "priority": null,
           "estCost": null,
           "notes": "",
-          "links": [],
+          "links": [
+            {
+              "id": "link_mvztz84j_10_swuo0",
+              "label": "Official Website",
+              "url": "https://www.brugsbeertje.be/"
+            }
+          ],
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1793403947964
@@ -1202,7 +1208,7 @@
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1793658442573,
+      "updatedAt": 1793658533943,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -5633,6 +5639,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mvztzad3_11_cu7aa",
+      "ts": 1793658533943,
+      "action": "research-edited",
+      "detail": "Updated \"'t Brugs Beertje\" in Brugge research"
+    },
+    {
       "id": "log_mvztxbv1_x_z0eiq",
       "ts": 1793658442573,
       "action": "research-edited",
@@ -6825,12 +6837,6 @@
       "ts": 1789944337331,
       "action": "settings-updated",
       "detail": "Updated GitHub Sync settings"
-    },
-    {
-      "id": "log_muaemnya_k_n3s7i",
-      "ts": 1789944314050,
-      "action": "map-updated",
-      "detail": "Updated My Maps embed for London"
     }
   ]
 }
