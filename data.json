@@ -1092,14 +1092,20 @@
           "id": "res_mvvmhk97_1a_4euzd",
           "sheet": "Sights",
           "name": "Simon Stevin",
-          "address": "",
-          "lat": null,
-          "lng": null,
+          "address": "Simon Stevinplein, 8000 Brugge, Belgium",
+          "lat": 51.206611599999995,
+          "lng": 3.2227343,
           "priceLevel": null,
           "priority": null,
           "estCost": null,
           "notes": "",
-          "links": [],
+          "links": [
+            {
+              "id": "link_mvzuktwc_1q_la4ff",
+              "label": "Official Website",
+              "url": "http://www.brugge.be/"
+            }
+          ],
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1793404084939
@@ -1268,7 +1274,7 @@
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1793659535100,
+      "updatedAt": 1793659539796,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -5699,6 +5705,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mvzukuhi_1r_1qupb",
+      "ts": 1793659539798,
+      "action": "research-edited",
+      "detail": "Updated \"Simon Stevin\" in Brugge research"
+    },
+    {
       "id": "log_mvzukqv0_1p_cirve",
       "ts": 1793659535100,
       "action": "research-edited",
@@ -6891,12 +6903,6 @@
       "ts": 1790032779472,
       "action": "research-promoted",
       "detail": "Promoted \"The Wolesy\" to Plan on London"
-    },
-    {
-      "id": "log_mubvaf9n_14_vpgmx",
-      "ts": 1790032762571,
-      "action": "research-edited",
-      "detail": "Updated \"NCL to LDN\" to London research"
     }
   ]
 }
