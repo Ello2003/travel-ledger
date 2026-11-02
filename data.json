@@ -814,15 +814,21 @@
           "id": "res_mvpw09qg_1_8ok1h",
           "sheet": "Hotels",
           "name": "Hotel Aragon",
-          "address": "",
-          "lat": null,
-          "lng": null,
+          "address": "Naaldenstraat 22, 8000 Brugge, Belgium",
+          "lat": 51.210643999999995,
+          "lng": 3.222296,
           "priceLevel": null,
           "priority": null,
           "estCost": null,
           "notes": "",
-          "links": [],
-          "status": "promoted",
+          "links": [
+            {
+              "id": "link_mvzv7gmi_21_jhca8",
+              "label": "Official Website",
+              "url": "https://www.aragon.be/en/"
+            }
+          ],
+          "status": "researching",
           "linkedPlanItemId": "plan_mvpw0bx6_3_191a7",
           "createdAt": 1793057277257
         },
@@ -1298,7 +1304,7 @@
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1793659586571,
+      "updatedAt": 1793660595776,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -5729,6 +5735,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mvzv7ha8_22_atek9",
+      "ts": 1793660595776,
+      "action": "research-edited",
+      "detail": "Updated \"Hotel Aragon\" in Brugge research"
+    },
+    {
       "id": "log_mvzuluks_20_1i3pv",
       "ts": 1793659586572,
       "action": "research-edited",
@@ -6921,12 +6933,6 @@
       "ts": 1790036188190,
       "action": "research-added",
       "detail": "Added \"The Portman\" to London research"
-    },
-    {
-      "id": "log_mubxb4ob_1e_lppo8",
-      "ts": 1790036154731,
-      "action": "research-edited",
-      "detail": "Updated \"108 Brasserie\" to London research"
     }
   ]
 }
