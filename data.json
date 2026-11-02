@@ -1158,14 +1158,20 @@
           "id": "res_mvvmi5uj_1g_1ckv8",
           "sheet": "Sights",
           "name": "De Wijngaard",
-          "address": "",
-          "lat": null,
-          "lng": null,
+          "address": "Begijnhof 4, 8000 Brugge, Belgium",
+          "lat": 51.201778499999996,
+          "lng": 3.2234409,
           "priceLevel": null,
           "priority": null,
           "estCost": null,
           "notes": "",
-          "links": [],
+          "links": [
+            {
+              "id": "link_mvzul9w1_1w_xi6l3",
+              "label": "Official Website",
+              "url": "https://sites.google.com/view/dewijngaardbegijnhofbrugge/home"
+            }
+          ],
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1793404112923
@@ -1286,7 +1292,7 @@
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1793659547492,
+      "updatedAt": 1793659577395,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -5717,6 +5723,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mvzulnhv_1x_vf2en",
+      "ts": 1793659577395,
+      "action": "research-edited",
+      "detail": "Updated \"De Wijngaard\" in Brugge research"
+    },
+    {
       "id": "log_mvzul0f8_1v_vugyi",
       "ts": 1793659547492,
       "action": "research-edited",
@@ -6909,12 +6921,6 @@
       "ts": 1790036078774,
       "action": "research-added",
       "detail": "Added \"28°-50° Wine Workshop & Kitchen\" to London research"
-    },
-    {
-      "id": "log_mubx78cv_19_kqgz4",
-      "ts": 1790035972879,
-      "action": "research-added",
-      "detail": "Added \"108 Brasserie\" to London research"
     }
   ]
 }
