@@ -3435,13 +3435,29 @@
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1788228459956
+        },
+        {
+          "id": "res_mvyjlrdh_10_c59vg",
+          "sheet": "Cheap Eats",
+          "name": "Toscano",
+          "address": "Toscano, 15, Blair Street, Abbeyhill, Old Town, City of Edinburgh, Scotland, EH1 1QR, United Kingdom",
+          "lat": 55.9493225,
+          "lng": -3.1878551,
+          "priceLevel": null,
+          "priority": null,
+          "estCost": null,
+          "notes": "",
+          "links": [],
+          "status": "researching",
+          "linkedPlanItemId": null,
+          "createdAt": 1793580640469
         }
       ],
       "packingList": [],
       "country": "United Kingdom",
       "countryGuessed": false,
       "createdAt": 1786110350004,
-      "updatedAt": 1792096094030,
+      "updatedAt": 1793580640469,
       "mapEmbedUrl": "https://www.google.com/maps/d/u/0/embed?mid=11LfUXb5kKkPuZQaevNFVaQ820krDU14&ehbc=2E312F",
       "manualEstimates": [],
       "hiddenSheets": [
@@ -10731,6 +10747,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mvyjlrdh_11_nvo49",
+      "ts": 1793580640469,
+      "action": "research-added",
+      "detail": "Added \"Toscano\" to Edinburgh research"
+    },
+    {
       "id": "log_mvxvyjq5_z_xwsa6",
       "ts": 1793540926301,
       "action": "research-edited",
@@ -11923,12 +11945,6 @@
       "ts": 1789945075451,
       "action": "research-edited",
       "detail": "Updated \"The Garden at Corinthia London\" to London research"
-    },
-    {
-      "id": "log_muaez6g8_o_az2wr",
-      "ts": 1789944897896,
-      "action": "research-edited",
-      "detail": "Updated \"Stanley's\" to London research"
     }
   ]
 }
