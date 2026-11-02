@@ -918,14 +918,20 @@
           "id": "res_mvvmeq3p_s_66ggt",
           "sheet": "Pubs",
           "name": "Huisbrouwerij De Halve Maan",
-          "address": "",
-          "lat": null,
-          "lng": null,
+          "address": "Walplein 26, 8000 Brugge, Belgium",
+          "lat": 51.202447299999996,
+          "lng": 3.2241779999999998,
           "priceLevel": null,
           "priority": null,
           "estCost": null,
           "notes": "",
-          "links": [],
+          "links": [
+            {
+              "id": "link_mvztzvku_18_dslo3",
+              "label": "Official Website",
+              "url": "http://www.halvemaan.be/"
+            }
+          ],
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1793403952549
@@ -1226,7 +1232,7 @@
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1793658556264,
+      "updatedAt": 1793658562284,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -5657,6 +5663,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mvztzw8d_19_pnkuy",
+      "ts": 1793658562285,
+      "action": "research-edited",
+      "detail": "Updated \"Huisbrouwerij De Halve Maan\" in Brugge research"
+    },
+    {
       "id": "log_mvztzrl4_17_e7oge",
       "ts": 1793658556264,
       "action": "research-edited",
@@ -6849,12 +6861,6 @@
       "ts": 1789946058704,
       "action": "research-added",
       "detail": "Added \"The Cadogan Arms\" to London research"
-    },
-    {
-      "id": "log_muaf2zgb_p_dc4wv",
-      "ts": 1789945075451,
-      "action": "research-edited",
-      "detail": "Updated \"The Garden at Corinthia London\" to London research"
     }
   ]
 }
