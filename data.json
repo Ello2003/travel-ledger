@@ -994,14 +994,20 @@
           "id": "res_mvvmgfkl_10_56o3u",
           "sheet": "Sights",
           "name": "Belfry of Bruges",
-          "address": "",
-          "lat": null,
-          "lng": null,
+          "address": "Markt 7, 8000 Brugge, Belgium",
+          "lat": 51.2081466,
+          "lng": 3.2248010999999996,
           "priceLevel": null,
           "priority": null,
           "estCost": null,
           "notes": "",
-          "links": [],
+          "links": [
+            {
+              "id": "link_mvzuk9g6_1i_6fvnk",
+              "label": "Official Website",
+              "url": "https://www.museabrugge.be/bezoek-onze-musea/onze-musea-en-monumenten/belfort"
+            }
+          ],
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1793404032213
@@ -1250,7 +1256,7 @@
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1793659506712,
+      "updatedAt": 1793659513787,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -5681,6 +5687,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mvzukaez_1j_rd7h5",
+      "ts": 1793659513787,
+      "action": "research-edited",
+      "detail": "Updated \"Belfry of Bruges\" in Brugge research"
+    },
+    {
       "id": "log_mvzuk4yg_1h_lek5p",
       "ts": 1793659506712,
       "action": "research-edited",
@@ -6873,12 +6885,6 @@
       "ts": 1789949416770,
       "action": "research-promoted",
       "detail": "Promoted \"The Beauchamp\" to Plan on London"
-    },
-    {
-      "id": "log_muahnqgf_x_zcfuc",
-      "ts": 1789949402799,
-      "action": "plan-item-edited",
-      "detail": "Updated \"Colbert\" (Bars) on London"
     }
   ]
 }
