@@ -1439,10 +1439,26 @@
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1793671609357
+        },
+        {
+          "id": "res_mw01wib8_k_uoayw",
+          "sheet": "Cheap Eats",
+          "name": "Fritbar",
+          "address": "Fritbar, 3, Katelijnestraat, Onze-Lieve-Vrouwekwartier, Brugge-Centrum, Brugge, Bruges, Brugge, West Flanders, Flanders, 8000, Belgium",
+          "lat": 51.2037742,
+          "lng": 3.2247633,
+          "priceLevel": null,
+          "priority": null,
+          "estCost": null,
+          "notes": "",
+          "links": [],
+          "status": "researching",
+          "linkedPlanItemId": null,
+          "createdAt": 1793671841204
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1793671609357,
+      "updatedAt": 1793671841204,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -5879,6 +5895,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw01wib8_l_lp09l",
+      "ts": 1793671841204,
+      "action": "research-added",
+      "detail": "Added \"Fritbar\" to Brugge research"
+    },
+    {
       "id": "log_mw01rjf2_j_ldn9m",
       "ts": 1793671609358,
       "action": "research-added",
@@ -7071,12 +7093,6 @@
       "ts": 1790288480494,
       "action": "packing-item-added",
       "detail": "Added \"Cigars / Lighters\" to London packing list"
-    },
-    {
-      "id": "log_mug3j76k_11_u1m66",
-      "ts": 1790288473628,
-      "action": "packing-item-added",
-      "detail": "Added \"Cartier Ring\" to London packing list"
     }
   ]
 }
