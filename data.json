@@ -1343,10 +1343,26 @@
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1793669606280
+        },
+        {
+          "id": "res_mw00lafg_8_z087v",
+          "sheet": "Chocolate&Waffles",
+          "name": "The Old Chocolate House",
+          "address": "The Old Chocolate House, Mariastraat, Steenstraatkwartier, Brugge-Centrum, Brugge, Bruges, Brugge, West Flanders, Flanders, 8000, Belgium",
+          "lat": 51.2060614,
+          "lng": 3.2230754,
+          "priceLevel": null,
+          "priority": null,
+          "estCost": null,
+          "notes": "",
+          "links": [],
+          "status": "researching",
+          "linkedPlanItemId": null,
+          "createdAt": 1793669638156
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1793669606281,
+      "updatedAt": 1793669638156,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -5783,6 +5799,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw00lafg_9_ao7xz",
+      "ts": 1793669638156,
+      "action": "research-added",
+      "detail": "Added \"The Old Chocolate House\" to Brugge research"
+    },
+    {
       "id": "log_mw00klu1_7_82ti7",
       "ts": 1793669606281,
       "action": "research-added",
@@ -6975,12 +6997,6 @@
       "ts": 1790286814158,
       "action": "sheet-renamed",
       "detail": "Renamed Plan/Research category \"New Category\" to \"Cigars\""
-    },
-    {
-      "id": "log_mug2jhbd_c_67eoo",
-      "ts": 1790286807145,
-      "action": "sheet-added",
-      "detail": "Added Plan/Research category \"New Category\""
     }
   ]
 }
