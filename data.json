@@ -97,6 +97,10 @@
     {
       "key": "Shopping",
       "color": "#6a4a6e"
+    },
+    {
+      "key": "New Category",
+      "color": "#6a4a6e"
     }
   ],
   "trips": [
