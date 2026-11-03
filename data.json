@@ -1407,10 +1407,26 @@
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1793670357035
+        },
+        {
+          "id": "res_mw01kzh4_g_yhx9b",
+          "sheet": "Coffee",
+          "name": "Aux Merveilleux de Fred",
+          "address": "Aux Merveilleux de Fred, Nestor de Tièrestraat, Stationsbuurt, Het Zoute, Knokke, Knokke-Heist, Brugge, West Flanders, Flanders, 8300, Belgium",
+          "lat": 51.3443421,
+          "lng": 3.2877077,
+          "priceLevel": null,
+          "priority": null,
+          "estCost": null,
+          "notes": "",
+          "links": [],
+          "status": "researching",
+          "linkedPlanItemId": null,
+          "createdAt": 1793671303576
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1793670357035,
+      "updatedAt": 1793671303576,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -5847,6 +5863,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw01kzh4_h_zyrgm",
+      "ts": 1793671303576,
+      "action": "research-added",
+      "detail": "Added \"Aux Merveilleux de Fred\" to Brugge research"
+    },
+    {
       "id": "log_mw010p4b_f_jy4t5",
       "ts": 1793670357035,
       "action": "research-added",
@@ -7039,12 +7061,6 @@
       "ts": 1790288463220,
       "action": "packing-item-added",
       "detail": "Added \"ID\" to London packing list"
-    },
-    {
-      "id": "log_mug2n2js_g_baryl",
-      "ts": 1790286974632,
-      "action": "section-map-added",
-      "detail": "Added a map for Bars on London"
     }
   ]
 }
