@@ -1391,10 +1391,26 @@
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1793669967875
+        },
+        {
+          "id": "res_mw010p4b_e_f9m4n",
+          "sheet": "Bars",
+          "name": "Groot Vlaenderen",
+          "address": "Groot Vlaenderen, 94, Vlamingstraat, Sint-Walburgakwartier, Brugge-Centrum, Brugge, Bruges, Brugge, West Flanders, Flanders, 8000, Belgium",
+          "lat": 51.2122443,
+          "lng": 3.2231237,
+          "priceLevel": null,
+          "priority": null,
+          "estCost": null,
+          "notes": "",
+          "links": [],
+          "status": "researching",
+          "linkedPlanItemId": null,
+          "createdAt": 1793670357035
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1793669967875,
+      "updatedAt": 1793670357035,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -5831,6 +5847,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw010p4b_f_jy4t5",
+      "ts": 1793670357035,
+      "action": "research-added",
+      "detail": "Added \"Groot Vlaenderen\" to Brugge research"
+    },
+    {
       "id": "log_mw00scub_d_s0qs9",
       "ts": 1793669967875,
       "action": "research-added",
@@ -7021,12 +7043,6 @@
     {
       "id": "log_mug2n2js_g_baryl",
       "ts": 1790286974632,
-      "action": "section-map-added",
-      "detail": "Added a map for Bars on London"
-    },
-    {
-      "id": "log_mug2m2qg_f_nf3ov",
-      "ts": 1790286928216,
       "action": "section-map-added",
       "detail": "Added a map for Bars on London"
     }
