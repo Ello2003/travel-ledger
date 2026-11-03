@@ -1359,10 +1359,26 @@
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1793669638156
+        },
+        {
+          "id": "res_mw00rfck_a_v4hse",
+          "sheet": "Chocolate&Waffles",
+          "name": "Chez Albert",
+          "address": "Chez Albert, Stationsplein, Sint-Michiels, Bruges, Brugge, West Flanders, Flanders, 8200, Belgium",
+          "lat": 51.1970288,
+          "lng": 3.2175407,
+          "priceLevel": null,
+          "priority": null,
+          "estCost": null,
+          "notes": "",
+          "links": [],
+          "status": "researching",
+          "linkedPlanItemId": null,
+          "createdAt": 1793669924469
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1793669638156,
+      "updatedAt": 1793669924469,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -5799,6 +5815,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw00rfcl_b_v12a7",
+      "ts": 1793669924469,
+      "action": "research-added",
+      "detail": "Added \"Chez Albert\" to Brugge research"
+    },
+    {
       "id": "log_mw00lafg_9_ao7xz",
       "ts": 1793669638156,
       "action": "research-added",
@@ -6991,12 +7013,6 @@
       "ts": 1790286832033,
       "action": "section-map-added",
       "detail": "Added a map for Cigars on London"
-    },
-    {
-      "id": "log_mug2jmq6_d_96yxb",
-      "ts": 1790286814158,
-      "action": "sheet-renamed",
-      "detail": "Renamed Plan/Research category \"New Category\" to \"Cigars\""
     }
   ]
 }
