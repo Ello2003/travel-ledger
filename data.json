@@ -1375,10 +1375,26 @@
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1793669924469
+        },
+        {
+          "id": "res_mw00scub_c_im6gs",
+          "sheet": "Chocolate&Waffles",
+          "name": "House of Waffles",
+          "address": "House of Waffles, Wollestraat, Steenstraatkwartier, Brugge-Centrum, Brugge, Bruges, Brugge, West Flanders, Flanders, 8000, Belgium",
+          "lat": 51.2075842,
+          "lng": 3.226278,
+          "priceLevel": null,
+          "priority": null,
+          "estCost": null,
+          "notes": "",
+          "links": [],
+          "status": "researching",
+          "linkedPlanItemId": null,
+          "createdAt": 1793669967875
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1793669924469,
+      "updatedAt": 1793669967875,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -5815,6 +5831,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw00scub_d_s0qs9",
+      "ts": 1793669967875,
+      "action": "research-added",
+      "detail": "Added \"House of Waffles\" to Brugge research"
+    },
+    {
       "id": "log_mw00rfcl_b_v12a7",
       "ts": 1793669924469,
       "action": "research-added",
@@ -7007,12 +7029,6 @@
       "ts": 1790286928216,
       "action": "section-map-added",
       "detail": "Added a map for Bars on London"
-    },
-    {
-      "id": "log_mug2k0ip_e_i5fvy",
-      "ts": 1790286832033,
-      "action": "section-map-added",
-      "detail": "Added a map for Cigars on London"
     }
   ]
 }
