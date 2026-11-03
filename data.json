@@ -1327,10 +1327,26 @@
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1793661077157
+        },
+        {
+          "id": "res_mw00klu0_6_pwaws",
+          "sheet": "Chocolate&Waffles",
+          "name": "The Chocolate Line",
+          "address": "The Chocolate Line, 75, Vaartstraat, Nijverheidsdok (Z12), Sint-Pieters, Brugge, Bruges, Brugge, West Flanders, Flanders, 8000, Belgium",
+          "lat": 51.2313728,
+          "lng": 3.2128952,
+          "priceLevel": null,
+          "priority": null,
+          "estCost": null,
+          "notes": "",
+          "links": [],
+          "status": "researching",
+          "linkedPlanItemId": null,
+          "createdAt": 1793669606280
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1793661077157,
+      "updatedAt": 1793669606281,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -5767,6 +5783,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw00klu1_7_82ti7",
+      "ts": 1793669606281,
+      "action": "research-added",
+      "detail": "Added \"The Chocolate Line\" to Brugge research"
+    },
+    {
       "id": "log_mvzx82sl_5_n8oek",
       "ts": 1793663982885,
       "action": "research-edited",
@@ -6959,12 +6981,6 @@
       "ts": 1790286807145,
       "action": "sheet-added",
       "detail": "Added Plan/Research category \"New Category\""
-    },
-    {
-      "id": "log_mug2d4yr_b_eik0b",
-      "ts": 1790286511203,
-      "action": "research-edited",
-      "detail": "Updated \"28°-50° Wine Workshop & Kitchen\" to London research"
     }
   ]
 }
