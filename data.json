@@ -51,7 +51,7 @@
       "color": "#8a7a3a"
     },
     {
-      "key": "Cheap Eats",
+      "key": "Breakfasts | Bakeries | Casual Dining |",
       "color": "#b8874f"
     },
     {
@@ -1432,7 +1432,7 @@
         },
         {
           "id": "res_mw01rjf1_i_4n3wk",
-          "sheet": "Cheap Eats",
+          "sheet": "Breakfasts | Bakeries | Casual Dining |",
           "name": "That's Toast",
           "address": "That's Toast, 4, Dweersstraat, Steenstraatkwartier, Brugge-Centrum, Brugge, Bruges, Brugge, West Flanders, Flanders, 8000, Belgium",
           "lat": 51.2064074,
@@ -1448,7 +1448,7 @@
         },
         {
           "id": "res_mw01wib8_k_uoayw",
-          "sheet": "Cheap Eats",
+          "sheet": "Breakfasts | Bakeries | Casual Dining |",
           "name": "Fritbar",
           "address": "Fritbar, 3, Katelijnestraat, Onze-Lieve-Vrouwekwartier, Brugge-Centrum, Brugge, Bruges, Brugge, West Flanders, Flanders, 8000, Belgium",
           "lat": 51.2037742,
@@ -3945,7 +3945,7 @@
         "Sights",
         "Activities",
         "Hotels",
-        "Cheap Eats"
+        "Breakfasts | Bakeries | Casual Dining |"
       ],
       "sectionMapUrls": {
         "Wine Bars": "https://www.google.com/maps/d/embed?mid=1Wa9qzlro10vsTMlHaTCkZ0R4WTI2XYI&hl=en&ehbc=2E312F"
@@ -4781,7 +4781,7 @@
         },
         {
           "id": "res_mtt7nbnd_6_dvyo6",
-          "sheet": "Cheap Eats",
+          "sheet": "Breakfasts | Bakeries | Casual Dining |",
           "name": "Dal Fiorentino",
           "address": "Fitzrovia | Notting Hill | Holborn |",
           "lat": null,
@@ -4909,7 +4909,7 @@
         },
         {
           "id": "res_mtur7k8d_b_19u9u",
-          "sheet": "Cheap Eats",
+          "sheet": "Breakfasts | Bakeries | Casual Dining |",
           "name": "Focaccia Factory",
           "address": "Mayfair",
           "lat": null,
@@ -5171,7 +5171,7 @@
         },
         {
           "id": "res_mu0gqigh_14_xonmi",
-          "sheet": "Cheap Eats",
+          "sheet": "Breakfasts | Bakeries | Casual Dining |",
           "name": "Carbon",
           "address": "78 Brewer St, London W1F 9TY",
           "lat": null,
@@ -5187,7 +5187,7 @@
         },
         {
           "id": "res_mu0gsfuk_16_bqwfq",
-          "sheet": "Cheap Eats",
+          "sheet": "Breakfasts | Bakeries | Casual Dining |",
           "name": "Eat Activ",
           "address": "26 Noel St, London W1F 8GY",
           "lat": null,
@@ -5203,7 +5203,7 @@
         },
         {
           "id": "res_mu0gznpd_18_nv7m7",
-          "sheet": "Cheap Eats",
+          "sheet": "Breakfasts | Bakeries | Casual Dining |",
           "name": "Make Mine",
           "address": "86 Dean St, London W1D 3SR",
           "lat": null,
@@ -5365,7 +5365,7 @@
         },
         {
           "id": "res_mu3ed09z_2h_hilpq",
-          "sheet": "Cheap Eats",
+          "sheet": "Breakfasts | Bakeries | Casual Dining |",
           "name": "Breadstall Pizza",
           "address": "Soho",
           "lat": null,
