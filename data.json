@@ -1455,10 +1455,32 @@
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1793671841204
+        },
+        {
+          "id": "res_mw47mnln_3_tehpn",
+          "sheet": "Chocolate & Waffles",
+          "name": "The Spot Waffles & Pancakes",
+          "address": "Jozef Suvéestraat 19, 8000 Brugge, Belgium",
+          "lat": 51.2070729,
+          "lng": 3.2293672,
+          "priceLevel": null,
+          "priority": null,
+          "estCost": null,
+          "notes": "",
+          "links": [
+            {
+              "id": "link_mw47mmo2_2_vag7r",
+              "label": "Official Website",
+              "url": "https://www.thespotbruges.be/"
+            }
+          ],
+          "status": "researching",
+          "linkedPlanItemId": null,
+          "createdAt": 1793923323899
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1793671841204,
+      "updatedAt": 1793923323899,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -5895,6 +5917,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw47mnlo_4_w3kyz",
+      "ts": 1793923323900,
+      "action": "research-added",
+      "detail": "Added \"The Spot Waffles & Pancakes\" to Brugge research"
+    },
+    {
       "id": "log_mw01wib8_l_lp09l",
       "ts": 1793671841204,
       "action": "research-added",
@@ -7087,12 +7115,6 @@
       "ts": 1790288494503,
       "action": "packing-item-added",
       "detail": "Added \"Fragrances\" to London packing list"
-    },
-    {
-      "id": "log_mug3jcha_13_jwk51",
-      "ts": 1790288480494,
-      "action": "packing-item-added",
-      "detail": "Added \"Cigars / Lighters\" to London packing list"
     }
   ]
 }
