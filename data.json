@@ -1957,10 +1957,26 @@
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1793929949637
+        },
+        {
+          "id": "res_mw4bni95_1z_cmt3t",
+          "sheet": "Breakfasts | Bakeries | Casual Dining",
+          "name": "Three.B.pasta",
+          "address": "Geldmuntstraat 12, 8000 Brugge, Belgium",
+          "lat": 51.2090672,
+          "lng": 3.2222923,
+          "priceLevel": null,
+          "priority": null,
+          "estCost": null,
+          "notes": "",
+          "links": [],
+          "status": "researching",
+          "linkedPlanItemId": null,
+          "createdAt": 1793930082089
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1793929949637,
+      "updatedAt": 1793930082089,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -6397,6 +6413,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw4bni95_20_edgu4",
+      "ts": 1793930082089,
+      "action": "research-added",
+      "detail": "Added \"Three.B.pasta\" to Brugge research"
+    },
+    {
       "id": "log_mw4bko1x_1y_wcapn",
       "ts": 1793929949637,
       "action": "research-added",
@@ -7589,12 +7611,6 @@
       "ts": 1790697973040,
       "action": "plan-marked-visited",
       "detail": "Marked \"Colbert\" as visited on London"
-    },
-    {
-      "id": "log_mumvbw16_2b_357eu",
-      "ts": 1790697958890,
-      "action": "plan-marked-visited",
-      "detail": "Marked \"Devonshire\" as visited on London"
     }
   ]
 }
