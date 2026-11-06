@@ -1973,10 +1973,32 @@
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1793930082089
+        },
+        {
+          "id": "res_mw4bqqlk_22_y2vw8",
+          "sheet": "Bars | Cocktails",
+          "name": "NOBLE Bruges",
+          "address": "Meestraat 4, 8000 Brugge, Belgium",
+          "lat": 51.2087832,
+          "lng": 3.2286869000000005,
+          "priceLevel": null,
+          "priority": null,
+          "estCost": null,
+          "notes": "With View",
+          "links": [
+            {
+              "id": "link_mw4bqlu0_21_34kef",
+              "label": "Official Website",
+              "url": "http://www.noblebruges.be/"
+            }
+          ],
+          "status": "researching",
+          "linkedPlanItemId": null,
+          "createdAt": 1793930232872
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1793930082089,
+      "updatedAt": 1793930232872,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -6413,6 +6435,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw4bqqlk_23_ipiv4",
+      "ts": 1793930232872,
+      "action": "research-added",
+      "detail": "Added \"NOBLE Bruges\" to Brugge research"
+    },
+    {
       "id": "log_mw4bni95_20_edgu4",
       "ts": 1793930082089,
       "action": "research-added",
@@ -7605,12 +7633,6 @@
       "ts": 1790698317439,
       "action": "plan-marked-visited",
       "detail": "Marked \"Suitsupply\" as visited on London"
-    },
-    {
-      "id": "log_mumvc6y8_2c_el3ba",
-      "ts": 1790697973040,
-      "action": "plan-marked-visited",
-      "detail": "Marked \"Colbert\" as visited on London"
     }
   ]
 }
