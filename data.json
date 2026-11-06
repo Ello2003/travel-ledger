@@ -59,7 +59,7 @@
       "color": "#6a4a6e"
     },
     {
-      "key": "Bars",
+      "key": "Bars | Cocktails",
       "color": "#6a4a6e"
     },
     {
@@ -1400,7 +1400,7 @@
         },
         {
           "id": "res_mw010p4b_e_f9m4n",
-          "sheet": "Bars",
+          "sheet": "Bars | Cocktails",
           "name": "Groot Vlaenderen",
           "address": "Groot Vlaenderen, 94, Vlamingstraat, Sint-Walburgakwartier, Brugge-Centrum, Brugge, Bruges, Brugge, West Flanders, Flanders, 8000, Belgium",
           "lat": 51.2122443,
@@ -3373,7 +3373,7 @@
         },
         {
           "id": "res_msjg2wqs_25_o4dhb",
-          "sheet": "Bars",
+          "sheet": "Bars | Cocktails",
           "name": "The Caley Bar",
           "address": "Caledonian Hotel",
           "lat": null,
@@ -3520,7 +3520,7 @@
         },
         {
           "id": "res_mt4dy1sr_f_20wnq",
-          "sheet": "Bars",
+          "sheet": "Bars | Cocktails",
           "name": "Heads & Tales Gin Bar",
           "address": "",
           "lat": null,
@@ -3536,7 +3536,7 @@
         },
         {
           "id": "res_mt4ygmlm_m_htj72",
-          "sheet": "Bars",
+          "sheet": "Bars | Cocktails",
           "name": "Bar Prince",
           "address": "The Balmoral",
           "lat": null,
@@ -3736,7 +3736,7 @@
         },
         {
           "id": "res_mt7w716a_1v_it563",
-          "sheet": "Bars",
+          "sheet": "Bars | Cocktails",
           "name": "Bar & Lounge",
           "address": "The Bonham",
           "lat": null,
@@ -3902,7 +3902,7 @@
         },
         {
           "id": "res_mti0zygg_t_wx8vs",
-          "sheet": "Bars",
+          "sheet": "Bars | Cocktails",
           "name": "The Dome",
           "address": "",
           "lat": null,
@@ -4305,7 +4305,7 @@
         },
         {
           "id": "plan_muaekpxm_h_y43cf",
-          "sheet": "Bars",
+          "sheet": "Bars | Cocktails",
           "name": "Bluebird",
           "status": "idea",
           "date": "2026-09-28",
@@ -4325,7 +4325,7 @@
           "estimateCategory": "Food & Drink",
           "estimateOriginal": {
             "name": "Bluebird",
-            "sheet": "Bars",
+            "sheet": "Bars | Cocktails",
             "category": "Food & Drink",
             "quantity": 1,
             "cost": null
@@ -4335,7 +4335,7 @@
         },
         {
           "id": "plan_muahnor8_v_i1e4l",
-          "sheet": "Bars",
+          "sheet": "Bars | Cocktails",
           "name": "Colbert",
           "status": "idea",
           "date": "2026-09-28",
@@ -4355,7 +4355,7 @@
           "estimateCategory": "Food & Drink",
           "estimateOriginal": {
             "name": "Colbert",
-            "sheet": "Bars",
+            "sheet": "Bars | Cocktails",
             "category": "Food & Drink",
             "quantity": 1,
             "cost": null
@@ -4365,7 +4365,7 @@
         },
         {
           "id": "plan_muaho18i_y_us1kt",
-          "sheet": "Bars",
+          "sheet": "Bars | Cocktails",
           "name": "The Beauchamp",
           "status": "idea",
           "date": "2026-09-28",
@@ -4385,7 +4385,7 @@
           "estimateCategory": "Food & Drink",
           "estimateOriginal": {
             "name": "The Beauchamp",
-            "sheet": "Bars",
+            "sheet": "Bars | Cocktails",
             "category": "Food & Drink",
             "quantity": 1,
             "cost": null
@@ -4572,7 +4572,7 @@
         },
         {
           "id": "plan_mun5ck5l_2o_88loa",
-          "sheet": "Bars",
+          "sheet": "Bars | Cocktails",
           "name": "Hippodrome",
           "status": "idea",
           "date": "2026-09-27",
@@ -4592,7 +4592,7 @@
           "estimateCategory": "Food & Drink",
           "estimateOriginal": {
             "name": "Hippodrome",
-            "sheet": "Bars",
+            "sheet": "Bars | Cocktails",
             "category": "Food & Drink",
             "quantity": 1,
             "cost": null
@@ -4659,7 +4659,7 @@
         },
         {
           "id": "plan_munaj78y_2y_b9kbp",
-          "sheet": "Bars",
+          "sheet": "Bars | Cocktails",
           "name": "Cafe Boheme",
           "status": "idea",
           "date": "2026-09-28",
@@ -4679,7 +4679,7 @@
           "estimateCategory": "Food & Drink",
           "estimateOriginal": {
             "name": "Cafe Boheme",
-            "sheet": "Bars",
+            "sheet": "Bars | Cocktails",
             "category": "Food & Drink",
             "quantity": 1,
             "cost": null
@@ -4688,7 +4688,7 @@
         },
         {
           "id": "plan_munasti6_31_w01b4",
-          "sheet": "Bars",
+          "sheet": "Bars | Cocktails",
           "name": "The Coach and Horses",
           "status": "idea",
           "date": "2026-09-27",
@@ -4708,7 +4708,7 @@
           "estimateCategory": "Food & Drink",
           "estimateOriginal": {
             "name": "Coach and Horses",
-            "sheet": "Bars",
+            "sheet": "Bars | Cocktails",
             "category": "Food & Drink",
             "quantity": 1,
             "cost": null
@@ -4717,7 +4717,7 @@
         },
         {
           "id": "plan_muoo1hkn_5_2y02v",
-          "sheet": "Bars",
+          "sheet": "Bars | Cocktails",
           "name": "The French House",
           "status": "idea",
           "date": "2026-09-27",
@@ -4738,7 +4738,7 @@
           "estimateCategory": "Food & Drink",
           "estimateOriginal": {
             "name": "The French House",
-            "sheet": "Bars",
+            "sheet": "Bars | Cocktails",
             "category": "Food & Drink",
             "quantity": 1,
             "cost": null
@@ -5005,7 +5005,7 @@
         },
         {
           "id": "res_mtw5j7gm_d_hk2ep",
-          "sheet": "Bars",
+          "sheet": "Bars | Cocktails",
           "name": "Bluebird",
           "address": "Chelsea",
           "lat": null,
@@ -5021,7 +5021,7 @@
         },
         {
           "id": "res_mtw5nlsx_f_uz1ez",
-          "sheet": "Bars",
+          "sheet": "Bars | Cocktails",
           "name": "Stanley's",
           "address": "Chelsea",
           "lat": null,
@@ -5037,7 +5037,7 @@
         },
         {
           "id": "res_mtw5p7gn_h_3hrjv",
-          "sheet": "Bars",
+          "sheet": "Bars | Cocktails",
           "name": "The Garden at Corinthia London",
           "address": "Trafalgar Sq",
           "lat": null,
@@ -5053,7 +5053,7 @@
         },
         {
           "id": "res_mtw5xym9_m_fcx8e",
-          "sheet": "Bars",
+          "sheet": "Bars | Cocktails",
           "name": "The Ivy Chelsea Garden",
           "address": "Chelsea",
           "lat": null,
@@ -5069,7 +5069,7 @@
         },
         {
           "id": "res_mtw66enh_o_bm52e",
-          "sheet": "Bars",
+          "sheet": "Bars | Cocktails",
           "name": "The Connaught",
           "address": "Mayfair",
           "lat": null,
@@ -5085,7 +5085,7 @@
         },
         {
           "id": "res_mtw66qnn_q_vuwp9",
-          "sheet": "Bars",
+          "sheet": "Bars | Cocktails",
           "name": "Franco's",
           "address": "st james",
           "lat": null,
@@ -5101,7 +5101,7 @@
         },
         {
           "id": "res_mtw6bwaq_t_yhwul",
-          "sheet": "Bars",
+          "sheet": "Bars | Cocktails",
           "name": "Colbert",
           "address": "Chelsea",
           "lat": null,
@@ -5117,7 +5117,7 @@
         },
         {
           "id": "res_mu0dgpk5_v_bhxlw",
-          "sheet": "Bars",
+          "sheet": "Bars | Cocktails",
           "name": "Dovetail",
           "address": "Leicester square",
           "lat": null,
@@ -5139,7 +5139,7 @@
         },
         {
           "id": "res_mu0dmjjq_z_hi5ww",
-          "sheet": "Bars",
+          "sheet": "Bars | Cocktails",
           "name": "Gods Rooftop",
           "address": "",
           "lat": null,
@@ -5333,7 +5333,7 @@
         },
         {
           "id": "res_mu1v5gdp_27_4dhe7",
-          "sheet": "Bars",
+          "sheet": "Bars | Cocktails",
           "name": "The Beauchamp",
           "address": "Knightsbridge",
           "lat": null,
@@ -5349,7 +5349,7 @@
         },
         {
           "id": "res_mu3apcng_29_ffy8v",
-          "sheet": "Bars",
+          "sheet": "Bars | Cocktails",
           "name": "Flute",
           "address": "Soho",
           "lat": null,
@@ -5445,7 +5445,7 @@
         },
         {
           "id": "res_mubx9i2e_1a_1enmh",
-          "sheet": "Bars",
+          "sheet": "Bars | Cocktails",
           "name": "28°-50° Wine Workshop & Kitchen",
           "address": "Marylebone",
           "lat": null,
@@ -5509,7 +5509,7 @@
         },
         {
           "id": "res_mug51x2s_1x_wjhdl",
-          "sheet": "Bars",
+          "sheet": "Bars | Cocktails",
           "name": "The Marlborough Head",
           "address": "Covent Garden",
           "lat": null,
@@ -5525,7 +5525,7 @@
         },
         {
           "id": "res_mug7p94w_20_dhe9c",
-          "sheet": "Bars",
+          "sheet": "Bars | Cocktails",
           "name": "Dovetail",
           "address": "Leicester square",
           "lat": null,
@@ -5547,7 +5547,7 @@
         },
         {
           "id": "res_muoo19rz_3_f5p74",
-          "sheet": "Bars",
+          "sheet": "Bars | Cocktails",
           "name": "The French House",
           "address": "",
           "lat": null,
@@ -5693,7 +5693,7 @@
         "Shopping": "https://www.google.com/maps/d/u/0/embed?mid=1OfW-BTzHmlazTWW50UhG-lmpt1GVl4s&ehbc=2E312F",
         "Restaurants": "https://www.google.com/maps/d/u/0/embed?mid=1g_ZKFxA4a5NyxwHKImbOP1LdUOI1ts4&ehbc=2E312F",
         "Cigars": "https://www.google.com/maps/d/u/0/embed?mid=1E4IugDGMc2J8zc1n8-U5LVj1TGhoj4k&ehbc=2E312F",
-        "Bars": "https://www.google.com/maps/d/u/0/embed?mid=17JtustSph_DQVK3QNVy0FSrZ39Jqys4&ehbc=2E312F"
+        "Bars | Cocktails": "https://www.google.com/maps/d/u/0/embed?mid=17JtustSph_DQVK3QNVy0FSrZ39Jqys4&ehbc=2E312F"
       },
       "timelineManualOrder": true,
       "isArchived": true,
