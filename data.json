@@ -1727,10 +1727,32 @@
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1793929149363
+        },
+        {
+          "id": "res_mw4b48at_z_9sflb",
+          "sheet": "Coffee",
+          "name": "Blackbird Coffee Club",
+          "address": "Jan van Eyckplein 7, 8000 Brugge, Belgium",
+          "lat": 51.2118512,
+          "lng": 3.2258364,
+          "priceLevel": null,
+          "priority": null,
+          "estCost": null,
+          "notes": "",
+          "links": [
+            {
+              "id": "link_mw4b47no_y_jspqe",
+              "label": "Official Website",
+              "url": "https://www.blackbird-bruges.com/"
+            }
+          ],
+          "status": "researching",
+          "linkedPlanItemId": null,
+          "createdAt": 1793929182725
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1793929149363,
+      "updatedAt": 1793929182725,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -6167,6 +6189,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw4b48at_10_o8yat",
+      "ts": 1793929182725,
+      "action": "research-added",
+      "detail": "Added \"Blackbird Coffee Club\" to Brugge research"
+    },
+    {
       "id": "log_mw4b3ik3_x_fwveh",
       "ts": 1793929149363,
       "action": "research-added",
@@ -7359,12 +7387,6 @@
       "ts": 1790291026612,
       "action": "research-added",
       "detail": "Added \"The Marlborough Head\" to London research"
-    },
-    {
-      "id": "log_mug4sv6d_1w_bfga6",
-      "ts": 1790290604245,
-      "action": "sheet-visibility-changed",
-      "detail": "Hid \"Pubs\" for London"
     }
   ]
 }
