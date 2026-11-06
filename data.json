@@ -1847,10 +1847,32 @@
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1793929455126
+        },
+        {
+          "id": "res_mw4bcv1b_1f_rhrbg",
+          "sheet": "Restaurants",
+          "name": "Au Petit Grand BV",
+          "address": "Philipstockstraat 18, 8000 Brugge, Belgium",
+          "lat": 51.2094637,
+          "lng": 3.2260896,
+          "priceLevel": null,
+          "priority": null,
+          "estCost": null,
+          "notes": "",
+          "links": [
+            {
+              "id": "link_mw4bcu9z_1e_8m693",
+              "label": "Official Website",
+              "url": "http://www.aupetitgrand.be/"
+            }
+          ],
+          "status": "researching",
+          "linkedPlanItemId": null,
+          "createdAt": 1793929585439
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1793929455126,
+      "updatedAt": 1793929585439,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -6287,6 +6309,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw4bcv1b_1g_1t5q0",
+      "ts": 1793929585439,
+      "action": "research-added",
+      "detail": "Added \"Au Petit Grand BV\" to Brugge research"
+    },
+    {
       "id": "log_mw4ba2hi_1d_h0lh4",
       "ts": 1793929455126,
       "action": "research-added",
@@ -7479,12 +7507,6 @@
       "ts": 1790295649889,
       "action": "plan-item-edited",
       "detail": "Updated \"Harrys\" (Restaurants) on London"
-    },
-    {
-      "id": "log_mug7sqdk_26_pc9er",
-      "ts": 1790295636872,
-      "action": "plan-item-added",
-      "detail": "Added \"Flat iron\" (Restaurants) on London"
     }
   ]
 }
