@@ -1891,10 +1891,32 @@
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1793929677460
+        },
+        {
+          "id": "res_mw4bg428_1l_iwbb2",
+          "sheet": "Restaurants",
+          "name": "Pigeon House",
+          "address": "Sint-Jansplein 12, 8000 Brugge, Belgium",
+          "lat": 51.2107083,
+          "lng": 3.2263167,
+          "priceLevel": null,
+          "priority": null,
+          "estCost": null,
+          "notes": "",
+          "links": [
+            {
+              "id": "link_mw4bg3dz_1k_jr204",
+              "label": "Official Website",
+              "url": "http://pigeonhouse.be/"
+            }
+          ],
+          "status": "researching",
+          "linkedPlanItemId": null,
+          "createdAt": 1793929737104
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1793929677460,
+      "updatedAt": 1793929737104,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -6331,6 +6353,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw4bg428_1m_amora",
+      "ts": 1793929737104,
+      "action": "research-added",
+      "detail": "Added \"Pigeon House\" to Brugge research"
+    },
+    {
       "id": "log_mw4beu1h_1j_ifzoy",
       "ts": 1793929677461,
       "action": "research-added",
@@ -7523,12 +7551,6 @@
       "ts": 1790697952324,
       "action": "plan-marked-visited",
       "detail": "Marked \"Mimi\" as visited on London"
-    },
-    {
-      "id": "log_mug7t4tp_28_tw3ch",
-      "ts": 1790295655597,
-      "action": "plan-item-edited",
-      "detail": "Updated \"Flat iron\" (Restaurants) on London"
     }
   ]
 }
