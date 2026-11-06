@@ -1771,10 +1771,32 @@
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1793929197471
+        },
+        {
+          "id": "res_mw4b4wl4_15_486mi",
+          "sheet": "Coffee",
+          "name": "Brapas",
+          "address": "Sint-Amandsstraat 30, 8000 Brugge, Belgium",
+          "lat": 51.208492299999996,
+          "lng": 3.2220795,
+          "priceLevel": null,
+          "priority": null,
+          "estCost": null,
+          "notes": "",
+          "links": [
+            {
+              "id": "link_mw4b4w02_14_de2c0",
+              "label": "Official Website",
+              "url": "https://www.brapas.be/"
+            }
+          ],
+          "status": "researching",
+          "linkedPlanItemId": null,
+          "createdAt": 1793929214200
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1793929197471,
+      "updatedAt": 1793929214200,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -6211,6 +6233,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw4b4wl4_16_6ftcl",
+      "ts": 1793929214200,
+      "action": "research-added",
+      "detail": "Added \"Brapas\" to Brugge research"
+    },
+    {
       "id": "log_mw4b4jof_13_ycfbi",
       "ts": 1793929197471,
       "action": "research-added",
@@ -7403,12 +7431,6 @@
       "ts": 1790295480285,
       "action": "plan-item-deleted",
       "detail": "Removed \"Gods Rooftop\" from London"
-    },
-    {
-      "id": "log_mug7p94w_21_ngrr1",
-      "ts": 1790295474560,
-      "action": "plan-moved-to-research",
-      "detail": "Moved \"Dovetail\" from Plan back to Research on London"
     }
   ]
 }
