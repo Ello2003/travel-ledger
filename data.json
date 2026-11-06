@@ -1645,10 +1645,26 @@
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1793929045223
+        },
+        {
+          "id": "res_mw4b1e0w_n_w50l0",
+          "sheet": "Breakfasts | Bakeries | Casual Dining",
+          "name": "Bakery St. Paul",
+          "address": "Boogschutterslaan 13, 8310 Brugge, Belgium",
+          "lat": 51.214571799999995,
+          "lng": 3.2509657,
+          "priceLevel": null,
+          "priority": null,
+          "estCost": null,
+          "notes": "",
+          "links": [],
+          "status": "researching",
+          "linkedPlanItemId": null,
+          "createdAt": 1793929050176
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1793929045223,
+      "updatedAt": 1793929050176,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -6085,6 +6101,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw4b1e0w_o_4i5si",
+      "ts": 1793929050176,
+      "action": "research-added",
+      "detail": "Added \"Bakery St. Paul\" to Brugge research"
+    },
+    {
       "id": "log_mw4b1a7b_m_xcqj3",
       "ts": 1793929045223,
       "action": "research-added",
@@ -7277,12 +7299,6 @@
       "ts": 1790289412106,
       "action": "packing-item-added",
       "detail": "Added \"Green Boglioli\" to London packing list"
-    },
-    {
-      "id": "log_mug433t2_1r_5csor",
-      "ts": 1790289402374,
-      "action": "packing-item-added",
-      "detail": "Added \"Cavour Flannel Brown\" to London packing list"
     }
   ]
 }
