@@ -1913,10 +1913,32 @@
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1793929737104
+        },
+        {
+          "id": "res_mw4bh5j5_1o_01fyj",
+          "sheet": "Restaurants",
+          "name": "De Gastro",
+          "address": "Braambergstraat 6, 8000 Brugge, Belgium",
+          "lat": 51.2074419,
+          "lng": 3.228262,
+          "priceLevel": null,
+          "priority": null,
+          "estCost": null,
+          "notes": "",
+          "links": [
+            {
+              "id": "link_mw4bh4vu_1n_8h9f9",
+              "label": "Official Website",
+              "url": "http://www.degastro.be/"
+            }
+          ],
+          "status": "researching",
+          "linkedPlanItemId": null,
+          "createdAt": 1793929785665
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1793929737104,
+      "updatedAt": 1793929785665,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -6353,6 +6375,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw4bh5j5_1p_i8alh",
+      "ts": 1793929785665,
+      "action": "research-added",
+      "detail": "Added \"De Gastro\" to Brugge research"
+    },
+    {
       "id": "log_mw4bg428_1m_amora",
       "ts": 1793929737104,
       "action": "research-added",
@@ -7545,12 +7573,6 @@
       "ts": 1790697956715,
       "action": "plan-marked-visited",
       "detail": "Marked \"Blacklock\" as visited on London"
-    },
-    {
-      "id": "log_mumvbqys_29_qabad",
-      "ts": 1790697952324,
-      "action": "plan-marked-visited",
-      "detail": "Marked \"Mimi\" as visited on London"
     }
   ]
 }
