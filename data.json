@@ -1937,52 +1937,30 @@
           "createdAt": 1793929785665
         },
         {
-          "id": "res_mw4bi9fp_1r_k7d3h",
+          "id": "res_mw4bko1x_1x_phjlp",
           "sheet": "Restaurants",
-          "name": "De Pepermolen",
-          "address": "Langestraat 16, 8000 Brugge, Belgium",
-          "lat": 51.20962,
-          "lng": 3.2322634,
+          "name": "Seafoodbar Belge",
+          "address": "Eiermarkt 14, 8000 Brugge, Belgium",
+          "lat": 51.209329800000006,
+          "lng": 3.2236027999999997,
           "priceLevel": null,
           "priority": null,
           "estCost": null,
           "notes": "",
           "links": [
             {
-              "id": "link_mw4bi8t5_1q_83x97",
+              "id": "link_mw4bkmz7_1w_mj264",
               "label": "Official Website",
-              "url": "https://www.depepermolen.com/"
+              "url": "http://www.seafoodbar-belge.be/"
             }
           ],
           "status": "researching",
           "linkedPlanItemId": null,
-          "createdAt": 1793929837381
-        },
-        {
-          "id": "res_mw4bjbh0_1u_6a2wf",
-          "sheet": "Restaurants",
-          "name": "Restaurant Chagall",
-          "address": "Sint-Amandsstraat 40, 8000 Brugge, Belgium",
-          "lat": 51.208368099999994,
-          "lng": 3.2217721,
-          "priceLevel": null,
-          "priority": null,
-          "estCost": null,
-          "notes": "",
-          "links": [
-            {
-              "id": "link_mw4bjak3_1t_a7wbk",
-              "label": "Official Website",
-              "url": "https://www.restaurantchagall.be/"
-            }
-          ],
-          "status": "researching",
-          "linkedPlanItemId": null,
-          "createdAt": 1793929886676
+          "createdAt": 1793929949637
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1793929886676,
+      "updatedAt": 1793929949637,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -6419,16 +6397,10 @@
   },
   "activityLog": [
     {
-      "id": "log_mw4bjbh0_1v_vok5o",
-      "ts": 1793929886676,
+      "id": "log_mw4bko1x_1y_wcapn",
+      "ts": 1793929949637,
       "action": "research-added",
-      "detail": "Added \"Restaurant Chagall\" to Brugge research"
-    },
-    {
-      "id": "log_mw4bi9fp_1s_0o226",
-      "ts": 1793929837381,
-      "action": "research-added",
-      "detail": "Added \"De Pepermolen\" to Brugge research"
+      "detail": "Added \"Seafoodbar Belge\" to Brugge research"
     },
     {
       "id": "log_mw4bh5j5_1p_i8alh",
@@ -7617,6 +7589,12 @@
       "ts": 1790697973040,
       "action": "plan-marked-visited",
       "detail": "Marked \"Colbert\" as visited on London"
+    },
+    {
+      "id": "log_mumvbw16_2b_357eu",
+      "ts": 1790697958890,
+      "action": "plan-marked-visited",
+      "detail": "Marked \"Devonshire\" as visited on London"
     }
   ]
 }
