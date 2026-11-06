@@ -1793,10 +1793,26 @@
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1793929214200
+        },
+        {
+          "id": "res_mw4b7r7r_17_3y2cn",
+          "sheet": "Coffee",
+          "name": "Hof Café",
+          "address": "Markt 3, 8000 Brugge, Belgium",
+          "lat": 51.2089925,
+          "lng": 3.2253825,
+          "priceLevel": null,
+          "priority": null,
+          "estCost": null,
+          "notes": "",
+          "links": [],
+          "status": "researching",
+          "linkedPlanItemId": null,
+          "createdAt": 1793929347207
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1793929214200,
+      "updatedAt": 1793929347207,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -6233,6 +6249,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw4b7r7r_18_08kyf",
+      "ts": 1793929347207,
+      "action": "research-added",
+      "detail": "Added \"Hof Café\" to Brugge research"
+    },
+    {
       "id": "log_mw4b4wl4_16_6ftcl",
       "ts": 1793929214200,
       "action": "research-added",
@@ -7425,12 +7447,6 @@
       "ts": 1790295586831,
       "action": "plan-item-edited",
       "detail": "Updated \"Suitsupply\" (Shopping) on London"
-    },
-    {
-      "id": "log_mug7pdjx_22_eoc9u",
-      "ts": 1790295480285,
-      "action": "plan-item-deleted",
-      "detail": "Removed \"Gods Rooftop\" from London"
     }
   ]
 }
