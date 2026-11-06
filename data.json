@@ -1541,7 +1541,7 @@
         {
           "id": "res_mw4anhtn_8_m2wst",
           "sheet": "Breakfasts | Bakeries | Casual Dining",
-          "name": "Eiermarkt 7",
+          "name": "Tasty Sandwich",
           "address": "Eiermarkt 7, 8000 Brugge, Belgium",
           "lat": 51.2094416,
           "lng": 3.2230032,
@@ -1556,7 +1556,7 @@
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1793928401915,
+      "updatedAt": 1793928413006,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -5993,6 +5993,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw4anqdq_a_eawc7",
+      "ts": 1793928413006,
+      "action": "research-edited",
+      "detail": "Updated \"Tasty Sandwich\" in Brugge research"
+    },
+    {
       "id": "log_mw4anhtn_9_hxv73",
       "ts": 1793928401915,
       "action": "research-added",
@@ -7185,12 +7191,6 @@
       "ts": 1790288549441,
       "action": "packing-item-added",
       "detail": "Added \"Phone / Charger\" to London packing list"
-    },
-    {
-      "id": "log_mug3kktl_1f_02oub",
-      "ts": 1790288537961,
-      "action": "packing-item-added",
-      "detail": "Added \"Plasters\" to London packing list"
     }
   ]
 }
