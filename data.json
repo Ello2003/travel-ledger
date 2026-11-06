@@ -1553,10 +1553,32 @@
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1793928401915
+        },
+        {
+          "id": "res_mw4ap5uz_c_rr7vg",
+          "sheet": "Breakfasts | Bakeries | Casual Dining",
+          "name": "Van Mullem 🍞",
+          "address": "Vlamingstraat 56, 8000 Brugge, Belgium",
+          "lat": 51.210648,
+          "lng": 3.2245939999999997,
+          "priceLevel": null,
+          "priority": null,
+          "estCost": null,
+          "notes": "",
+          "links": [
+            {
+              "id": "link_mw4ap4j5_b_j1ffy",
+              "label": "Official Website",
+              "url": "https://patisserie-vanmullem.be/"
+            }
+          ],
+          "status": "researching",
+          "linkedPlanItemId": null,
+          "createdAt": 1793928479723
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1793928413006,
+      "updatedAt": 1793928479723,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -5993,6 +6015,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw4ap5uz_d_idxkt",
+      "ts": 1793928479723,
+      "action": "research-added",
+      "detail": "Added \"Van Mullem 🍞\" to Brugge research"
+    },
+    {
       "id": "log_mw4anqdq_a_eawc7",
       "ts": 1793928413006,
       "action": "research-edited",
@@ -7185,12 +7213,6 @@
       "ts": 1790288553207,
       "action": "packing-item-added",
       "detail": "Added \"Garmin\" to London packing list"
-    },
-    {
-      "id": "log_mug3ktoh_1h_nhnfw",
-      "ts": 1790288549441,
-      "action": "packing-item-added",
-      "detail": "Added \"Phone / Charger\" to London packing list"
     }
   ]
 }
