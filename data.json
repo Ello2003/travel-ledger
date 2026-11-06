@@ -1749,10 +1749,32 @@
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1793929182725
+        },
+        {
+          "id": "res_mw4b4jof_12_mfrwf",
+          "sheet": "Coffee",
+          "name": "EspressoBar - I Love Coffee",
+          "address": "Sint-Jakobsstraat 10, 8000 Brugge, Belgium",
+          "lat": 51.209469899999995,
+          "lng": 3.2225167,
+          "priceLevel": null,
+          "priority": null,
+          "estCost": null,
+          "notes": "",
+          "links": [
+            {
+              "id": "link_mw4b4j2f_11_slwm9",
+              "label": "Official Website",
+              "url": "https://ilcoffee.be/"
+            }
+          ],
+          "status": "researching",
+          "linkedPlanItemId": null,
+          "createdAt": 1793929197471
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1793929182725,
+      "updatedAt": 1793929197471,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -6189,6 +6211,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw4b4jof_13_ycfbi",
+      "ts": 1793929197471,
+      "action": "research-added",
+      "detail": "Added \"EspressoBar - I Love Coffee\" to Brugge research"
+    },
+    {
       "id": "log_mw4b48at_10_o8yat",
       "ts": 1793929182725,
       "action": "research-added",
@@ -7381,12 +7409,6 @@
       "ts": 1790295474560,
       "action": "plan-moved-to-research",
       "detail": "Moved \"Dovetail\" from Plan back to Research on London"
-    },
-    {
-      "id": "log_mug51x2s_1y_lwox6",
-      "ts": 1790291026612,
-      "action": "research-added",
-      "detail": "Added \"The Marlborough Head\" to London research"
     }
   ]
 }
