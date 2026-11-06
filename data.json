@@ -43,7 +43,7 @@
       "color": "#35695c"
     },
     {
-      "key": "Transport / Transfers",
+      "key": "Transport | Transfers",
       "color": "#5b6672"
     },
     {
@@ -608,7 +608,7 @@
       "planItems": [
         {
           "id": "plan_murk7w6d_b_q4ho8",
-          "sheet": "Transport / Transfers",
+          "sheet": "Transport | Transfers",
           "name": "Train",
           "status": "idea",
           "date": "2026-12-11",
@@ -629,7 +629,7 @@
           "estimateCategory": "Transportation",
           "estimateOriginal": {
             "name": "Train",
-            "sheet": "Transport / Transfers",
+            "sheet": "Transport | Transfers",
             "category": "Transportation",
             "quantity": 1,
             "cost": null
@@ -637,7 +637,7 @@
         },
         {
           "id": "plan_mv8ptu6b_c_n5quv",
-          "sheet": "Transport / Transfers",
+          "sheet": "Transport | Transfers",
           "name": "Airport Parking",
           "status": "idea",
           "date": "2026-12-11",
@@ -664,7 +664,7 @@
           "estimateCategory": "Transportation",
           "estimateOriginal": {
             "name": "Airport Parking",
-            "sheet": "Transport / Transfers",
+            "sheet": "Transport | Transfers",
             "category": "Transportation",
             "quantity": 1,
             "cost": 40
@@ -672,7 +672,7 @@
         },
         {
           "id": "plan_mv8pwmxu_i_bf5z5",
-          "sheet": "Transport / Transfers",
+          "sheet": "Transport | Transfers",
           "name": "Brussels to Brugge Train",
           "status": "idea",
           "date": "2026-12-11",
@@ -693,7 +693,7 @@
           "estimateCategory": "Transportation",
           "estimateOriginal": {
             "name": "Brussels to Brugge Train",
-            "sheet": "Transport / Transfers",
+            "sheet": "Transport | Transfers",
             "category": "Transportation",
             "quantity": 1,
             "cost": 20
@@ -701,7 +701,7 @@
         },
         {
           "id": "plan_mv8pxrpq_l_0xfa9",
-          "sheet": "Transport / Transfers",
+          "sheet": "Transport | Transfers",
           "name": "Petrol",
           "status": "idea",
           "date": "2026-12-11",
@@ -722,7 +722,7 @@
           "estimateCategory": "Transportation",
           "estimateOriginal": {
             "name": "Petrol",
-            "sheet": "Transport / Transfers",
+            "sheet": "Transport | Transfers",
             "category": "Transportation",
             "quantity": 1,
             "cost": 60
@@ -762,7 +762,7 @@
       "research": [
         {
           "id": "res_murk7nx3_9_b0buk",
-          "sheet": "Transport / Transfers",
+          "sheet": "Transport | Transfers",
           "name": "Brussels to Brugge Train",
           "address": "",
           "lat": null,
@@ -778,7 +778,7 @@
         },
         {
           "id": "res_mv8ptojb_9_xkqqd",
-          "sheet": "Transport / Transfers",
+          "sheet": "Transport | Transfers",
           "name": "Airport Parking",
           "address": "Jet Parks 3 / Jet Parks Ringway",
           "lat": null,
@@ -800,7 +800,7 @@
         },
         {
           "id": "res_mv8pvzk1_f_0fxvg",
-          "sheet": "Transport / Transfers",
+          "sheet": "Transport | Transfers",
           "name": "Petrol",
           "address": "",
           "lat": null,
@@ -1673,7 +1673,7 @@
         },
         {
           "id": "plan_ms9hi1u3_3_hk0ah",
-          "sheet": "Transport / Transfers",
+          "sheet": "Transport | Transfers",
           "name": "Train",
           "status": "booked",
           "date": "2026-08-04",
@@ -1695,7 +1695,7 @@
           "estimateCategory": "Transportation",
           "estimateOriginal": {
             "name": "Train",
-            "sheet": "Transport / Transfers",
+            "sheet": "Transport | Transfers",
             "category": "Transportation",
             "quantity": 1,
             "cost": null
@@ -3216,7 +3216,7 @@
         },
         {
           "id": "plan_mv9zqs02_c_xndxz",
-          "sheet": "Transport / Transfers",
+          "sheet": "Transport | Transfers",
           "name": "Petrol",
           "status": "idea",
           "date": "2026-12-04",
@@ -3237,7 +3237,7 @@
           "estimateCategory": "Transportation",
           "estimateOriginal": {
             "name": "Petrol",
-            "sheet": "Transport / Transfers",
+            "sheet": "Transport | Transfers",
             "category": "Transportation",
             "quantity": 1,
             "cost": 50
@@ -4083,7 +4083,7 @@
         },
         {
           "id": "plan_mu0lmv7w_1w_pfi7k",
-          "sheet": "Transport / Transfers",
+          "sheet": "Transport | Transfers",
           "name": "NCL to LDN",
           "status": "idea",
           "date": "2026-09-27",
@@ -4103,7 +4103,7 @@
           "estimateCategory": "Transportation",
           "estimateOriginal": {
             "name": "ncl to ldn",
-            "sheet": "Transport / Transfers",
+            "sheet": "Transport | Transfers",
             "category": "Transportation",
             "quantity": 1,
             "cost": 100.09
@@ -4765,7 +4765,7 @@
         },
         {
           "id": "res_mtm3lu9g_5_03xon",
-          "sheet": "Transport / Transfers",
+          "sheet": "Transport | Transfers",
           "name": "NCL to LDN",
           "address": "",
           "lat": null,
