@@ -1521,10 +1521,26 @@
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1793928101289
+        },
+        {
+          "id": "res_mw4amkco_6_m9za1",
+          "sheet": "Breakfasts | Bakeries | Casual Dining",
+          "name": "Boulangerie Schaeverbeke",
+          "address": "Schaarstraat 2, 8000 Brugge, Belgium",
+          "lat": 51.20452160000001,
+          "lng": 3.232078,
+          "priceLevel": null,
+          "priority": null,
+          "estCost": null,
+          "notes": "",
+          "links": [],
+          "status": "researching",
+          "linkedPlanItemId": null,
+          "createdAt": 1793928358536
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1793928101289,
+      "updatedAt": 1793928358536,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -5961,6 +5977,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw4amkco_7_jk8lz",
+      "ts": 1793928358536,
+      "action": "research-added",
+      "detail": "Added \"Boulangerie Schaeverbeke\" to Brugge research"
+    },
+    {
       "id": "log_mw4ah1ux_5_monhx",
       "ts": 1793928101289,
       "action": "research-added",
@@ -7153,12 +7175,6 @@
       "ts": 1790288532003,
       "action": "packing-item-added",
       "detail": "Added \"Venlafaxine\" to London packing list"
-    },
-    {
-      "id": "log_mug3k11k_1b_i6nvs",
-      "ts": 1790288512328,
-      "action": "packing-item-added",
-      "detail": "Added \"Soap\" to London packing list"
     }
   ]
 }
