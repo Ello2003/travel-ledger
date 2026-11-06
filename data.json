@@ -1597,10 +1597,26 @@
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1793928997787
+        },
+        {
+          "id": "res_mw4b0y31_h_icqct",
+          "sheet": "Breakfasts | Bakeries | Casual Dining",
+          "name": "Bakkerij Sint-Paulus",
+          "address": "Vlamingstraat 25, 8000 Brugge, Belgium",
+          "lat": 51.2103397,
+          "lng": 3.2243207999999997,
+          "priceLevel": null,
+          "priority": null,
+          "estCost": null,
+          "notes": "",
+          "links": [],
+          "status": "researching",
+          "linkedPlanItemId": null,
+          "createdAt": 1793929029517
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1793928997787,
+      "updatedAt": 1793929029517,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -6037,6 +6053,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw4b0y31_i_4803q",
+      "ts": 1793929029517,
+      "action": "research-added",
+      "detail": "Added \"Bakkerij Sint-Paulus\" to Brugge research"
+    },
+    {
       "id": "log_mw4b09ln_g_d7cc7",
       "ts": 1793928997787,
       "action": "research-added",
@@ -7229,12 +7251,6 @@
       "ts": 1790289197492,
       "action": "packing-item-added",
       "detail": "Added \"Astorflex\" to London packing list"
-    },
-    {
-      "id": "log_mug3yj9p_1l_jfod0",
-      "ts": 1790289189133,
-      "action": "packing-item-added",
-      "detail": "Added \"Gucci 1953 Loafer\" to London packing list"
     }
   ]
 }
