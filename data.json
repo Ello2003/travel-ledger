@@ -1661,10 +1661,32 @@
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1793929050176
+        },
+        {
+          "id": "res_mw4b2qza_q_gxuxf",
+          "sheet": "Coffee",
+          "name": "Nuba Cafe Brugge",
+          "address": "Oude Burg 10, 8000 Brugge, Belgium",
+          "lat": 51.2072618,
+          "lng": 3.2247989,
+          "priceLevel": null,
+          "priority": null,
+          "estCost": null,
+          "notes": "",
+          "links": [
+            {
+              "id": "link_mw4b2qbo_p_4bibj",
+              "label": "Official Website",
+              "url": "https://www.instagram.com/nubacafe/"
+            }
+          ],
+          "status": "researching",
+          "linkedPlanItemId": null,
+          "createdAt": 1793929113622
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1793929050176,
+      "updatedAt": 1793929113622,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -6101,6 +6123,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw4b2qza_r_72qw6",
+      "ts": 1793929113622,
+      "action": "research-added",
+      "detail": "Added \"Nuba Cafe Brugge\" to Brugge research"
+    },
+    {
       "id": "log_mw4b1e0w_o_4i5si",
       "ts": 1793929050176,
       "action": "research-added",
@@ -7293,12 +7321,6 @@
       "ts": 1790290579539,
       "action": "sheet-visibility-changed",
       "detail": "Hid \"Pubs\" for London"
-    },
-    {
-      "id": "log_mug43bbe_1t_hnvqc",
-      "ts": 1790289412106,
-      "action": "packing-item-added",
-      "detail": "Added \"Green Boglioli\" to London packing list"
     }
   ]
 }
