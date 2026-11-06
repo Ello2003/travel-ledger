@@ -1294,14 +1294,20 @@
           "id": "res_mvvn6hqb_1t_itnt0",
           "sheet": "Shopping",
           "name": "Käthe Wohlfahrt",
-          "address": "",
-          "lat": null,
-          "lng": null,
+          "address": "Breidelstraat 4, 8000 Brugge, Belgium",
+          "lat": 51.2084529,
+          "lng": 3.2254240999999997,
           "priceLevel": null,
           "priority": null,
           "estCost": null,
           "notes": "Christmas Shop",
-          "links": [],
+          "links": [
+            {
+              "id": "link_mw4aglfh_2_8phbp",
+              "label": "Official Website",
+              "url": "https://www.kaethe-wohlfahrt.com/"
+            }
+          ],
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1793405248067
@@ -1502,7 +1508,7 @@
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1793923350231,
+      "updatedAt": 1793928081466,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -5939,6 +5945,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw4agmkb_3_5r4m4",
+      "ts": 1793928081467,
+      "action": "research-edited",
+      "detail": "Updated \"Käthe Wohlfahrt\" in Brugge research"
+    },
+    {
       "id": "log_mw47n7x3_8_3ntzo",
       "ts": 1793923350231,
       "action": "research-added",
@@ -7131,12 +7143,6 @@
       "ts": 1790288507894,
       "action": "packing-item-added",
       "detail": "Added \"toothpaste\" to London packing list"
-    },
-    {
-      "id": "log_mug3ju2v_17_4k31f",
-      "ts": 1790288503303,
-      "action": "packing-item-added",
-      "detail": "Added \"Toothbrush\" to London packing list"
     }
   ]
 }
