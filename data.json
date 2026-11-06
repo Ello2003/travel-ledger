@@ -1705,10 +1705,32 @@
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1793929131580
+        },
+        {
+          "id": "res_mw4b3ik3_w_t0il9",
+          "sheet": "Coffee",
+          "name": "Les Coquettes Le Café",
+          "address": "Braambergstraat 12 a, 8000 Brugge, Belgium",
+          "lat": 51.2075563,
+          "lng": 3.2286907,
+          "priceLevel": null,
+          "priority": null,
+          "estCost": null,
+          "notes": "",
+          "links": [
+            {
+              "id": "link_mw4b3hom_v_q6abq",
+              "label": "Official Website",
+              "url": "http://www.lescoquettes.be/"
+            }
+          ],
+          "status": "researching",
+          "linkedPlanItemId": null,
+          "createdAt": 1793929149363
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1793929131581,
+      "updatedAt": 1793929149363,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -6145,6 +6167,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw4b3ik3_x_fwveh",
+      "ts": 1793929149363,
+      "action": "research-added",
+      "detail": "Added \"Les Coquettes Le Café\" to Brugge research"
+    },
+    {
       "id": "log_mw4b34u5_u_5jty4",
       "ts": 1793929131581,
       "action": "research-added",
@@ -7337,12 +7365,6 @@
       "ts": 1790290604245,
       "action": "sheet-visibility-changed",
       "detail": "Hid \"Pubs\" for London"
-    },
-    {
-      "id": "log_mug4sjxb_1v_b7668",
-      "ts": 1790290589663,
-      "action": "sheet-visibility-changed",
-      "detail": "Showed \"Pubs\" for London"
     }
   ]
 }
