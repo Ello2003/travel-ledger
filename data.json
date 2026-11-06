@@ -1957,10 +1957,32 @@
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1793929837381
+        },
+        {
+          "id": "res_mw4bjbh0_1u_6a2wf",
+          "sheet": "Restaurants",
+          "name": "Restaurant Chagall",
+          "address": "Sint-Amandsstraat 40, 8000 Brugge, Belgium",
+          "lat": 51.208368099999994,
+          "lng": 3.2217721,
+          "priceLevel": null,
+          "priority": null,
+          "estCost": null,
+          "notes": "",
+          "links": [
+            {
+              "id": "link_mw4bjak3_1t_a7wbk",
+              "label": "Official Website",
+              "url": "https://www.restaurantchagall.be/"
+            }
+          ],
+          "status": "researching",
+          "linkedPlanItemId": null,
+          "createdAt": 1793929886676
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1793929837381,
+      "updatedAt": 1793929886676,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -6397,6 +6419,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw4bjbh0_1v_vok5o",
+      "ts": 1793929886676,
+      "action": "research-added",
+      "detail": "Added \"Restaurant Chagall\" to Brugge research"
+    },
+    {
       "id": "log_mw4bi9fp_1s_0o226",
       "ts": 1793929837381,
       "action": "research-added",
@@ -7589,12 +7617,6 @@
       "ts": 1790697973040,
       "action": "plan-marked-visited",
       "detail": "Marked \"Colbert\" as visited on London"
-    },
-    {
-      "id": "log_mumvbw16_2b_357eu",
-      "ts": 1790697958890,
-      "action": "plan-marked-visited",
-      "detail": "Marked \"Devonshire\" as visited on London"
     }
   ]
 }
