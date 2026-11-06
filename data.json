@@ -1683,10 +1683,32 @@
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1793929113622
+        },
+        {
+          "id": "res_mw4b34u4_t_d481t",
+          "sheet": "Coffee",
+          "name": "Coffeebar Adriaan",
+          "address": "Adriaan Willaertstraat 7, 8000 Brugge, Belgium",
+          "lat": 51.2108078,
+          "lng": 3.2237238,
+          "priceLevel": null,
+          "priority": null,
+          "estCost": null,
+          "notes": "",
+          "links": [
+            {
+              "id": "link_mw4b348x_s_q2blg",
+              "label": "Official Website",
+              "url": "http://www.coffeebaradriaan.be/"
+            }
+          ],
+          "status": "researching",
+          "linkedPlanItemId": null,
+          "createdAt": 1793929131580
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1793929113622,
+      "updatedAt": 1793929131581,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -6123,6 +6145,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw4b34u5_u_5jty4",
+      "ts": 1793929131581,
+      "action": "research-added",
+      "detail": "Added \"Coffeebar Adriaan\" to Brugge research"
+    },
+    {
       "id": "log_mw4b2qza_r_72qw6",
       "ts": 1793929113622,
       "action": "research-added",
@@ -7315,12 +7343,6 @@
       "ts": 1790290589663,
       "action": "sheet-visibility-changed",
       "detail": "Showed \"Pubs\" for London"
-    },
-    {
-      "id": "log_mug4sc43_1u_uy4zl",
-      "ts": 1790290579539,
-      "action": "sheet-visibility-changed",
-      "detail": "Hid \"Pubs\" for London"
     }
   ]
 }
