@@ -1629,10 +1629,26 @@
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1793929035947
+        },
+        {
+          "id": "res_mw4b1a7b_l_j2mo6",
+          "sheet": "Breakfasts | Bakeries | Casual Dining",
+          "name": "Bakery Sint-Paulus",
+          "address": "Monnikenwerve 101, 8000 Brugge, Belgium",
+          "lat": 51.2493802,
+          "lng": 3.2009908,
+          "priceLevel": null,
+          "priority": null,
+          "estCost": null,
+          "notes": "",
+          "links": [],
+          "status": "researching",
+          "linkedPlanItemId": null,
+          "createdAt": 1793929045223
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1793929035947,
+      "updatedAt": 1793929045223,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -6069,6 +6085,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw4b1a7b_m_xcqj3",
+      "ts": 1793929045223,
+      "action": "research-added",
+      "detail": "Added \"Bakery Sint-Paulus\" to Brugge research"
+    },
+    {
       "id": "log_mw4b131o_k_muem3",
       "ts": 1793929035948,
       "action": "research-added",
@@ -7261,12 +7283,6 @@
       "ts": 1790289402374,
       "action": "packing-item-added",
       "detail": "Added \"Cavour Flannel Brown\" to London packing list"
-    },
-    {
-      "id": "log_mug42t5y_1p_qtrqz",
-      "ts": 1790289388582,
-      "action": "packing-item-added",
-      "detail": "Added \"Navy Linen Cavour\" to London packing list"
     }
   ]
 }
