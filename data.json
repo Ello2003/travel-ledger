@@ -1809,10 +1809,26 @@
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1793929347207
+        },
+        {
+          "id": "res_mw4b8sxc_19_qxaxo",
+          "sheet": "Breakfasts | Bakeries | Casual Dining",
+          "name": "CROQUES & COFFEE",
+          "address": "Burg 15/7, 8000 Brugge, Belgium",
+          "lat": 51.2082183,
+          "lng": 3.2262567,
+          "priceLevel": null,
+          "priority": null,
+          "estCost": null,
+          "notes": "",
+          "links": [],
+          "status": "researching",
+          "linkedPlanItemId": null,
+          "createdAt": 1793929396080
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1793929347207,
+      "updatedAt": 1793929396080,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -6249,6 +6265,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw4b8sxc_1a_9bivq",
+      "ts": 1793929396080,
+      "action": "research-added",
+      "detail": "Added \"CROQUES & COFFEE\" to Brugge research"
+    },
+    {
       "id": "log_mw4b7r7r_18_08kyf",
       "ts": 1793929347207,
       "action": "research-added",
@@ -7439,12 +7461,6 @@
     {
       "id": "log_mug7s061_24_42ghy",
       "ts": 1790295602905,
-      "action": "plan-item-edited",
-      "detail": "Updated \"Suitsupply\" (Shopping) on London"
-    },
-    {
-      "id": "log_mug7rnrj_23_sqtpl",
-      "ts": 1790295586831,
       "action": "plan-item-edited",
       "detail": "Updated \"Suitsupply\" (Shopping) on London"
     }
