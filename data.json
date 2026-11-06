@@ -1575,10 +1575,32 @@
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1793928479723
+        },
+        {
+          "id": "res_mw4b09ln_f_c2wo0",
+          "sheet": "Breakfasts | Bakeries | Casual Dining",
+          "name": "Carpe Diem Bakery & Tea-room",
+          "address": "Wijngaardstraat 8, 8000 Brugge, Belgium",
+          "lat": 51.2023,
+          "lng": 3.2253277999999996,
+          "priceLevel": null,
+          "priority": null,
+          "estCost": null,
+          "notes": "",
+          "links": [
+            {
+              "id": "link_mw4b08xu_e_ixxx3",
+              "label": "Official Website",
+              "url": "http://www.tearoom-carpediem.be/"
+            }
+          ],
+          "status": "researching",
+          "linkedPlanItemId": null,
+          "createdAt": 1793928997787
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1793928479723,
+      "updatedAt": 1793928997787,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -6015,6 +6037,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw4b09ln_g_d7cc7",
+      "ts": 1793928997787,
+      "action": "research-added",
+      "detail": "Added \"Carpe Diem Bakery & Tea-room\" to Brugge research"
+    },
+    {
       "id": "log_mw4ap5uz_d_idxkt",
       "ts": 1793928479723,
       "action": "research-added",
@@ -7207,12 +7235,6 @@
       "ts": 1790289189133,
       "action": "packing-item-added",
       "detail": "Added \"Gucci 1953 Loafer\" to London packing list"
-    },
-    {
-      "id": "log_mug3kwl3_1j_ujw1w",
-      "ts": 1790288553207,
-      "action": "packing-item-added",
-      "detail": "Added \"Garmin\" to London packing list"
     }
   ]
 }
