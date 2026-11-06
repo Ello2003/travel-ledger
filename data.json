@@ -1825,10 +1825,32 @@
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1793929396080
+        },
+        {
+          "id": "res_mw4ba2hi_1c_r8frc",
+          "sheet": "Restaurants",
+          "name": "El Churrasco Argentino",
+          "address": "Vlamingstraat 76, 8000 Brugge, Belgium",
+          "lat": 51.2111303,
+          "lng": 3.2243527,
+          "priceLevel": null,
+          "priority": null,
+          "estCost": null,
+          "notes": "",
+          "links": [
+            {
+              "id": "link_mw4ba1ne_1b_p6d2d",
+              "label": "Official Website",
+              "url": "https://www.elchurrascoargentinobrugge.com/"
+            }
+          ],
+          "status": "researching",
+          "linkedPlanItemId": null,
+          "createdAt": 1793929455126
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1793929396080,
+      "updatedAt": 1793929455126,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -6265,6 +6287,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw4ba2hi_1d_h0lh4",
+      "ts": 1793929455126,
+      "action": "research-added",
+      "detail": "Added \"El Churrasco Argentino\" to Brugge research"
+    },
+    {
       "id": "log_mw4b8sxc_1a_9bivq",
       "ts": 1793929396080,
       "action": "research-added",
@@ -7457,12 +7485,6 @@
       "ts": 1790295636872,
       "action": "plan-item-added",
       "detail": "Added \"Flat iron\" (Restaurants) on London"
-    },
-    {
-      "id": "log_mug7s061_24_42ghy",
-      "ts": 1790295602905,
-      "action": "plan-item-edited",
-      "detail": "Updated \"Suitsupply\" (Shopping) on London"
     }
   ]
 }
