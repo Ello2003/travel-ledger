@@ -99,7 +99,7 @@
       "color": "#6a4a6e"
     },
     {
-      "key": "Chocolate & Waffles",
+      "key": "Belgium Chocolate | Waffles",
       "color": "#6a4a6e"
     }
   ],
@@ -1336,7 +1336,7 @@
         },
         {
           "id": "res_mw00klu0_6_pwaws",
-          "sheet": "Chocolate & Waffles",
+          "sheet": "Belgium Chocolate | Waffles",
           "name": "The Chocolate Line",
           "address": "The Chocolate Line, 75, Vaartstraat, Nijverheidsdok (Z12), Sint-Pieters, Brugge, Bruges, Brugge, West Flanders, Flanders, 8000, Belgium",
           "lat": 51.2313728,
@@ -1352,7 +1352,7 @@
         },
         {
           "id": "res_mw00lafg_8_z087v",
-          "sheet": "Chocolate & Waffles",
+          "sheet": "Belgium Chocolate | Waffles",
           "name": "The Old Chocolate House",
           "address": "The Old Chocolate House, Mariastraat, Steenstraatkwartier, Brugge-Centrum, Brugge, Bruges, Brugge, West Flanders, Flanders, 8000, Belgium",
           "lat": 51.2060614,
@@ -1368,7 +1368,7 @@
         },
         {
           "id": "res_mw00rfck_a_v4hse",
-          "sheet": "Chocolate & Waffles",
+          "sheet": "Belgium Chocolate | Waffles",
           "name": "Chez Albert",
           "address": "Chez Albert, Stationsplein, Sint-Michiels, Bruges, Brugge, West Flanders, Flanders, 8200, Belgium",
           "lat": 51.1970288,
@@ -1384,7 +1384,7 @@
         },
         {
           "id": "res_mw00scub_c_im6gs",
-          "sheet": "Chocolate & Waffles",
+          "sheet": "Belgium Chocolate | Waffles",
           "name": "House of Waffles",
           "address": "House of Waffles, Wollestraat, Steenstraatkwartier, Brugge-Centrum, Brugge, Bruges, Brugge, West Flanders, Flanders, 8000, Belgium",
           "lat": 51.2075842,
@@ -1464,7 +1464,7 @@
         },
         {
           "id": "res_mw47mnln_3_tehpn",
-          "sheet": "Chocolate & Waffles",
+          "sheet": "Belgium Chocolate | Waffles",
           "name": "The Spot Waffles & Pancakes",
           "address": "Jozef Suvéestraat 19, 8000 Brugge, Belgium",
           "lat": 51.2070729,
@@ -1486,7 +1486,7 @@
         },
         {
           "id": "res_mw47n7x3_7_3b6hg",
-          "sheet": "Chocolate & Waffles",
+          "sheet": "Belgium Chocolate | Waffles",
           "name": "Waffles 'n Beer in Bruges Centre",
           "address": "Hoogstraat 10, 8000 Brugge, Belgium",
           "lat": 51.2093327,
