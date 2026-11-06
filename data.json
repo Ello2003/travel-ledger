@@ -1477,10 +1477,32 @@
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1793923323899
+        },
+        {
+          "id": "res_mw47n7x3_7_3b6hg",
+          "sheet": "Chocolate & Waffles",
+          "name": "Waffles 'n Beer in Bruges Centre",
+          "address": "Hoogstraat 10, 8000 Brugge, Belgium",
+          "lat": 51.2093327,
+          "lng": 3.2287377999999998,
+          "priceLevel": null,
+          "priority": null,
+          "estCost": null,
+          "notes": "",
+          "links": [
+            {
+              "id": "link_mw47n6yy_6_12g0d",
+              "label": "Official Website",
+              "url": "https://www.wafflesnbeer.be/?utm_source=google&utm_medium=organic&utm_campaign=gmb"
+            }
+          ],
+          "status": "researching",
+          "linkedPlanItemId": null,
+          "createdAt": 1793923350231
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1793923323899,
+      "updatedAt": 1793923350231,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -5917,6 +5939,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw47n7x3_8_3ntzo",
+      "ts": 1793923350231,
+      "action": "research-added",
+      "detail": "Added \"Waffles 'n Beer in Bruges Centre\" to Brugge research"
+    },
+    {
       "id": "log_mw47mnlo_4_w3kyz",
       "ts": 1793923323900,
       "action": "research-added",
@@ -7109,12 +7137,6 @@
       "ts": 1790288503303,
       "action": "packing-item-added",
       "detail": "Added \"Toothbrush\" to London packing list"
-    },
-    {
-      "id": "log_mug3jnaf_15_khyel",
-      "ts": 1790288494503,
-      "action": "packing-item-added",
-      "detail": "Added \"Fragrances\" to London packing list"
     }
   ]
 }
