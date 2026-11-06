@@ -1869,10 +1869,32 @@
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1793929585439
+        },
+        {
+          "id": "res_mw4beu1g_1i_gj9v7",
+          "sheet": "Restaurants",
+          "name": "De koetse",
+          "address": "Oude Burg 31, 8000 Brugge, Belgium",
+          "lat": 51.2063534,
+          "lng": 3.2235506,
+          "priceLevel": null,
+          "priority": null,
+          "estCost": null,
+          "notes": "",
+          "links": [
+            {
+              "id": "link_mw4betc2_1h_kmmgk",
+              "label": "Official Website",
+              "url": "http://www.dekoetsebrugge.be/"
+            }
+          ],
+          "status": "researching",
+          "linkedPlanItemId": null,
+          "createdAt": 1793929677460
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1793929585439,
+      "updatedAt": 1793929677460,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -6309,6 +6331,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw4beu1h_1j_ifzoy",
+      "ts": 1793929677461,
+      "action": "research-added",
+      "detail": "Added \"De koetse\" to Brugge research"
+    },
+    {
       "id": "log_mw4bcv1b_1g_1t5q0",
       "ts": 1793929585439,
       "action": "research-added",
@@ -7501,12 +7529,6 @@
       "ts": 1790295655597,
       "action": "plan-item-edited",
       "detail": "Updated \"Flat iron\" (Restaurants) on London"
-    },
-    {
-      "id": "log_mug7t0f4_27_07kzk",
-      "ts": 1790295649889,
-      "action": "plan-item-edited",
-      "detail": "Updated \"Harrys\" (Restaurants) on London"
     }
   ]
 }
