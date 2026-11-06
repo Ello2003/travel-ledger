@@ -1505,10 +1505,26 @@
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1793923350231
+        },
+        {
+          "id": "res_mw4ah1ux_4_w3qig",
+          "sheet": "Sights",
+          "name": "Winter gloed 2025",
+          "address": "Site Oud Sint-Jan, Zonnekemeers, 8000 Brugge, Belgium",
+          "lat": 51.2037014,
+          "lng": 3.2222963,
+          "priceLevel": null,
+          "priority": null,
+          "estCost": null,
+          "notes": "",
+          "links": [],
+          "status": "researching",
+          "linkedPlanItemId": null,
+          "createdAt": 1793928101289
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1793928081466,
+      "updatedAt": 1793928101289,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -5945,6 +5961,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw4ah1ux_5_monhx",
+      "ts": 1793928101289,
+      "action": "research-added",
+      "detail": "Added \"Winter gloed 2025\" to Brugge research"
+    },
+    {
       "id": "log_mw4agmkb_3_5r4m4",
       "ts": 1793928081467,
       "action": "research-edited",
@@ -7137,12 +7159,6 @@
       "ts": 1790288512328,
       "action": "packing-item-added",
       "detail": "Added \"Soap\" to London packing list"
-    },
-    {
-      "id": "log_mug3jxme_19_uo5pe",
-      "ts": 1790288507894,
-      "action": "packing-item-added",
-      "detail": "Added \"toothpaste\" to London packing list"
     }
   ]
 }
