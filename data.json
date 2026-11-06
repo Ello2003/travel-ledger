@@ -1935,10 +1935,32 @@
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1793929785665
+        },
+        {
+          "id": "res_mw4bi9fp_1r_k7d3h",
+          "sheet": "Restaurants",
+          "name": "De Pepermolen",
+          "address": "Langestraat 16, 8000 Brugge, Belgium",
+          "lat": 51.20962,
+          "lng": 3.2322634,
+          "priceLevel": null,
+          "priority": null,
+          "estCost": null,
+          "notes": "",
+          "links": [
+            {
+              "id": "link_mw4bi8t5_1q_83x97",
+              "label": "Official Website",
+              "url": "https://www.depepermolen.com/"
+            }
+          ],
+          "status": "researching",
+          "linkedPlanItemId": null,
+          "createdAt": 1793929837381
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1793929785665,
+      "updatedAt": 1793929837381,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -6375,6 +6397,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw4bi9fp_1s_0o226",
+      "ts": 1793929837381,
+      "action": "research-added",
+      "detail": "Added \"De Pepermolen\" to Brugge research"
+    },
+    {
       "id": "log_mw4bh5j5_1p_i8alh",
       "ts": 1793929785665,
       "action": "research-added",
@@ -7567,12 +7595,6 @@
       "ts": 1790697958890,
       "action": "plan-marked-visited",
       "detail": "Marked \"Devonshire\" as visited on London"
-    },
-    {
-      "id": "log_mumvbucr_2a_np6r4",
-      "ts": 1790697956715,
-      "action": "plan-marked-visited",
-      "detail": "Marked \"Blacklock\" as visited on London"
     }
   ]
 }
