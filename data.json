@@ -2061,10 +2061,32 @@
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1794087917545
+        },
+        {
+          "id": "res_mw6ygo7u_2e_2jpmp",
+          "sheet": "Restaurants",
+          "name": "Brasserie Rozenhoedkaai",
+          "address": "Pandreitje 1a, 8000 Brugge, Belgium",
+          "lat": 51.207317599999996,
+          "lng": 3.2280884999999997,
+          "priceLevel": null,
+          "priority": null,
+          "estCost": null,
+          "notes": "",
+          "links": [
+            {
+              "id": "link_mw6ygnj8_2d_tc1ef",
+              "label": "Official Website",
+              "url": "http://www.rozenhoedkaai.be/"
+            }
+          ],
+          "status": "researching",
+          "linkedPlanItemId": null,
+          "createdAt": 1794089326746
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1794087917545,
+      "updatedAt": 1794089326746,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -6501,6 +6523,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw6ygo7v_2f_eqtvk",
+      "ts": 1794089326747,
+      "action": "research-added",
+      "detail": "Added \"Brasserie Rozenhoedkaai\" to Brugge research"
+    },
+    {
       "id": "log_mw6xmgvd_2c_5v1ij",
       "ts": 1794087917545,
       "action": "research-added",
@@ -7693,12 +7721,6 @@
       "ts": 1790714704552,
       "action": "plan-item-added",
       "detail": "Added \"POLPO\" (Restaurants) on London"
-    },
-    {
-      "id": "log_mumvju9z_2g_vwrhp",
-      "ts": 1790698329863,
-      "action": "plan-marked-visited",
-      "detail": "Marked \"Walker Slater\" as visited on London"
     }
   ]
 }
