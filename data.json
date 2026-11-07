@@ -1647,22 +1647,6 @@
           "createdAt": 1793929045223
         },
         {
-          "id": "res_mw4b1e0w_n_w50l0",
-          "sheet": "Breakfasts | Bakeries | Casual Dining",
-          "name": "Bakery St. Paul",
-          "address": "Boogschutterslaan 13, 8310 Brugge, Belgium",
-          "lat": 51.214571799999995,
-          "lng": 3.2509657,
-          "priceLevel": null,
-          "priority": null,
-          "estCost": null,
-          "notes": "",
-          "links": [],
-          "status": "researching",
-          "linkedPlanItemId": null,
-          "createdAt": 1793929050176
-        },
-        {
           "id": "res_mw4b2qza_q_gxuxf",
           "sheet": "Coffee",
           "name": "Nuba Cafe Brugge",
@@ -2108,7 +2092,7 @@
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1794090940138,
+      "updatedAt": 1794091668701,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -6545,6 +6529,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw6zuva5_2j_2liww",
+      "ts": 1794091668701,
+      "action": "research-deleted",
+      "detail": "Removed \"Bakery St. Paul\" from Brugge research"
+    },
+    {
       "id": "log_mw6zf94a_2i_17pf2",
       "ts": 1794090940138,
       "action": "research-added",
@@ -7737,12 +7727,6 @@
       "ts": 1790714760171,
       "action": "plan-item-added",
       "detail": "Added \"Cgars\" (Cigars) on London"
-    },
-    {
-      "id": "log_mun5awjw_2j_rarlt",
-      "ts": 1790714709068,
-      "action": "plan-marked-visited",
-      "detail": "Marked \"POLPO\" as visited on London"
     }
   ]
 }
