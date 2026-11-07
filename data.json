@@ -1615,22 +1615,6 @@
           "createdAt": 1793929029517
         },
         {
-          "id": "res_mw4b1a7b_l_j2mo6",
-          "sheet": "Breakfasts | Bakeries | Casual Dining",
-          "name": "Bakery Sint-Paulus",
-          "address": "Monnikenwerve 101, 8000 Brugge, Belgium",
-          "lat": 51.2493802,
-          "lng": 3.2009908,
-          "priceLevel": null,
-          "priority": null,
-          "estCost": null,
-          "notes": "",
-          "links": [],
-          "status": "researching",
-          "linkedPlanItemId": null,
-          "createdAt": 1793929045223
-        },
-        {
           "id": "res_mw4b2qza_q_gxuxf",
           "sheet": "Coffee",
           "name": "Nuba Cafe Brugge",
@@ -2076,7 +2060,7 @@
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1794091705257,
+      "updatedAt": 1794091713972,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -6513,6 +6497,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw6zvu7p_2l_904g3",
+      "ts": 1794091713973,
+      "action": "research-deleted",
+      "detail": "Removed \"Bakery Sint-Paulus\" from Brugge research"
+    },
+    {
       "id": "log_mw6zvnhm_2k_ber8k",
       "ts": 1794091705258,
       "action": "research-deleted",
@@ -7705,12 +7695,6 @@
       "ts": 1790714770379,
       "action": "plan-marked-visited",
       "detail": "Marked \"Cgars\" as visited on London"
-    },
-    {
-      "id": "log_mun5c70f_2m_oahzj",
-      "ts": 1790714769279,
-      "action": "plan-item-edited",
-      "detail": "Updated \"Cgars\" (Cigars) on London"
     }
   ]
 }
