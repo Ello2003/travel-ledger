@@ -2039,10 +2039,32 @@
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1794086689917
+        },
+        {
+          "id": "res_mw6xmgvd_2b_njrpe",
+          "sheet": "Bars | Cocktails",
+          "name": "’t Klein Venetië",
+          "address": "Braambergstraat 1, 8000 Brugge, Belgium",
+          "lat": 51.207456699999994,
+          "lng": 3.2279464,
+          "priceLevel": null,
+          "priority": null,
+          "estCost": null,
+          "notes": "Views",
+          "links": [
+            {
+              "id": "link_mw6xmdo7_2a_whf99",
+              "label": "Official Website",
+              "url": "http://www.kleinvenetie.be/"
+            }
+          ],
+          "status": "researching",
+          "linkedPlanItemId": null,
+          "createdAt": 1794087917545
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1794086689917,
+      "updatedAt": 1794087917545,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -6479,6 +6501,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw6xmgvd_2c_5v1ij",
+      "ts": 1794087917545,
+      "action": "research-added",
+      "detail": "Added \"’t Klein Venetië\" to Brugge research"
+    },
+    {
       "id": "log_mw6ww5ml_29_2wff9",
       "ts": 1794086689917,
       "action": "research-added",
@@ -7671,12 +7699,6 @@
       "ts": 1790698329863,
       "action": "plan-marked-visited",
       "detail": "Marked \"Walker Slater\" as visited on London"
-    },
-    {
-      "id": "log_mumvjrk2_2f_rl80l",
-      "ts": 1790698326338,
-      "action": "plan-marked-visited",
-      "detail": "Marked \"Drakes\" as visited on London"
     }
   ]
 }
