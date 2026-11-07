@@ -2017,10 +2017,32 @@
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1794086673646
+        },
+        {
+          "id": "res_mw6ww5ml_28_3ku06",
+          "sheet": "Bars | Cocktails",
+          "name": "ODA Rooftop Bar",
+          "address": "Steenstraat 96, 8000 Brugge, Belgium",
+          "lat": 51.2059797,
+          "lng": 3.2209095999999997,
+          "priceLevel": null,
+          "priority": null,
+          "estCost": null,
+          "notes": "Views",
+          "links": [
+            {
+              "id": "link_mw6ww377_27_5qkjc",
+              "label": "Official Website",
+              "url": "https://www.odarooftopbar.be/"
+            }
+          ],
+          "status": "researching",
+          "linkedPlanItemId": null,
+          "createdAt": 1794086689917
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1794086673646,
+      "updatedAt": 1794086689917,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -6457,6 +6479,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw6ww5ml_29_2wff9",
+      "ts": 1794086689917,
+      "action": "research-added",
+      "detail": "Added \"ODA Rooftop Bar\" to Brugge research"
+    },
+    {
       "id": "log_mw6wvt2m_26_kf424",
       "ts": 1794086673646,
       "action": "research-added",
@@ -7649,12 +7677,6 @@
       "ts": 1790698326338,
       "action": "plan-marked-visited",
       "detail": "Marked \"Drakes\" as visited on London"
-    },
-    {
-      "id": "log_mumvjq6z_2e_115ow",
-      "ts": 1790698324571,
-      "action": "plan-marked-visited",
-      "detail": "Marked \"Suitsupply\" as visited on London"
     }
   ]
 }
