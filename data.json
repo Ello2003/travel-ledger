@@ -1615,22 +1615,6 @@
           "createdAt": 1793929029517
         },
         {
-          "id": "res_mw4b131n_j_y05m7",
-          "sheet": "Breakfasts | Bakeries | Casual Dining",
-          "name": "Bakery Sint-Paulus",
-          "address": "Potentestraat 20, 8000 Brugge, Belgium",
-          "lat": 51.2233706,
-          "lng": 3.2052039,
-          "priceLevel": null,
-          "priority": null,
-          "estCost": null,
-          "notes": "",
-          "links": [],
-          "status": "researching",
-          "linkedPlanItemId": null,
-          "createdAt": 1793929035947
-        },
-        {
           "id": "res_mw4b1a7b_l_j2mo6",
           "sheet": "Breakfasts | Bakeries | Casual Dining",
           "name": "Bakery Sint-Paulus",
@@ -2092,7 +2076,7 @@
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1794091668701,
+      "updatedAt": 1794091705257,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -6529,6 +6513,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw6zvnhm_2k_ber8k",
+      "ts": 1794091705258,
+      "action": "research-deleted",
+      "detail": "Removed \"Bakery Sint-Paulus\" from Brugge research"
+    },
+    {
       "id": "log_mw6zuva5_2j_2liww",
       "ts": 1794091668701,
       "action": "research-deleted",
@@ -7721,12 +7711,6 @@
       "ts": 1790714769279,
       "action": "plan-item-edited",
       "detail": "Updated \"Cgars\" (Cigars) on London"
-    },
-    {
-      "id": "log_mun5bzzf_2l_pkc97",
-      "ts": 1790714760171,
-      "action": "plan-item-added",
-      "detail": "Added \"Cgars\" (Cigars) on London"
     }
   ]
 }
