@@ -2083,10 +2083,32 @@
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1794089326746
+        },
+        {
+          "id": "res_mw6zf94a_2h_d0446",
+          "sheet": "Restaurants",
+          "name": "Petite Aneth",
+          "address": "Maria van Bourgondiëlaan 1, 8000 Brugge, Belgium",
+          "lat": 51.2117541,
+          "lng": 3.2112190999999997,
+          "priceLevel": null,
+          "priority": null,
+          "estCost": null,
+          "notes": "",
+          "links": [
+            {
+              "id": "link_mw6zf7ft_2g_ki2rb",
+              "label": "Official Website",
+              "url": "http://www.aneth.be/"
+            }
+          ],
+          "status": "researching",
+          "linkedPlanItemId": null,
+          "createdAt": 1794090940138
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1794089326746,
+      "updatedAt": 1794090940138,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -6523,6 +6545,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw6zf94a_2i_17pf2",
+      "ts": 1794090940138,
+      "action": "research-added",
+      "detail": "Added \"Petite Aneth\" to Brugge research"
+    },
+    {
       "id": "log_mw6ygo7v_2f_eqtvk",
       "ts": 1794089326747,
       "action": "research-added",
@@ -7715,12 +7743,6 @@
       "ts": 1790714709068,
       "action": "plan-marked-visited",
       "detail": "Marked \"POLPO\" as visited on London"
-    },
-    {
-      "id": "log_mun5at2g_2i_bxumf",
-      "ts": 1790714704552,
-      "action": "plan-item-added",
-      "detail": "Added \"POLPO\" (Restaurants) on London"
     }
   ]
 }
