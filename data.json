@@ -1995,10 +1995,32 @@
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1793930232872
+        },
+        {
+          "id": "res_mw6wvt2m_25_rdcp2",
+          "sheet": "Bars | Cocktails",
+          "name": "Opus Latino",
+          "address": "Burg 15, 8000 Brugge, Belgium",
+          "lat": 51.208221599999995,
+          "lng": 3.2263536,
+          "priceLevel": null,
+          "priority": null,
+          "estCost": null,
+          "notes": "Views.",
+          "links": [
+            {
+              "id": "link_mw6wvo4k_24_in0yl",
+              "label": "Official Website",
+              "url": "http://www.opuslatino.be/"
+            }
+          ],
+          "status": "researching",
+          "linkedPlanItemId": null,
+          "createdAt": 1794086673646
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1793930232872,
+      "updatedAt": 1794086673646,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -6435,6 +6457,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw6wvt2m_26_kf424",
+      "ts": 1794086673646,
+      "action": "research-added",
+      "detail": "Added \"Opus Latino\" to Brugge research"
+    },
+    {
       "id": "log_mw4bqqlk_23_ipiv4",
       "ts": 1793930232872,
       "action": "research-added",
@@ -7625,12 +7653,6 @@
     {
       "id": "log_mumvjq6z_2e_115ow",
       "ts": 1790698324571,
-      "action": "plan-marked-visited",
-      "detail": "Marked \"Suitsupply\" as visited on London"
-    },
-    {
-      "id": "log_mumvjkou_2d_qozpt",
-      "ts": 1790698317439,
       "action": "plan-marked-visited",
       "detail": "Marked \"Suitsupply\" as visited on London"
     }
