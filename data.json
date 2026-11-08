@@ -905,6 +905,35 @@
           "originalCost": null,
           "exchangeRate": 1,
           "homeCurrency": "GBP"
+        },
+        {
+          "id": "plan_mw79u3er_1f_7h3a1",
+          "sheet": "Pubs",
+          "name": "Huisbrouwerij De Halve Maan",
+          "status": "idea",
+          "date": null,
+          "endDate": null,
+          "time": null,
+          "dayNumber": 1,
+          "dayNumberEnd": null,
+          "location": "Walplein 26, 8000 Brugge, Belgium",
+          "links": [
+            {
+              "id": "link_mw79u3er_1g_t9tsz",
+              "label": "Official Website",
+              "url": "http://www.halvemaan.be/"
+            }
+          ],
+          "cost": null,
+          "linkedExpenseId": null,
+          "actualExpenseId": null,
+          "notes": "",
+          "visited": false,
+          "estimateCategory": "Other",
+          "currency": "GBP",
+          "originalCost": null,
+          "exchangeRate": 1,
+          "homeCurrency": "GBP"
         }
       ],
       "timelineMode": "days",
@@ -1096,8 +1125,8 @@
               "url": "http://www.halvemaan.be/"
             }
           ],
-          "status": "researching",
-          "linkedPlanItemId": null,
+          "status": "promoted",
+          "linkedPlanItemId": "plan_mw79u3er_1f_7h3a1",
           "createdAt": 1793403952549
         },
         {
@@ -2406,7 +2435,7 @@
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1794108417168,
+      "updatedAt": 1794108432490,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -6894,6 +6923,18 @@
   },
   "activityLog": [
     {
+      "id": "log_mw79u6az_1i_z6zav",
+      "ts": 1794108432491,
+      "action": "plan-item-edited",
+      "detail": "Updated \"Huisbrouwerij De Halve Maan\" on Brugge"
+    },
+    {
+      "id": "log_mw79u3er_1h_4b4kr",
+      "ts": 1794108428739,
+      "action": "research-promoted",
+      "detail": "Promoted \"Huisbrouwerij De Halve Maan\" to Plan on Brugge"
+    },
+    {
       "id": "log_mw79tuhc_1e_qgalw",
       "ts": 1794108417168,
       "action": "plan-item-edited",
@@ -8080,18 +8121,6 @@
       "ts": 1790782896854,
       "action": "visited-actual-created",
       "detail": "Copied estimated cost for \"Drakes\" into Actual Expenses on London"
-    },
-    {
-      "id": "log_muo9wel2_4_935f1",
-      "ts": 1790782896854,
-      "action": "visited-actual-created",
-      "detail": "Copied estimated cost for \"Walker Slater\" into Actual Expenses on London"
-    },
-    {
-      "id": "log_muo9wel2_2_tundo",
-      "ts": 1790782896854,
-      "action": "visited-actual-created",
-      "detail": "Copied estimated cost for \"Mimi\" into Actual Expenses on London"
     }
   ]
 }
