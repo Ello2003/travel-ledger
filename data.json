@@ -2231,10 +2231,32 @@
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1794102320338
+        },
+        {
+          "id": "res_mw77l1oj_i_2kdsu",
+          "sheet": "Bars With Views | Cocktails",
+          "name": "The Republic",
+          "address": "Sint-Jakobsstraat 36, 8000 Brugge, Belgium",
+          "lat": 51.210260100000006,
+          "lng": 3.2214601000000003,
+          "priceLevel": null,
+          "priority": null,
+          "estCost": null,
+          "notes": "",
+          "links": [
+            {
+              "id": "link_mw77l0ta_h_xn1jk",
+              "label": "Official Website",
+              "url": "https://www.republiekbrugge.be/"
+            }
+          ],
+          "status": "researching",
+          "linkedPlanItemId": null,
+          "createdAt": 1794104647363
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1794102320338,
+      "updatedAt": 1794104647363,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -6722,6 +6744,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw77l1oj_j_ewnkl",
+      "ts": 1794104647363,
+      "action": "research-added",
+      "detail": "Added \"The Republic\" to Brugge research"
+    },
+    {
       "id": "log_mw76764y_f_18k9p",
       "ts": 1794102320338,
       "action": "research-added",
@@ -7914,12 +7942,6 @@
       "ts": 1790716762596,
       "action": "plan-marked-visited",
       "detail": "Marked \"L'ETO\" as visited on London"
-    },
-    {
-      "id": "log_mun6iu5z_2t_1kbiz",
-      "ts": 1790716758839,
-      "action": "plan-item-added",
-      "detail": "Added \"L'ETO\" (Coffee) on London"
     }
   ]
 }
