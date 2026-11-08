@@ -963,6 +963,35 @@
           "originalCost": null,
           "exchangeRate": 1,
           "homeCurrency": "GBP"
+        },
+        {
+          "id": "plan_mw79uye6_1n_na94a",
+          "sheet": "Pubs",
+          "name": "'t Brugs Beertje",
+          "status": "idea",
+          "date": null,
+          "endDate": null,
+          "time": null,
+          "dayNumber": 1,
+          "dayNumberEnd": null,
+          "location": "Kemelstraat 5, 8000 Brugge, Belgium",
+          "links": [
+            {
+              "id": "link_mw79uye6_1o_39e4u",
+              "label": "Official Website",
+              "url": "https://www.brugsbeertje.be/"
+            }
+          ],
+          "cost": null,
+          "linkedExpenseId": null,
+          "actualExpenseId": null,
+          "notes": "Cheap",
+          "visited": false,
+          "estimateCategory": "Other",
+          "currency": "GBP",
+          "originalCost": null,
+          "exchangeRate": 1,
+          "homeCurrency": "GBP"
         }
       ],
       "timelineMode": "days",
@@ -1061,8 +1090,8 @@
               "url": "https://www.brugsbeertje.be/"
             }
           ],
-          "status": "researching",
-          "linkedPlanItemId": null,
+          "status": "promoted",
+          "linkedPlanItemId": "plan_mw79uye6_1n_na94a",
           "createdAt": 1793403947964
         },
         {
@@ -2464,7 +2493,7 @@
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1794108458577,
+      "updatedAt": 1794108470631,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -6952,6 +6981,18 @@
   },
   "activityLog": [
     {
+      "id": "log_mw79uzqg_1q_bflvr",
+      "ts": 1794108470632,
+      "action": "plan-item-edited",
+      "detail": "Updated \"'t Brugs Beertje\" on Brugge"
+    },
+    {
+      "id": "log_mw79uye6_1p_9uv0j",
+      "ts": 1794108468894,
+      "action": "research-promoted",
+      "detail": "Promoted \"'t Brugs Beertje\" to Plan on Brugge"
+    },
+    {
       "id": "log_mw79uqfm_1m_vc7k5",
       "ts": 1794108458578,
       "action": "plan-item-edited",
@@ -8138,18 +8179,6 @@
       "ts": 1790783127656,
       "action": "expense-deleted",
       "detail": "Removed \"Walker Slater\" (£595.00) from London"
-    },
-    {
-      "id": "log_muoa0ps0_c_sk96u",
-      "ts": 1790783097984,
-      "action": "expense-deleted",
-      "detail": "Removed \"Mimi\" (£257.00) from London"
-    },
-    {
-      "id": "log_muoa0mun_a_5vh00",
-      "ts": 1790783094191,
-      "action": "expense-deleted",
-      "detail": "Removed \"Drakes\" (£40.00) from London"
     }
   ]
 }
