@@ -848,7 +848,7 @@
           "sheet": "Pubs",
           "name": "Le Trappiste",
           "status": "idea",
-          "date": null,
+          "date": "2026-12-11",
           "endDate": null,
           "time": null,
           "dayNumber": 1,
@@ -870,14 +870,24 @@
           "currency": "GBP",
           "originalCost": null,
           "exchangeRate": 1,
-          "homeCurrency": "GBP"
+          "homeCurrency": "GBP",
+          "estimateQuantity": 1,
+          "estimateOriginal": {
+            "name": "Le Trappiste",
+            "sheet": "Pubs",
+            "category": "Other",
+            "quantity": 1,
+            "cost": null
+          },
+          "actualNotes": "",
+          "actualRating": null
         },
         {
           "id": "plan_mw79tso9_1a_yiiys",
           "sheet": "Pubs",
           "name": "Bauhaus",
           "status": "idea",
-          "date": null,
+          "date": "2026-12-11",
           "endDate": null,
           "time": null,
           "dayNumber": 1,
@@ -904,14 +914,24 @@
           "currency": "GBP",
           "originalCost": null,
           "exchangeRate": 1,
-          "homeCurrency": "GBP"
+          "homeCurrency": "GBP",
+          "estimateQuantity": 1,
+          "estimateOriginal": {
+            "name": "Bauhaus",
+            "sheet": "Pubs",
+            "category": "Other",
+            "quantity": 1,
+            "cost": null
+          },
+          "actualNotes": "",
+          "actualRating": null
         },
         {
           "id": "plan_mw79u3er_1f_7h3a1",
           "sheet": "Pubs",
           "name": "Huisbrouwerij De Halve Maan",
           "status": "idea",
-          "date": null,
+          "date": "2026-12-11",
           "endDate": null,
           "time": null,
           "dayNumber": 1,
@@ -933,14 +953,24 @@
           "currency": "GBP",
           "originalCost": null,
           "exchangeRate": 1,
-          "homeCurrency": "GBP"
+          "homeCurrency": "GBP",
+          "estimateQuantity": 1,
+          "estimateOriginal": {
+            "name": "Huisbrouwerij De Halve Maan",
+            "sheet": "Pubs",
+            "category": "Other",
+            "quantity": 1,
+            "cost": null
+          },
+          "actualNotes": "",
+          "actualRating": null
         },
         {
           "id": "plan_mw79up2j_1j_mq54p",
           "sheet": "Pubs",
           "name": "2be Shop",
           "status": "idea",
-          "date": null,
+          "date": "2026-12-11",
           "endDate": null,
           "time": null,
           "dayNumber": 1,
@@ -962,14 +992,24 @@
           "currency": "GBP",
           "originalCost": null,
           "exchangeRate": 1,
-          "homeCurrency": "GBP"
+          "homeCurrency": "GBP",
+          "estimateQuantity": 1,
+          "estimateOriginal": {
+            "name": "2be Shop",
+            "sheet": "Pubs",
+            "category": "Other",
+            "quantity": 1,
+            "cost": null
+          },
+          "actualNotes": "",
+          "actualRating": null
         },
         {
           "id": "plan_mw79uye6_1n_na94a",
           "sheet": "Pubs",
           "name": "'t Brugs Beertje",
           "status": "idea",
-          "date": null,
+          "date": "2026-12-11",
           "endDate": null,
           "time": null,
           "dayNumber": 1,
@@ -991,7 +1031,17 @@
           "currency": "GBP",
           "originalCost": null,
           "exchangeRate": 1,
-          "homeCurrency": "GBP"
+          "homeCurrency": "GBP",
+          "estimateQuantity": 1,
+          "estimateOriginal": {
+            "name": "'t Brugs Beertje",
+            "sheet": "Pubs",
+            "category": "Other",
+            "quantity": 1,
+            "cost": null
+          },
+          "actualNotes": "",
+          "actualRating": null
         }
       ],
       "timelineMode": "days",
