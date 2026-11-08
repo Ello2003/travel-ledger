@@ -2209,10 +2209,32 @@
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1794102249051
+        },
+        {
+          "id": "res_mw76764y_e_oound",
+          "sheet": "Shopping",
+          "name": "The Bottle Shop",
+          "address": "Wollestraat 13, 8000 Brugge, Belgium",
+          "lat": 51.208079299999994,
+          "lng": 3.2254821999999996,
+          "priceLevel": null,
+          "priority": null,
+          "estCost": null,
+          "notes": "",
+          "links": [
+            {
+              "id": "link_mw7675jf_d_ojcas",
+              "label": "Official Website",
+              "url": "http://www.thebottleshop.be"
+            }
+          ],
+          "status": "researching",
+          "linkedPlanItemId": null,
+          "createdAt": 1794102320338
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1794102249051,
+      "updatedAt": 1794102320338,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -6700,6 +6722,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw76764y_f_18k9p",
+      "ts": 1794102320338,
+      "action": "research-added",
+      "detail": "Added \"The Bottle Shop\" to Brugge research"
+    },
+    {
       "id": "log_mw765n4r_c_y1w92",
       "ts": 1794102249051,
       "action": "research-added",
@@ -7892,12 +7920,6 @@
       "ts": 1790716758839,
       "action": "plan-item-added",
       "detail": "Added \"L'ETO\" (Coffee) on London"
-    },
-    {
-      "id": "log_mun5cubt_2r_l6olu",
-      "ts": 1790714799498,
-      "action": "plan-item-edited",
-      "detail": "Updated \"Hippodrome\" (Bars) on London"
     }
   ]
 }
