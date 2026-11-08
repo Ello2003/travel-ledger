@@ -2297,10 +2297,32 @@
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1794104793580
+        },
+        {
+          "id": "res_mw77oy7k_r_e8d61",
+          "sheet": "Coffee",
+          "name": "Kaffee Kamiel",
+          "address": "Zilverpand 7, 8000 Brugge, Belgium",
+          "lat": 51.2068096,
+          "lng": 3.2201052,
+          "priceLevel": null,
+          "priority": null,
+          "estCost": null,
+          "notes": "",
+          "links": [
+            {
+              "id": "link_mw77oxfw_q_dkz3x",
+              "label": "Official Website",
+              "url": "https://www.kaffeekamiel.be/"
+            }
+          ],
+          "status": "researching",
+          "linkedPlanItemId": null,
+          "createdAt": 1794104829488
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1794104793580,
+      "updatedAt": 1794104829488,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -6788,6 +6810,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw77oy7k_s_v0dyo",
+      "ts": 1794104829488,
+      "action": "research-added",
+      "detail": "Added \"Kaffee Kamiel\" to Brugge research"
+    },
+    {
       "id": "log_mw77o6i5_p_t5e57",
       "ts": 1794104793581,
       "action": "research-added",
@@ -7980,12 +8008,6 @@
       "ts": 1790723494260,
       "action": "plan-item-added",
       "detail": "Added \"Cafe Boheme\" (Bars) on London"
-    },
-    {
-      "id": "log_mun9gtdo_2x_j28db",
-      "ts": 1790721703356,
-      "action": "plan-marked-visited",
-      "detail": "Marked \"Brasserie Zedel\" as visited on London"
     }
   ]
 }
