@@ -2187,10 +2187,32 @@
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1794102212103
+        },
+        {
+          "id": "res_mw765n4r_b_aim2z",
+          "sheet": "Pubs",
+          "name": "2be Shop",
+          "address": "Wollestraat 53, 8000 Brugge, Belgium",
+          "lat": 51.2072149,
+          "lng": 3.2268024000000004,
+          "priceLevel": null,
+          "priority": null,
+          "estCost": null,
+          "notes": "",
+          "links": [
+            {
+              "id": "link_mw765mfe_a_25w4l",
+              "label": "Official Website",
+              "url": "http://www.2-be.biz/"
+            }
+          ],
+          "status": "researching",
+          "linkedPlanItemId": null,
+          "createdAt": 1794102249051
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1794102212104,
+      "updatedAt": 1794102249051,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -6678,6 +6700,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw765n4r_c_y1w92",
+      "ts": 1794102249051,
+      "action": "research-added",
+      "detail": "Added \"2be Shop\" to Brugge research"
+    },
+    {
       "id": "log_mw764umg_9_w4k7y",
       "ts": 1794102212104,
       "action": "research-added",
@@ -7870,12 +7898,6 @@
       "ts": 1790714799498,
       "action": "plan-item-edited",
       "detail": "Updated \"Hippodrome\" (Bars) on London"
-    },
-    {
-      "id": "log_mun5cnx7_2q_qvrme",
-      "ts": 1790714791195,
-      "action": "plan-marked-visited",
-      "detail": "Marked \"Hippodrome\" as visited on London"
     }
   ]
 }
