@@ -954,7 +954,7 @@
           "priceLevel": null,
           "priority": null,
           "estCost": null,
-          "notes": "",
+          "notes": "Tasting Paddles",
           "links": [
             {
               "id": "link_mvztzfnt_12_mge1m",
@@ -2322,7 +2322,7 @@
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1794104829488,
+      "updatedAt": 1794106870257,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -6810,6 +6810,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw78wovl_t_ij41x",
+      "ts": 1794106870257,
+      "action": "research-edited",
+      "detail": "Updated \"Le Trappiste\" in Brugge research"
+    },
+    {
       "id": "log_mw77oy7k_s_v0dyo",
       "ts": 1794104829488,
       "action": "research-added",
@@ -8002,12 +8008,6 @@
       "ts": 1790723496473,
       "action": "plan-marked-visited",
       "detail": "Marked \"Cafe Boheme\" as visited on London"
-    },
-    {
-      "id": "log_munaj790_2z_no9ba",
-      "ts": 1790723494260,
-      "action": "plan-item-added",
-      "detail": "Added \"Cafe Boheme\" (Bars) on London"
     }
   ]
 }
