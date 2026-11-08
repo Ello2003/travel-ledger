@@ -998,7 +998,7 @@
           "priceLevel": null,
           "priority": null,
           "estCost": null,
-          "notes": "",
+          "notes": "Massive Choice",
           "links": [
             {
               "id": "link_mvztzqsv_16_vdf5w",
@@ -2322,7 +2322,7 @@
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1794106889547,
+      "updatedAt": 1794107181673,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -6810,6 +6810,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw793d61_v_4dffe",
+      "ts": 1794107181673,
+      "action": "research-edited",
+      "detail": "Updated \"Bauhaus\" in Brugge research"
+    },
+    {
       "id": "log_mw78x3rf_u_hocsr",
       "ts": 1794106889547,
       "action": "research-edited",
@@ -8002,12 +8008,6 @@
       "ts": 1790723946804,
       "action": "plan-marked-visited",
       "detail": "Marked \"Coach and Horses\" as visited on London"
-    },
-    {
-      "id": "log_munasti6_32_8rleg",
-      "ts": 1790723943006,
-      "action": "plan-item-added",
-      "detail": "Added \"Coach and Horses\" (Bars) on London"
     }
   ]
 }
