@@ -1018,7 +1018,7 @@
           "lat": 51.202447299999996,
           "lng": 3.2241779999999998,
           "priceLevel": null,
-          "priority": null,
+          "priority": 5,
           "estCost": null,
           "notes": "",
           "links": [
@@ -2322,7 +2322,7 @@
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1794107188323,
+      "updatedAt": 1794107320432,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -6810,6 +6810,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw796c8g_x_hx2u2",
+      "ts": 1794107320432,
+      "action": "research-edited",
+      "detail": "Updated \"Huisbrouwerij De Halve Maan\" in Brugge research"
+    },
+    {
       "id": "log_mw793iar_w_p67f2",
       "ts": 1794107188323,
       "action": "research-edited",
@@ -8002,12 +8008,6 @@
       "ts": 1790723969770,
       "action": "post-trip-updated",
       "detail": "Updated post-trip notes for \"Devonshire\" on London"
-    },
-    {
-      "id": "log_munatam3_34_o05jc",
-      "ts": 1790723965179,
-      "action": "post-trip-updated",
-      "detail": "Updated post-trip notes for \"Blacklock\" on London"
     }
   ]
 }
