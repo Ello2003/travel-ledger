@@ -934,6 +934,35 @@
           "originalCost": null,
           "exchangeRate": 1,
           "homeCurrency": "GBP"
+        },
+        {
+          "id": "plan_mw79up2j_1j_mq54p",
+          "sheet": "Pubs",
+          "name": "2be Shop",
+          "status": "idea",
+          "date": null,
+          "endDate": null,
+          "time": null,
+          "dayNumber": 1,
+          "dayNumberEnd": null,
+          "location": "Wollestraat 53, 8000 Brugge, Belgium",
+          "links": [
+            {
+              "id": "link_mw79up2j_1k_ercpg",
+              "label": "Official Website",
+              "url": "http://www.2-be.biz/"
+            }
+          ],
+          "cost": null,
+          "linkedExpenseId": null,
+          "actualExpenseId": null,
+          "notes": "",
+          "visited": false,
+          "estimateCategory": "Other",
+          "currency": "GBP",
+          "originalCost": null,
+          "exchangeRate": 1,
+          "homeCurrency": "GBP"
         }
       ],
       "timelineMode": "days",
@@ -2303,8 +2332,8 @@
               "url": "http://www.2-be.biz/"
             }
           ],
-          "status": "researching",
-          "linkedPlanItemId": null,
+          "status": "promoted",
+          "linkedPlanItemId": "plan_mw79up2j_1j_mq54p",
           "createdAt": 1794102249051
         },
         {
@@ -2435,7 +2464,7 @@
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1794108432490,
+      "updatedAt": 1794108458577,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -6923,6 +6952,18 @@
   },
   "activityLog": [
     {
+      "id": "log_mw79uqfm_1m_vc7k5",
+      "ts": 1794108458578,
+      "action": "plan-item-edited",
+      "detail": "Updated \"2be Shop\" on Brugge"
+    },
+    {
+      "id": "log_mw79up2j_1l_pvmzx",
+      "ts": 1794108456811,
+      "action": "research-promoted",
+      "detail": "Promoted \"2be Shop\" to Plan on Brugge"
+    },
+    {
       "id": "log_mw79u6az_1i_z6zav",
       "ts": 1794108432491,
       "action": "plan-item-edited",
@@ -8109,18 +8150,6 @@
       "ts": 1790783094191,
       "action": "expense-deleted",
       "detail": "Removed \"Drakes\" (£40.00) from London"
-    },
-    {
-      "id": "log_muoa0c65_8_w0slh",
-      "ts": 1790783080349,
-      "action": "expense-deleted",
-      "detail": "Removed \"Walker Slater\" (£600.00) from London"
-    },
-    {
-      "id": "log_muo9wel2_6_mpu24",
-      "ts": 1790782896854,
-      "action": "visited-actual-created",
-      "detail": "Copied estimated cost for \"Drakes\" into Actual Expenses on London"
     }
   ]
 }
