@@ -996,7 +996,7 @@
           "lat": 51.211900199999995,
           "lng": 3.2374684,
           "priceLevel": null,
-          "priority": null,
+          "priority": 5,
           "estCost": null,
           "notes": "Massive Choice",
           "links": [
@@ -2322,7 +2322,7 @@
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1794107181673,
+      "updatedAt": 1794107188323,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -6810,6 +6810,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw793iar_w_p67f2",
+      "ts": 1794107188323,
+      "action": "research-edited",
+      "detail": "Updated \"Bauhaus\" in Brugge research"
+    },
+    {
       "id": "log_mw793d61_v_4dffe",
       "ts": 1794107181673,
       "action": "research-edited",
@@ -8002,12 +8008,6 @@
       "ts": 1790723965179,
       "action": "post-trip-updated",
       "detail": "Updated post-trip notes for \"Blacklock\" on London"
-    },
-    {
-      "id": "log_munaswfo_33_mnrrg",
-      "ts": 1790723946804,
-      "action": "plan-marked-visited",
-      "detail": "Marked \"Coach and Horses\" as visited on London"
     }
   ]
 }
