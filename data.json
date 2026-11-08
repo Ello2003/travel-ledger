@@ -2330,7 +2330,7 @@
           "priceLevel": null,
           "priority": null,
           "estCost": null,
-          "notes": "",
+          "notes": "Tasting Paddles",
           "links": [],
           "status": "researching",
           "linkedPlanItemId": null,
@@ -2338,7 +2338,7 @@
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1794107494988,
+      "updatedAt": 1794107508254,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -6826,6 +6826,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw79ad5q_12_xn2l7",
+      "ts": 1794107508254,
+      "action": "research-edited",
+      "detail": "Updated \"The Monk\" in Brugge research"
+    },
+    {
       "id": "log_mw79a2x8_11_k5b9h",
       "ts": 1794107494988,
       "action": "research-added",
@@ -8018,12 +8024,6 @@
       "ts": 1790723995420,
       "action": "post-trip-updated",
       "detail": "Updated post-trip notes for \"Cafe Boheme\" on London"
-    },
-    {
-      "id": "log_munattqr_38_y0zyt",
-      "ts": 1790723989971,
-      "action": "post-trip-updated",
-      "detail": "Updated post-trip notes for \"Hippodrome\" on London"
     }
   ]
 }
