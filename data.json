@@ -848,7 +848,7 @@
           "sheet": "Pubs",
           "name": "Le Trappiste",
           "status": "idea",
-          "date": "2026-12-11",
+          "date": null,
           "endDate": null,
           "time": null,
           "dayNumber": 1,
@@ -866,7 +866,11 @@
           "actualExpenseId": null,
           "notes": "Tasting Paddles",
           "visited": false,
-          "estimateCategory": "Other"
+          "estimateCategory": "Other",
+          "currency": "GBP",
+          "originalCost": null,
+          "exchangeRate": 1,
+          "homeCurrency": "GBP"
         }
       ],
       "timelineMode": "days",
@@ -2368,7 +2372,7 @@
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1794108194561,
+      "updatedAt": 1794108395549,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -6856,6 +6860,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw79tdsu_19_oplf7",
+      "ts": 1794108395550,
+      "action": "plan-item-edited",
+      "detail": "Updated \"Le Trappiste\" on Brugge"
+    },
+    {
       "id": "log_mw79t9vl_18_w4e94",
       "ts": 1794108390465,
       "action": "research-promoted",
@@ -8048,12 +8058,6 @@
       "ts": 1790724100579,
       "action": "expense-added",
       "detail": "Added \"Walker Slater\" (£595.00) to London"
-    },
-    {
-      "id": "log_munau98m_3c_epxlo",
-      "ts": 1790724010054,
-      "action": "post-trip-updated",
-      "detail": "Updated post-trip notes for \"Brasserie Zedel\" on London"
     }
   ]
 }
