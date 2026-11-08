@@ -930,7 +930,7 @@
           "lat": 51.2068237,
           "lng": 3.2217179,
           "priceLevel": null,
-          "priority": null,
+          "priority": 4,
           "estCost": null,
           "notes": "",
           "links": [
@@ -2322,7 +2322,7 @@
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1794107371057,
+      "updatedAt": 1794107375428,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -6810,6 +6810,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw797io5_z_h7v6a",
+      "ts": 1794107375429,
+      "action": "research-edited",
+      "detail": "Updated \"'t Brugs Beertje\" in Brugge research"
+    },
+    {
       "id": "log_mw797faq_y_fs919",
       "ts": 1794107371058,
       "action": "research-edited",
@@ -8002,12 +8008,6 @@
       "ts": 1790723985829,
       "action": "post-trip-updated",
       "detail": "Updated post-trip notes for \"Colbert\" on London"
-    },
-    {
-      "id": "log_munatl66_36_8sm7t",
-      "ts": 1790723978862,
-      "action": "post-trip-updated",
-      "detail": "Updated post-trip notes for \"POLPO\" on London"
     }
   ]
 }
