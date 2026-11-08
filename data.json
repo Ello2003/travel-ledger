@@ -2275,10 +2275,32 @@
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1794104731340
+        },
+        {
+          "id": "res_mw77o6i4_o_jschl",
+          "sheet": "Bars With Views | Cocktails",
+          "name": "Hotel Van Cleef",
+          "address": "Molenmeers 11, 8000 Brugge, Belgium",
+          "lat": 51.2102551,
+          "lng": 3.2319484999999997,
+          "priceLevel": null,
+          "priority": null,
+          "estCost": null,
+          "notes": "",
+          "links": [
+            {
+              "id": "link_mw77o56k_n_s9evr",
+              "label": "Official Website",
+              "url": "http://www.hotelvancleef.be/"
+            }
+          ],
+          "status": "researching",
+          "linkedPlanItemId": null,
+          "createdAt": 1794104793580
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1794104731340,
+      "updatedAt": 1794104793580,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -6766,6 +6788,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw77o6i5_p_t5e57",
+      "ts": 1794104793581,
+      "action": "research-added",
+      "detail": "Added \"Hotel Van Cleef\" to Brugge research"
+    },
+    {
       "id": "log_mw77muh8_m_zyiwb",
       "ts": 1794104731340,
       "action": "research-added",
@@ -7958,12 +7986,6 @@
       "ts": 1790721703356,
       "action": "plan-marked-visited",
       "detail": "Marked \"Brasserie Zedel\" as visited on London"
-    },
-    {
-      "id": "log_mun9gq5z_2w_xvd2f",
-      "ts": 1790721699191,
-      "action": "plan-item-added",
-      "detail": "Added \"Brasserie Zedel\" (Coffee) on London"
     }
   ]
 }
