@@ -2196,7 +2196,7 @@
           "lat": 51.2072149,
           "lng": 3.2268024000000004,
           "priceLevel": null,
-          "priority": null,
+          "priority": 4,
           "estCost": null,
           "notes": "",
           "links": [
@@ -2322,7 +2322,7 @@
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1794107320432,
+      "updatedAt": 1794107371057,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -6810,6 +6810,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw797faq_y_fs919",
+      "ts": 1794107371058,
+      "action": "research-edited",
+      "detail": "Updated \"2be Shop\" in Brugge research"
+    },
+    {
       "id": "log_mw796c8g_x_hx2u2",
       "ts": 1794107320432,
       "action": "research-edited",
@@ -8002,12 +8008,6 @@
       "ts": 1790723978862,
       "action": "post-trip-updated",
       "detail": "Updated post-trip notes for \"POLPO\" on London"
-    },
-    {
-      "id": "log_munate5m_35_3kc12",
-      "ts": 1790723969770,
-      "action": "post-trip-updated",
-      "detail": "Updated post-trip notes for \"Devonshire\" on London"
     }
   ]
 }
