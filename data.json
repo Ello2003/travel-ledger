@@ -952,7 +952,7 @@
           "lat": 51.210837999999995,
           "lng": 3.222809,
           "priceLevel": null,
-          "priority": null,
+          "priority": 5,
           "estCost": null,
           "notes": "Tasting Paddles",
           "links": [
@@ -2322,7 +2322,7 @@
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1794106870257,
+      "updatedAt": 1794106889547,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -6810,6 +6810,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw78x3rf_u_hocsr",
+      "ts": 1794106889547,
+      "action": "research-edited",
+      "detail": "Updated \"Le Trappiste\" in Brugge research"
+    },
+    {
       "id": "log_mw78wovl_t_ij41x",
       "ts": 1794106870257,
       "action": "research-edited",
@@ -8002,12 +8008,6 @@
       "ts": 1790723943006,
       "action": "plan-item-added",
       "detail": "Added \"Coach and Horses\" (Bars) on London"
-    },
-    {
-      "id": "log_munaj8yh_30_pe45k",
-      "ts": 1790723496473,
-      "action": "plan-marked-visited",
-      "detail": "Marked \"Cafe Boheme\" as visited on London"
     }
   ]
 }
