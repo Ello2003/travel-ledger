@@ -871,6 +871,40 @@
           "originalCost": null,
           "exchangeRate": 1,
           "homeCurrency": "GBP"
+        },
+        {
+          "id": "plan_mw79tso9_1a_yiiys",
+          "sheet": "Pubs",
+          "name": "Bauhaus",
+          "status": "idea",
+          "date": null,
+          "endDate": null,
+          "time": null,
+          "dayNumber": 1,
+          "dayNumberEnd": null,
+          "location": "Langestraat 135, 8000 Brugge, Belgium",
+          "links": [
+            {
+              "id": "link_mw79tso9_1b_siwid",
+              "label": "Official Website",
+              "url": "http://www.bauhaus.be/?utm_source=google&utm_medium=organic&utm_campaign=gmb_bruges"
+            },
+            {
+              "id": "link_mw79tso9_1c_kbea9",
+              "label": "Menu",
+              "url": "https://bauhaus.be/?utm_source=google&utm_medium=organic&utm_campaign=gmb_bruges"
+            }
+          ],
+          "cost": null,
+          "linkedExpenseId": null,
+          "actualExpenseId": null,
+          "notes": "Massive Choice",
+          "visited": false,
+          "estimateCategory": "Other",
+          "currency": "GBP",
+          "originalCost": null,
+          "exchangeRate": 1,
+          "homeCurrency": "GBP"
         }
       ],
       "timelineMode": "days",
@@ -1040,8 +1074,8 @@
               "url": "https://bauhaus.be/?utm_source=google&utm_medium=organic&utm_campaign=gmb_bruges"
             }
           ],
-          "status": "researching",
-          "linkedPlanItemId": null,
+          "status": "promoted",
+          "linkedPlanItemId": "plan_mw79tso9_1a_yiiys",
           "createdAt": 1793403951707
         },
         {
@@ -2372,7 +2406,7 @@
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1794108395549,
+      "updatedAt": 1794108417168,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -6860,6 +6894,18 @@
   },
   "activityLog": [
     {
+      "id": "log_mw79tuhc_1e_qgalw",
+      "ts": 1794108417168,
+      "action": "plan-item-edited",
+      "detail": "Updated \"Bauhaus\" on Brugge"
+    },
+    {
+      "id": "log_mw79tso9_1d_fz115",
+      "ts": 1794108414825,
+      "action": "research-promoted",
+      "detail": "Promoted \"Bauhaus\" to Plan on Brugge"
+    },
+    {
       "id": "log_mw79tdsu_19_oplf7",
       "ts": 1794108395550,
       "action": "plan-item-edited",
@@ -8046,18 +8092,6 @@
       "ts": 1790782896854,
       "action": "visited-actual-created",
       "detail": "Copied estimated cost for \"Mimi\" into Actual Expenses on London"
-    },
-    {
-      "id": "log_munax2fg_3g_9kdnu",
-      "ts": 1790724141196,
-      "action": "expense-added",
-      "detail": "Added \"Cgars\" (£240.00) to London"
-    },
-    {
-      "id": "log_munaw737_3e_605xn",
-      "ts": 1790724100579,
-      "action": "expense-added",
-      "detail": "Added \"Walker Slater\" (£595.00) to London"
     }
   ]
 }
