@@ -2165,10 +2165,32 @@
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1794101192352
+        },
+        {
+          "id": "res_mw764umf_8_piwgn",
+          "sheet": "Coffee",
+          "name": "The Republic",
+          "address": "Sint-Jakobsstraat 36, 8000 Brugge, Belgium",
+          "lat": 51.210260100000006,
+          "lng": 3.2214601000000003,
+          "priceLevel": null,
+          "priority": null,
+          "estCost": null,
+          "notes": "",
+          "links": [
+            {
+              "id": "link_mw764tva_7_joecf",
+              "label": "Official Website",
+              "url": "https://www.republiekbrugge.be/"
+            }
+          ],
+          "status": "researching",
+          "linkedPlanItemId": null,
+          "createdAt": 1794102212103
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1794101192352,
+      "updatedAt": 1794102212104,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -6656,6 +6678,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw764umg_9_w4k7y",
+      "ts": 1794102212104,
+      "action": "research-added",
+      "detail": "Added \"The Republic\" to Brugge research"
+    },
+    {
       "id": "log_mw75izs0_6_bxca2",
       "ts": 1794101192352,
       "action": "research-added",
@@ -7848,12 +7876,6 @@
       "ts": 1790714791195,
       "action": "plan-marked-visited",
       "detail": "Marked \"Hippodrome\" as visited on London"
-    },
-    {
-      "id": "log_mun5ck5m_2p_am7sd",
-      "ts": 1790714786314,
-      "action": "plan-item-added",
-      "detail": "Added \"Hippodrome\" (Bars) on London"
     }
   ]
 }
