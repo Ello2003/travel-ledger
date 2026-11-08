@@ -1004,6 +1004,11 @@
               "id": "link_mvztzqsv_16_vdf5w",
               "label": "Official Website",
               "url": "http://www.bauhaus.be/?utm_source=google&utm_medium=organic&utm_campaign=gmb_bruges"
+            },
+            {
+              "id": "link_mw79aqwz_13_2muoz",
+              "label": "Menu",
+              "url": "https://bauhaus.be/?utm_source=google&utm_medium=organic&utm_campaign=gmb_bruges"
             }
           ],
           "status": "researching",
@@ -2338,7 +2343,7 @@
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1794107508254,
+      "updatedAt": 1794107529663,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -6826,6 +6831,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw79atof_14_0xocj",
+      "ts": 1794107529663,
+      "action": "research-edited",
+      "detail": "Updated \"Bauhaus\" in Brugge research"
+    },
+    {
       "id": "log_mw79ad5q_12_xn2l7",
       "ts": 1794107508254,
       "action": "research-edited",
@@ -8018,12 +8029,6 @@
       "ts": 1790723999128,
       "action": "post-trip-updated",
       "detail": "Updated post-trip notes for \"Coach and Horses\" on London"
-    },
-    {
-      "id": "log_munatxy4_39_f94fx",
-      "ts": 1790723995420,
-      "action": "post-trip-updated",
-      "detail": "Updated post-trip notes for \"Cafe Boheme\" on London"
     }
   ]
 }
