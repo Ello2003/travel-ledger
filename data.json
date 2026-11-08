@@ -932,7 +932,7 @@
           "priceLevel": null,
           "priority": 4,
           "estCost": null,
-          "notes": "",
+          "notes": "Cheap",
           "links": [
             {
               "id": "link_mvztz84j_10_swuo0",
@@ -2343,7 +2343,7 @@
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1794107529663,
+      "updatedAt": 1794108194561,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -6831,6 +6831,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw79p2pt_15_5w46g",
+      "ts": 1794108194561,
+      "action": "research-edited",
+      "detail": "Updated \"'t Brugs Beertje\" in Brugge research"
+    },
+    {
       "id": "log_mw79atof_14_0xocj",
       "ts": 1794107529663,
       "action": "research-edited",
@@ -8023,12 +8029,6 @@
       "ts": 1790724006212,
       "action": "post-trip-updated",
       "detail": "Updated post-trip notes for \"L'ETO\" on London"
-    },
-    {
-      "id": "log_munau0t4_3a_exz6h",
-      "ts": 1790723999128,
-      "action": "post-trip-updated",
-      "detail": "Updated post-trip notes for \"Coach and Horses\" on London"
     }
   ]
 }
