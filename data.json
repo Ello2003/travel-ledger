@@ -2253,10 +2253,32 @@
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1794104647363
+        },
+        {
+          "id": "res_mw77muh8_l_1rebc",
+          "sheet": "Bars With Views | Cocktails",
+          "name": "Estaminet in 't Molenhuis🍺",
+          "address": "Potterierei 109, 8000 Brugge, Belgium",
+          "lat": 51.220402799999995,
+          "lng": 3.2332451,
+          "priceLevel": null,
+          "priority": null,
+          "estCost": null,
+          "notes": "",
+          "links": [
+            {
+              "id": "link_mw77mt21_k_bav5h",
+              "label": "Official Website",
+              "url": "https://molenhuisbrugge.be/"
+            }
+          ],
+          "status": "researching",
+          "linkedPlanItemId": null,
+          "createdAt": 1794104731340
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1794104647363,
+      "updatedAt": 1794104731340,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -6744,6 +6766,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw77muh8_m_zyiwb",
+      "ts": 1794104731340,
+      "action": "research-added",
+      "detail": "Added \"Estaminet in 't Molenhuis🍺\" to Brugge research"
+    },
+    {
       "id": "log_mw77l1oj_j_ewnkl",
       "ts": 1794104647363,
       "action": "research-added",
@@ -7936,12 +7964,6 @@
       "ts": 1790721699191,
       "action": "plan-item-added",
       "detail": "Added \"Brasserie Zedel\" (Coffee) on London"
-    },
-    {
-      "id": "log_mun6ix2c_2u_fpqhf",
-      "ts": 1790716762596,
-      "action": "plan-marked-visited",
-      "detail": "Marked \"L'ETO\" as visited on London"
     }
   ]
 }
