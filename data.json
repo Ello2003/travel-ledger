@@ -101,6 +101,18 @@
     {
       "key": "Belgium Chocolate | Waffles",
       "color": "#6a4a6e"
+    },
+    {
+      "key": "Cheap Eats",
+      "color": "#b8874f"
+    },
+    {
+      "key": "Bars",
+      "color": "#6a4a6e"
+    },
+    {
+      "key": "Transport / Transfers",
+      "color": "#5b6672"
     }
   ],
   "trips": [
@@ -196,7 +208,19 @@
       "luggageBags": [],
       "outfits": [],
       "hauls": [],
-      "loungeVisits": []
+      "loungeVisits": [],
+      "tripNotes": {
+        "entries": [],
+        "clips": [],
+        "pins": [],
+        "practical": {
+          "currency": "",
+          "safety": "",
+          "emergency": "",
+          "apps": []
+        },
+        "legacyMigrated": true
+      }
     },
     {
       "id": "trip_ms9g79qh_e_y0tq4",
@@ -272,7 +296,26 @@
       "luggageBags": [],
       "outfits": [],
       "hauls": [],
-      "loungeVisits": []
+      "loungeVisits": [],
+      "tripNotes": {
+        "entries": [
+          {
+            "id": "note_mw73rd3l_2_xcwa2",
+            "text": "Hyde Park - Stevie Nicks",
+            "kind": "note",
+            "createdAt": 1785532924169
+          }
+        ],
+        "clips": [],
+        "pins": [],
+        "practical": {
+          "currency": "",
+          "safety": "",
+          "emergency": "",
+          "apps": []
+        },
+        "legacyMigrated": true
+      }
     },
     {
       "id": "trip_ms9g79qh_m_f4vz9",
@@ -366,7 +409,19 @@
       "luggageBags": [],
       "outfits": [],
       "hauls": [],
-      "loungeVisits": []
+      "loungeVisits": [],
+      "tripNotes": {
+        "entries": [],
+        "clips": [],
+        "pins": [],
+        "practical": {
+          "currency": "",
+          "safety": "",
+          "emergency": "",
+          "apps": []
+        },
+        "legacyMigrated": true
+      }
     },
     {
       "id": "trip_ms9g79qh_q_oggtn",
@@ -424,7 +479,26 @@
       "luggageBags": [],
       "outfits": [],
       "hauls": [],
-      "loungeVisits": []
+      "loungeVisits": [],
+      "tripNotes": {
+        "entries": [
+          {
+            "id": "note_mw73rd3l_3_yu2ax",
+            "text": "Springsteen Trip",
+            "kind": "note",
+            "createdAt": 1785532924169
+          }
+        ],
+        "clips": [],
+        "pins": [],
+        "practical": {
+          "currency": "",
+          "safety": "",
+          "emergency": "",
+          "apps": []
+        },
+        "legacyMigrated": true
+      }
     },
     {
       "id": "trip_ms9g79qh_11_kwuzd",
@@ -545,7 +619,19 @@
       "luggageBags": [],
       "outfits": [],
       "hauls": [],
-      "loungeVisits": []
+      "loungeVisits": [],
+      "tripNotes": {
+        "entries": [],
+        "clips": [],
+        "pins": [],
+        "practical": {
+          "currency": "",
+          "safety": "",
+          "emergency": "",
+          "apps": []
+        },
+        "legacyMigrated": true
+      }
     },
     {
       "id": "trip_ms9g79qh_14_mvqhc",
@@ -2057,10 +2143,32 @@
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1794090940138
+        },
+        {
+          "id": "res_mw75izs0_5_uwp5w",
+          "sheet": "Breakfasts | Bakeries | Casual Dining",
+          "name": "Boho Brunch",
+          "address": "Giststraat 3, 8000 Brugge, Belgium",
+          "lat": 51.2070185,
+          "lng": 3.2204941,
+          "priceLevel": null,
+          "priority": null,
+          "estCost": null,
+          "notes": "",
+          "links": [
+            {
+              "id": "link_mw75iyet_4_72c0a",
+              "label": "Official Website",
+              "url": "http://www.bohobrunch.be/"
+            }
+          ],
+          "status": "researching",
+          "linkedPlanItemId": null,
+          "createdAt": 1794101192352
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1794091713972,
+      "updatedAt": 1794101192352,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -2098,7 +2206,19 @@
       "luggageBags": [],
       "outfits": [],
       "hauls": [],
-      "loungeVisits": []
+      "loungeVisits": [],
+      "tripNotes": {
+        "entries": [],
+        "clips": [],
+        "pins": [],
+        "practical": {
+          "currency": "",
+          "safety": "",
+          "emergency": "",
+          "apps": []
+        },
+        "legacyMigrated": true
+      }
     },
     {
       "id": "trip_ms9gp16e_1_0n81d",
@@ -3656,7 +3776,19 @@
           "atmosphereNotes": "Refined heated terrace with bespoke cigar service.",
           "isPrivateOrMembersClub": true
         }
-      ]
+      ],
+      "tripNotes": {
+        "entries": [],
+        "clips": [],
+        "pins": [],
+        "practical": {
+          "currency": "",
+          "safety": "",
+          "emergency": "",
+          "apps": []
+        },
+        "legacyMigrated": true
+      }
     },
     {
       "id": "trip_msizzid0_1p_eq7is",
@@ -4491,7 +4623,19 @@
       "luggageBags": [],
       "outfits": [],
       "hauls": [],
-      "loungeVisits": []
+      "loungeVisits": [],
+      "tripNotes": {
+        "entries": [],
+        "clips": [],
+        "pins": [],
+        "practical": {
+          "currency": "",
+          "safety": "",
+          "emergency": "",
+          "apps": []
+        },
+        "legacyMigrated": true
+      }
     },
     {
       "id": "trip_mswbxsjm_8_wbnn1",
@@ -6363,7 +6507,19 @@
           "atmosphereNotes": "Refined heated terrace with bespoke cigar service.",
           "isPrivateOrMembersClub": true
         }
-      ]
+      ],
+      "tripNotes": {
+        "entries": [],
+        "clips": [],
+        "pins": [],
+        "practical": {
+          "currency": "",
+          "safety": "",
+          "emergency": "",
+          "apps": []
+        },
+        "legacyMigrated": true
+      }
     }
   ],
   "trash": {
@@ -6496,6 +6652,12 @@
     ]
   },
   "activityLog": [
+    {
+      "id": "log_mw75izs0_6_bxca2",
+      "ts": 1794101192352,
+      "action": "research-added",
+      "detail": "Added \"Boho Brunch\" to Brugge research"
+    },
     {
       "id": "log_mw6zvu7p_2l_904g3",
       "ts": 1794091713973,
@@ -7689,12 +7851,6 @@
       "ts": 1790714786314,
       "action": "plan-item-added",
       "detail": "Added \"Hippodrome\" (Bars) on London"
-    },
-    {
-      "id": "log_mun5c7uz_2n_9neog",
-      "ts": 1790714770379,
-      "action": "plan-marked-visited",
-      "detail": "Marked \"Cgars\" as visited on London"
     }
   ]
 }
