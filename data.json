@@ -2319,10 +2319,26 @@
           "status": "researching",
           "linkedPlanItemId": null,
           "createdAt": 1794104829488
+        },
+        {
+          "id": "res_mw79a2x8_10_rvzl4",
+          "sheet": "Pubs",
+          "name": "The Monk",
+          "address": "Vlamingstraat 37, 8000 Brugge, Belgium",
+          "lat": 51.211279399999995,
+          "lng": 3.2239792,
+          "priceLevel": null,
+          "priority": null,
+          "estCost": null,
+          "notes": "",
+          "links": [],
+          "status": "researching",
+          "linkedPlanItemId": null,
+          "createdAt": 1794107494988
         }
       ],
       "createdAt": 1785532924169,
-      "updatedAt": 1794107375428,
+      "updatedAt": 1794107494988,
       "packingList": [],
       "country": "Belgium",
       "countryGuessed": false,
@@ -6810,6 +6826,12 @@
   },
   "activityLog": [
     {
+      "id": "log_mw79a2x8_11_k5b9h",
+      "ts": 1794107494988,
+      "action": "research-added",
+      "detail": "Added \"The Monk\" to Brugge research"
+    },
+    {
       "id": "log_mw797io5_z_h7v6a",
       "ts": 1794107375429,
       "action": "research-edited",
@@ -8002,12 +8024,6 @@
       "ts": 1790723989971,
       "action": "post-trip-updated",
       "detail": "Updated post-trip notes for \"Hippodrome\" on London"
-    },
-    {
-      "id": "log_munatqjp_37_73ar1",
-      "ts": 1790723985829,
-      "action": "post-trip-updated",
-      "detail": "Updated post-trip notes for \"Colbert\" on London"
     }
   ]
 }
